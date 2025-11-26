@@ -1,0 +1,21 @@
+{
+	"name": "precious-pizza",
+	"version": "1.0.0",
+	"description": "",
+	"type": "module",
+	"engines": {
+		"node": ">=22 <=24"
+	},
+	"scripts": {
+		"test": "pnpm -r test",
+		"test:api": "pnpm --filter api test",
+		"test:frontend": "pnpm --filter frontend test",
+		"dev": "pnpm -r dev",
+		"dev:api": "pnpm --filter api dev",
+		"dev:frontend": "pnpm --filter frontend dev"
+	},
+	"keywords": [],
+	"author": "",
+	"license": "ISC",
+	"packageManager": "pnpm@10.23.0"
+}
