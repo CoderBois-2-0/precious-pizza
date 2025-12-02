@@ -1,8 +1,14 @@
+import UserHandler from "$db/user/handler";
 import publicRouter from "./publicRouter";
 import protectedRouter from "./publicRouter";
 
-export default {
-  path: "auth/" as const,
+interface IAuthVariables {
+  userHandler: UserHandler;
+}
+
+export const authRouter = {
+  path: "/auth" as const,
   publicRouter,
   protectedRouter,
 };
+export { IAuthVariables };

@@ -1,4 +1,4 @@
-import { sql } from "drizzle-orm";
+import { getTableColumns, sql } from "drizzle-orm";
 
 import { getDB, TDB } from "$db/index";
 import { userTable } from "./schema";
@@ -44,12 +44,31 @@ class UserHandler {
    * @description
    * createCustomer will create a customer with the "customer" role
    */
-  async createCustomer(newUser: TUserInsert): Promise<void> {
-    await this.#client.insert(this.#table).values({
-      ...newUser,
-      role: "customer",
-      password: sql`crypt(${newUser.password}, gen_salt('bf', 12))`,
-    });
+  async createCustomer(newUser: TUserInsert): Promise<TSafeUser> {
+    const userRows = await this.#client
+      .insert(this.#table)
+      .values({
+        ...newUser,
+        role: "customer",
+        password: sql`crypt(${newUser.password}, gen_salt('bf', 12))`,
+      })
+      .returning(this.getSafeColumns());
+
+    const user = userRows.at(0);
+    if (!user) {
+      throw Error();
+    }
+
+    return user;
+  }
+
+  getSafeColumns() {
+    const unsafeColumns = getTableColumns(this.#table);
+    // disabling eslint on password as it needs to be discarding for security
+    /* eslint-disable-next-line @typescript-eslint/no-unused-vars */
+    const { password: _, ...safeColumns } = unsafeColumns;
+
+    return safeColumns;
   }
 }
 
