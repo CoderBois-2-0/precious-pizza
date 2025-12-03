@@ -1,80 +1,78 @@
 import { Link } from '@tanstack/react-router'
-
 import { useState } from 'react'
-import { Home, Menu, Network, X } from 'lucide-react'
+import { Home, ShoppingBasket } from 'lucide-react'
+import { Menu, X } from 'lucide-react'
 
 export default function Header() {
   const [isOpen, setIsOpen] = useState(false)
 
   return (
     <>
-      <header className="p-4 flex items-center bg-gray-800 text-white shadow-lg">
+      {/* Top Header */}
+      <header className="d-flex align-items-center p-3 text-white shadow-sm header-light-green">
         <button
           onClick={() => setIsOpen(true)}
-          className="p-2 hover:bg-gray-700 rounded-lg transition-colors"
+          className="btn btn-light me-3"
           aria-label="Open menu"
         >
           <Menu size={24} />
         </button>
-        <h1 className="ml-4 text-xl font-semibold">
-          <Link to="/">
-            <img
-              src="/tanstack-word-logo-white.svg"
-              alt="TanStack Logo"
-              className="h-10"
-            />
-          </Link>
-        </h1>
+        <p className="mb-0">
+          Hello this is
+          header.................................................................
+        </p>
       </header>
 
-      <aside
-        className={`fixed top-0 left-0 h-full w-80 bg-gray-900 text-white shadow-2xl z-50 transform transition-transform duration-300 ease-in-out flex flex-col ${
-          isOpen ? 'translate-x-0' : '-translate-x-full'
+      {/* Side Navigation */}
+      <div
+        className={`position-fixed top-0 start-0 vh-100 bg-dark text-white shadow-lg d-flex flex-column p-3 ${
+          isOpen ? 'translate-middle-x-0' : 'translate-middle-x-n100'
         }`}
+        style={{
+          width: '20rem',
+          transition: 'transform 0.3s ease-in-out',
+          transform: isOpen ? 'translateX(0)' : 'translateX(-100%)',
+          zIndex: 1050,
+        }}
       >
-        <div className="flex items-center justify-between p-4 border-b border-gray-700">
-          <h2 className="text-xl font-bold">Navigation</h2>
+        {/* Side nav header */}
+        <div className="d-flex justify-content-between align-items-center border-bottom border-secondary pb-2 mb-3">
+          <h2 className="h5 mb-0">Navigation</h2>
           <button
             onClick={() => setIsOpen(false)}
-            className="p-2 hover:bg-gray-800 rounded-lg transition-colors"
+            className="btn btn-dark"
             aria-label="Close menu"
           >
             <X size={24} />
           </button>
         </div>
 
-        <nav className="flex-1 p-4 overflow-y-auto">
+        {/* Navigation links */}
+        <nav className="flex-grow-1 overflow-auto">
           <Link
             to="/"
             onClick={() => setIsOpen(false)}
-            className="flex items-center gap-3 p-3 rounded-lg hover:bg-gray-800 transition-colors mb-2"
-            activeProps={{
-              className:
-                'flex items-center gap-3 p-3 rounded-lg bg-cyan-600 hover:bg-cyan-700 transition-colors mb-2',
-            }}
+            className="d-flex align-items-center gap-2 p-2 mb-2 text-white text-decoration-none rounded hover-bg-secondary"
           >
             <Home size={20} />
-            <span className="font-medium">Home</span>
+            <span className="fw-medium">Home</span>
           </Link>
-
-          {/* Demo Links Start */}
 
           <Link
-            to="/demo/tanstack-query"
+            to="/basketPage"
             onClick={() => setIsOpen(false)}
-            className="flex items-center gap-3 p-3 rounded-lg hover:bg-gray-800 transition-colors mb-2"
-            activeProps={{
-              className:
-                'flex items-center gap-3 p-3 rounded-lg bg-cyan-600 hover:bg-cyan-700 transition-colors mb-2',
-            }}
+            className="d-flex align-items-center gap-2 p-2 mb-2 text-white text-decoration-none rounded hover-bg-secondary"
           >
-            <Network size={20} />
-            <span className="font-medium">TanStack Query</span>
+            <ShoppingBasket size={20} />
+            <span className="fw-medium">Basket</span>
           </Link>
 
-          {/* Demo Links End */}
+          <p>
+            Hello this is side
+            nav.................................................................
+          </p>
         </nav>
-      </aside>
+      </div>
     </>
   )
 }

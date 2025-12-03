@@ -8,6 +8,10 @@ import * as TanStackQueryProvider from './integrations/tanstack-query/root-provi
 import { routeTree } from './routeTree.gen'
 
 import './styles.css'
+import 'bootstrap/dist/js/bootstrap.bundle.min.js'
+import 'bootstrap/dist/css/bootstrap.min.css'
+
+
 import reportWebVitals from './reportWebVitals.ts'
 
 // Create a new router instance
