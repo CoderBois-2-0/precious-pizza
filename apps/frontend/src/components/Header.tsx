@@ -17,10 +17,6 @@ export default function Header() {
         >
           <Menu size={24} />
         </button>
-        <p className="mb-0">
-          Hello this is
-          header.................................................................
-        </p>
       </header>
 
       {/* Side Navigation */}
@@ -67,10 +63,6 @@ export default function Header() {
             <span className="fw-medium">Basket</span>
           </Link>
 
-          <p>
-            Hello this is side
-            nav.................................................................
-          </p>
         </nav>
       </div>
     </>
