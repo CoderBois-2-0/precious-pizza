@@ -24,3 +24,8 @@ code {
 .header-light-green {
   background-color: #6ab66a; 
 }
+
+.header-light-green-gradient {
+  background: linear-gradient(180deg, #75bd67 0%, #598145 100%);
+  color: white;
+}

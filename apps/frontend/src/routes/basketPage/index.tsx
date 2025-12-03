@@ -5,5 +5,12 @@ export const Route = createFileRoute('/basketPage/')({
 })
 
 function RouteComponent() {
-  return <div>Hello "/basket/"!</div>
+  return (
+    <>
+      <div>Hello "/basket/"!</div>
+     
+    </>
+  )
+ 
+
 }
