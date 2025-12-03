@@ -4,48 +4,10 @@ import { pizzaInBasketTable } from "../pizzaInBasket/schema";
 import { orderItemTable } from "../orderItem/schema";
 import { getDB, TDB } from "..";
 import { pizzaTable } from "../pizza/schema";
+import { IFullOrder, INewOrder, IOrder, IOrderInsert, IOrderItemQuery } from "./types";
 
 
 
-interface INewOrder {
-  basketID: string;
-  delivery: "Pickup" | "Delivery";
-  deliveryFee?: number;
-  deliveryAddress?: {
-    street: string;
-    number: string;
-    postalCode: string;
-    town: string;
-    doorFloor?: string;
-  };
-  customerNote?: string;
-}
-
-interface IOrder {
-  id: string;
-  basketID: string;
-  totalPrice: number;
-  deliveryOption: string;
-  street?: string;
-  number?: string;
-  postalCode?: string;
-  town?: string;
-  doorFloor?: string;
-  customerNote?: string;
-  status: string;
-  createdAt: Date;
-}
-
-interface IOrderItem {
-  pizzaID: number;
-  name: string;
-  quantity: number;
-  price: number;
-}
-
-interface IFullOrder extends IOrder {
-  items: IOrderItem[];
-}
 
 class OrdersHandler {
   #client: TDB;
@@ -93,7 +55,7 @@ class OrdersHandler {
         doorFloor: deliveryAddress?.doorFloor,
         customerNote,
         status: "Pending",
-      })
+      } as IOrderInsert)
       .returning();
 
     // 4. Copy basket items to order_items
@@ -143,7 +105,7 @@ class OrdersHandler {
       .where(eq(orderItemTable.orderID, orderID));
 
     // 3. Convert price strings to numbers if needed
-    const items: IOrderItem[] = itemsRaw.map((item) => ({
+    const items: IOrderItemQuery[] = itemsRaw.map((item) => ({
       pizzaID: item.pizzaID,
       name: item.name ?? "Unknown Pizza",
       quantity: item.quantity,
