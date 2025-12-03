@@ -1,6 +1,6 @@
 import { Link } from '@tanstack/react-router'
 import { useState } from 'react'
-import { Home, ShoppingBasket } from 'lucide-react'
+import { Home, ShoppingBasket, Pizza } from 'lucide-react'
 import { Menu, X } from 'lucide-react'
 
 export default function Header() {
@@ -9,14 +9,33 @@ export default function Header() {
   return (
     <>
       {/* Top Header */}
-      <header className="d-flex align-items-center p-3 text-white shadow-sm header-light-green">
-        <button
-          onClick={() => setIsOpen(true)}
-          className="btn btn-light me-3"
-          aria-label="Open menu"
-        >
-          <Menu size={24} />
-        </button>
+      <header className="d-flex align-items-center justify-content-between px-3 py-1 text-white shadow-sm header-light-green ">
+        <div className="d-flex align-items-center">
+          <button
+            onClick={() => setIsOpen(true)}
+            className="btn btn-light me-3"
+            aria-label="Open menu"
+          >
+            <Menu size={24} />
+          </button>
+          <div className="text-center">
+            <h1>Precious Pizza</h1>
+            <p> - The one Pizza to rule them all!</p>
+          </div>
+        </div>
+
+        <div className="d-flex align-items-end">
+          <button className="btn btn-light me-3">
+            <Link
+              to="/basketPage"
+              onClick={() => setIsOpen(false)}
+              className='text-black'
+            >
+              <ShoppingBasket size={28} />
+              {/* <span className="fw-medium">Basket</span> */}
+            </Link>
+          </button>
+        </div>
       </header>
 
       {/* Side Navigation */}
@@ -63,6 +82,14 @@ export default function Header() {
             <span className="fw-medium">Basket</span>
           </Link>
 
+          <Link
+            to="/pizzaPage"
+            onClick={() => setIsOpen(false)}
+            className="d-flex align-items-center gap-2 p-2 mb-2 text-white text-decoration-none rounded hover-bg-secondary"
+          >
+            <Pizza size={20} />
+            <span className="fw-medium">Menu</span>
+          </Link>
         </nav>
       </div>
     </>
