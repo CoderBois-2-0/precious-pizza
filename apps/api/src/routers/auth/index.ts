@@ -1,6 +1,6 @@
 import UserHandler from "$db/user/handler";
 import publicRouter from "./publicRouter";
-import protectedRouter from "./publicRouter";
+import protectedRouter from "./protectedRouter";
 
 interface IAuthVariables {
   userHandler: UserHandler;

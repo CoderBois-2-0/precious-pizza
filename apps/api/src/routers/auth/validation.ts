@@ -1,4 +1,4 @@
-import { zValidator } from "@hono/zod-validator";
+import { createValidator } from "$routers/validation";
 import z from "zod/v4";
 
 const signUpSchema = z
@@ -9,11 +9,14 @@ const signUpSchema = z
     password: z.string().min(8).max(16),
     "confirm-password": z.string(),
   })
-  .refine((val) => val.password === val["confirm-password"])
+  .refine((val) => val.password === val["confirm-password"], {
+    message: "The passwords must match",
+    path: ["confirm-password"],
+  })
   .strict();
-const signUpValidator = zValidator("json", signUpSchema);
+const signUpValidator = createValidator("json", signUpSchema);
 
 const loginSchema = z.object({ email: z.email(), password: z.string() });
-const loginValidator = zValidator("json", loginSchema);
+const loginValidator = createValidator("json", loginSchema);
 
 export { signUpValidator, loginValidator };

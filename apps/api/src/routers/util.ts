@@ -9,7 +9,7 @@ function createRouter<TEnv extends IEnv = IEnv>() {
   return new Hono<TEnv>();
 }
 
-const authTokenName = "auth-name";
+const authTokenName = "auth-token";
 
 /**
  * @description
@@ -24,7 +24,7 @@ async function setAuthCookie<TEnv extends IEnv = IEnv>(
   setCookie(c, authTokenName, jwtValue, {
     httpOnly: true,
     maxAge: 60 * 60 * 24 * 3,
-    secure: Boolean(c.env.PROD),
+    secure: c.env.PROD === "true",
   });
 }
 

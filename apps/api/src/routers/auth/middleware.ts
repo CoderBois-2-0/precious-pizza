@@ -8,7 +8,7 @@ interface IAuthEnv extends IEnv {
 }
 
 const injectUserHandler = createMiddleware<IAuthEnv>((c, next) => {
-  const userHandler = new UserHandler(c.env.DB_URL);
+  const userHandler = new UserHandler(c.env.DB_URL, c.env.PROD === "true");
   c.set("userHandler", userHandler);
 
   return next();

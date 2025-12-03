@@ -8,8 +8,8 @@ class UserHandler {
   #client: TDB;
   #table: TUserTable;
 
-  constructor(dbUrl: string) {
-    this.#client = getDB(dbUrl);
+  constructor(dbUrl: string, logger: boolean) {
+    this.#client = getDB(dbUrl, logger);
     this.#table = userTable;
   }
 
@@ -25,7 +25,7 @@ class UserHandler {
       where: (user, { eq, and }) =>
         and(
           eq(user.email, userEmail),
-          sql`crypt(${userPassword}, ${user.password})`,
+          sql`${userTable.password} = crypt(${userPassword}, ${user.password})`,
         ),
     });
 

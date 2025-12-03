@@ -10,9 +10,6 @@ importers:
 
   apps/api:
     dependencies:
-      '@hono/zod-validator':
-        specifier: ^0.7.5
-        version: 0.7.5(hono@4.10.6)(zod@4.1.13)
       drizzle-orm:
         specifier: ^0.44.7
         version: 0.44.7(pg@8.16.3)
@@ -713,12 +710,6 @@ packages:
   '@eslint/plugin-kit@0.4.1':
     resolution: {integrity: sha512-43/qtrDUokr7LJqoF2c3+RInu/t4zfrpYdoSDfYyhg52rwLV6TnOvdG4fXm7IkSB3wErkcmJS9iEhjVtOSEjjA==}
     engines: {node: ^18.18.0 || ^20.9.0 || >=21.1.0}
-
-  '@hono/zod-validator@0.7.5':
-    resolution: {integrity: sha512-n4l4hutkfYU07PzRUHBOVzUEn38VSfrh+UVE5d0w4lyfWDOEhzxIupqo5iakRiJL44c3vTuFJBvcmUl8b9agIA==}
-    peerDependencies:
-      hono: '>=3.9.0'
-      zod: ^3.25.0 || ^4.0.0
 
   '@humanfs/core@0.19.1':
     resolution: {integrity: sha512-5DyQ4+1JEUzejeK1JGICcideyfUbGixgS9jNgex5nqkW+cY7WZhxBigmieN5Qnw9ZosSNVC9KQKyb+GUaGyKUA==}
@@ -3354,11 +3345,6 @@ snapshots:
     dependencies:
       '@eslint/core': 0.17.0
       levn: 0.4.1
-
-  '@hono/zod-validator@0.7.5(hono@4.10.6)(zod@4.1.13)':
-    dependencies:
-      hono: 4.10.6
-      zod: 4.1.13
 
   '@humanfs/core@0.19.1': {}
 

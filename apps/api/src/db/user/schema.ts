@@ -24,4 +24,4 @@ const userTable = pgTable(
   (table) => [primaryKey({ columns: [table.id] })],
 );
 
-export { userTable };
+export { userTable, userRole };

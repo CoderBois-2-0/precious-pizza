@@ -1,8 +1,8 @@
 import { drizzle } from "drizzle-orm/node-postgres";
 import * as userSchema from "$db/user/schema";
 
-function getDB(dbUrl: string) {
-  return drizzle(dbUrl, { schema: { ...userSchema } });
+function getDB(dbUrl: string, logger: boolean) {
+  return drizzle(dbUrl, { logger, schema: { ...userSchema } });
 }
 
 type TDB = ReturnType<typeof getDB>;
