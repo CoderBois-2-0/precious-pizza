@@ -1,0 +1,1 @@
+// interface logic for favourites would go here
