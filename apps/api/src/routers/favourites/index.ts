@@ -42,7 +42,6 @@ app.get("/", async (c) => {
 
 /* ---------------------------------------------------
  * PROTECTED ROUTES
- * (You can add auth middleware later if needed)
  * --------------------------------------------------- */
 
 /**
