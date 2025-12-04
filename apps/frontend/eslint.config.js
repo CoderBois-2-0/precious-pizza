@@ -1,5 +1,11 @@
 //  @ts-check
 
-import { tanstackConfig } from '@tanstack/eslint-config'
+import { tanstackConfig } from '@tanstack/eslint-config';
 
-export default [...tanstackConfig]
+export default [
+  ...tanstackConfig,
+  {
+    // prettier and eslint config throws weird errors if ignored
+    ignores: ['./*.config.js'],
+  },
+];

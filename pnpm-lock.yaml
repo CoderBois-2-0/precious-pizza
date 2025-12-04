@@ -8,12 +8,12 @@ importers:
 
   .:
     dependencies:
-      pg-mem:
-        specifier: ^3.0.5
-        version: 3.0.5
       bootstrap:
         specifier: 5.3.8
         version: 5.3.8(@popperjs/core@2.11.8)
+      pg-mem:
+        specifier: ^3.0.5
+        version: 3.0.5
 
   apps/api:
     dependencies:

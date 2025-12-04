@@ -1,7 +1,7 @@
 import { Link } from '@tanstack/react-router'
 import { useState } from 'react'
-import { Home, ShoppingBasket, Pizza } from 'lucide-react'
-import { Menu, X } from 'lucide-react'
+import { Home, Menu, Pizza, ShoppingBasket, User, X  } from 'lucide-react'
+
 
 export default function Header() {
   const [isOpen, setIsOpen] = useState(false)
@@ -89,6 +89,15 @@ export default function Header() {
           >
             <Pizza size={20} />
             <span className="fw-medium">Menu</span>
+          </Link>
+
+          <Link
+            to="/userPage"
+            onClick={() => setIsOpen(false)}
+            className="d-flex align-items-center gap-2 p-2 mb-2 text-white text-decoration-none rounded hover-bg-secondary"
+          >
+            <User size={20} />
+            <span className="fw-medium">User</span>
           </Link>
         </nav>
       </div>
