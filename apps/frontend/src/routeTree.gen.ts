@@ -10,43 +10,53 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
-import { Route as UserPageIndexRouteImport } from './routes/userPage/index'
+import { Route as PizzaPageIndexRouteImport } from './routes/pizzaPage/index'
+import { Route as BasketPageIndexRouteImport } from './routes/basketPage/index'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
-const UserPageIndexRoute = UserPageIndexRouteImport.update({
-  id: '/userPage/',
-  path: '/userPage/',
+const PizzaPageIndexRoute = PizzaPageIndexRouteImport.update({
+  id: '/pizzaPage/',
+  path: '/pizzaPage/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const BasketPageIndexRoute = BasketPageIndexRouteImport.update({
+  id: '/basketPage/',
+  path: '/basketPage/',
   getParentRoute: () => rootRouteImport,
 } as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
-  '/userPage': typeof UserPageIndexRoute
+  '/basketPage': typeof BasketPageIndexRoute
+  '/pizzaPage': typeof PizzaPageIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
-  '/userPage': typeof UserPageIndexRoute
+  '/basketPage': typeof BasketPageIndexRoute
+  '/pizzaPage': typeof PizzaPageIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
-  '/userPage/': typeof UserPageIndexRoute
+  '/basketPage/': typeof BasketPageIndexRoute
+  '/pizzaPage/': typeof PizzaPageIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/userPage'
+  fullPaths: '/' | '/basketPage' | '/pizzaPage'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/userPage'
-  id: '__root__' | '/' | '/userPage/'
+  to: '/' | '/basketPage' | '/pizzaPage'
+  id: '__root__' | '/' | '/basketPage/' | '/pizzaPage/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
-  UserPageIndexRoute: typeof UserPageIndexRoute
+  BasketPageIndexRoute: typeof BasketPageIndexRoute
+  PizzaPageIndexRoute: typeof PizzaPageIndexRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -58,11 +68,18 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/userPage/': {
-      id: '/userPage/'
-      path: '/userPage'
-      fullPath: '/userPage'
-      preLoaderRoute: typeof UserPageIndexRouteImport
+    '/pizzaPage/': {
+      id: '/pizzaPage/'
+      path: '/pizzaPage'
+      fullPath: '/pizzaPage'
+      preLoaderRoute: typeof PizzaPageIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/basketPage/': {
+      id: '/basketPage/'
+      path: '/basketPage'
+      fullPath: '/basketPage'
+      preLoaderRoute: typeof BasketPageIndexRouteImport
       parentRoute: typeof rootRouteImport
     }
   }
@@ -70,7 +87,8 @@ declare module '@tanstack/react-router' {
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
-  UserPageIndexRoute: UserPageIndexRoute,
+  BasketPageIndexRoute: BasketPageIndexRoute,
+  PizzaPageIndexRoute: PizzaPageIndexRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
