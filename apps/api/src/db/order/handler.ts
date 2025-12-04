@@ -1,13 +1,10 @@
 import { eq } from "drizzle-orm";
 import { orderTable } from "./schema";
-import { pizzaInBasketTable } from "../pizzaInBasket/schema";
+import { basketItemTable } from "../basketItem/schema";
 import { orderItemTable } from "../orderItem/schema";
 import { getDB, TDB } from "..";
 import { pizzaTable } from "../pizza/schema";
 import { IFullOrder, INewOrder, IOrder, IOrderInsert, IOrderItemQuery } from "./types";
-
-
-
 
 class OrdersHandler {
   #client: TDB;
@@ -29,7 +26,7 @@ class OrdersHandler {
     const { basketID, delivery, deliveryFee = 0, deliveryAddress, customerNote } = input;
 
     // 1. Fetch basket items
-    const basketItems = await this.#client.select().from(pizzaInBasketTable).where(eq(pizzaInBasketTable.basketID, basketID));
+    const basketItems = await this.#client.select().from(basketItemTable).where(eq(basketItemTable.basketID, basketID));
 
     if (basketItems.length === 0) {
       throw new Error("Basket is empty");
@@ -116,4 +113,4 @@ class OrdersHandler {
   }
 }
 
-export { OrdersHandler, INewOrder, IOrder };
+export { OrdersHandler };
