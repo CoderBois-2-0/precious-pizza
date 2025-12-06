@@ -8,6 +8,8 @@ export const Route = createFileRoute('/(auth)/signUp')({
 });
 
 const SignUpForm = () => {
+  const { signUp } = useAuth();
+
   const [firstName, setFirstName] = useState('');
   const [lastName, setLastName] = useState('');
   const [email, setEmail] = useState('');
@@ -17,7 +19,6 @@ const SignUpForm = () => {
 
   const submit: FormEventHandler = (e) => {
     e.preventDefault();
-    const { signUp } = useAuth();
 
     signUp({
       'first-name': firstName,

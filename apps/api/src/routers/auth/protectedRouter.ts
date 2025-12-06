@@ -1,6 +1,5 @@
-import { createRouter } from "$routers/util";
+import { createRouter, removeAuthCookie } from "$routers/util";
 import { IProtectedEnv, TProtectedVariables } from "$routers/types";
-import { removeAuthCookie } from "$routers/util";
 import { IAuthVariables } from "./index";
 
 interface IAuthProtectedVariables extends TProtectedVariables, IAuthVariables {}

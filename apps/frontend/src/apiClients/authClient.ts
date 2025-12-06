@@ -21,7 +21,7 @@ interface ILoginUpUser {
 }
 
 class AuthClient {
-  #url = `${import.meta.env.VITE_API_URL}/auth`;
+  readonly #url = `${import.meta.env.VITE_API_URL}/auth`;
 
   async signUp(newUser: ISignUpUser): Promise<IAPIUser | null> {
     const res = await fetch(`${this.#url}/sign-up`, {

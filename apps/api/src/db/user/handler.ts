@@ -5,8 +5,8 @@ import { userTable } from "./schema";
 import { TSafeUser, TUser, TUserInsert, TUserTable } from "./types";
 
 class UserHandler {
-  #client: TDB;
-  #table: TUserTable;
+  readonly #client: TDB;
+  readonly #table: TUserTable;
 
   constructor(dbUrl: string, logger: boolean) {
     this.#client = getDB(dbUrl, logger);
@@ -56,7 +56,7 @@ class UserHandler {
 
     const user = userRows.at(0);
     if (!user) {
-      throw Error();
+      throw new Error("DB returned no rows upon insert");
     }
 
     return user;
