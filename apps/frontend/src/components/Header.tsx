@@ -1,8 +1,10 @@
 import { useState } from 'react';
 import { Link } from '@tanstack/react-router';
 import { Home, Menu, User, UserPlus, X } from 'lucide-react';
+import { useAuth } from '@/services/authService';
 
 export default function Header() {
+  const { signOut } = useAuth();
   const [isOpen, setIsOpen] = useState(false);
 
   const closeSidebar = () => setIsOpen(false);
@@ -22,6 +24,10 @@ export default function Header() {
             <h1>Precious Pizza</h1>
             <p> - The one Pizza to rule them all!</p>
           </div>
+
+          <button className="btn btn-danger" onClick={signOut}>
+            Sign out
+          </button>
         </div>
       </header>
 

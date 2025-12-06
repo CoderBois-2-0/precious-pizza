@@ -22,6 +22,7 @@ async function setAuthCookie<TEnv extends IEnv = IEnv>(
   const jwtValue = await sign(payload, c.env.JWT_SECRET);
 
   setCookie(c, authTokenName, jwtValue, {
+    path: "/",
     httpOnly: true,
     maxAge: 60 * 60 * 24 * 3,
     secure: c.env.PROD === "true",

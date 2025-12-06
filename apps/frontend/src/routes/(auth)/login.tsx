@@ -1,20 +1,21 @@
 import { useState } from 'react';
 import { createFileRoute, Link } from '@tanstack/react-router';
 import type { FormEventHandler } from 'react';
-import { authService } from '@/services/authService';
+import { useAuth } from '@/services/authService';
 
 export const Route = createFileRoute('/(auth)/login')({
   component: RouteComponent,
 });
 
 const LoginForm = () => {
+  const { login } = useAuth();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
 
   const submit: FormEventHandler = (e) => {
     e.preventDefault();
 
-    authService.login({
+    login({
       email: email,
       password: password,
     });

@@ -13,10 +13,10 @@ interface IAuthStore {
   removeUser: () => void;
 }
 
-const useAuth = create<IAuthStore>((set) => ({
+const useAuthStore = create<IAuthStore>((set) => ({
   user: null,
   setUser: (user) => set({ user }),
   removeUser: () => set({ user: null }),
 }));
 
-export { useAuth };
+export { useAuthStore };

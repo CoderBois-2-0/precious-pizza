@@ -30,6 +30,7 @@ class AuthClient {
         'Content-Type': 'application/json',
       },
       body: JSON.stringify(newUser),
+      credentials: 'include',
     });
 
     if (res.status !== 201) {
@@ -48,6 +49,7 @@ class AuthClient {
         'Content-Type': 'application/json',
       },
       body: JSON.stringify(userLogin),
+      credentials: 'include',
     });
 
     if (res.status !== 200) {
@@ -71,7 +73,9 @@ class AuthClient {
    * Ideal for init of auth state, aka. when the user opens the page or refreshes the browser.
    */
   async isAuthenticated(): Promise<IAPIUser | null> {
-    const res = await fetch(`${this.#url}/is-authenticated`);
+    const res = await fetch(`${this.#url}/is-authenticated`, {
+      credentials: 'include',
+    });
 
     if (res.status !== 200) {
       return null;

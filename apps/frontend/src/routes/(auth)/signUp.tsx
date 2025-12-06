@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { createFileRoute, Link } from '@tanstack/react-router';
 import type { FormEventHandler } from 'react';
-import { authService } from '@/services/authService';
+import { useAuth } from '@/services/authService';
 
 export const Route = createFileRoute('/(auth)/signUp')({
   component: RouteComponent,
@@ -17,8 +17,9 @@ const SignUpForm = () => {
 
   const submit: FormEventHandler = (e) => {
     e.preventDefault();
+    const { signUp } = useAuth();
 
-    authService.signUp({
+    signUp({
       'first-name': firstName,
       'last-name': lastName,
       email: email,

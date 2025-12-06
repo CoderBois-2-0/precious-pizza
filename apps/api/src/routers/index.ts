@@ -7,6 +7,7 @@ const app = createRouter()
   .use((c, next) => {
     const corsMiddelware = cors({
       origin: c.env.CORS_ORIGIN,
+      credentials: true,
     });
 
     return corsMiddelware(c, next);
