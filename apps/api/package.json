@@ -8,6 +8,7 @@
     "db:generate": "pnpm drizzle-kit generate",
     "db:migrate": "pnpm drizzle-kit migrate",
     "lint": "eslint .",
+    "lint:fix": "eslint --fix .",
     "format": "prettier --write .",
     "dev": "wrangler dev",
     "deploy": "wrangler deploy --minify",
