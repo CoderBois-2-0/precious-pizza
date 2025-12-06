@@ -62,7 +62,9 @@ class AuthClient {
   }
 
   async signOut(): Promise<boolean> {
-    const res = await fetch(`${this.#url}/sign-out`);
+    const res = await fetch(`${this.#url}/sign-out`, {
+      credentials: 'include',
+    });
 
     return res.status === 200;
   }
