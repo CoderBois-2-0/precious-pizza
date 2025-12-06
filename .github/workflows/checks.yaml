@@ -15,7 +15,7 @@ jobs:
       - uses: actions/checkout@v4
 
       - name: Setup pnpm
-        uses: pnpm/action-setup@v4#3a0024f0665291c8c6c9957134b033a5e639e837
+        uses: pnpm/action-setup@41ff72655975bd51cab0327fa583b6e92b6d3061
 
       - name: Setup Node
         uses: actions/setup-node@v5
@@ -34,11 +34,11 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    - uses: actions/checkout@v4
+    - uses: actions/checkout@41ff72655975bd51cab0327fa583b6e92b6d3061
 
 
     - name: Setup pnpm
-      uses: pnpm/action-setup@v4#3a0024f0665291c8c6c9957134b033a5e639e837
+      uses: pnpm/action-setup@v4
 
     - uses: actions/setup-node@v4
       with:
