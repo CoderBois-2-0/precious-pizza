@@ -7,6 +7,9 @@
 		"node": ">=22 <=24"
 	},
 	"scripts": {
+		"lint": "pnpm -r lint",
+		"lint:api": "pnpm --filter api lint",
+		"lint:frontend": "pnpm --filter frontend lint",
 		"test": "pnpm -r test",
 		"test:api": "pnpm --filter api test",
 		"test:frontend": "pnpm --filter frontend test",

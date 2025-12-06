@@ -14,7 +14,8 @@ const router = createRouter()
     try {
       user = await userHandler.createCustomer({
         email: userRequest.email,
-        firsName: userRequest["first-name"],
+        phoneNumber: userRequest["phone-number"],
+        firstName: userRequest["first-name"],
         lastName: userRequest["last-name"],
         password: userRequest.password,
       });
@@ -24,7 +25,7 @@ const router = createRouter()
 
     await setAuthCookie(c, user);
 
-    return c.json({ message: "User created" }, 201);
+    return c.json(user, 201);
   })
   .post("login", loginValidator, async (c) => {
     const userRequest = c.req.valid("json");

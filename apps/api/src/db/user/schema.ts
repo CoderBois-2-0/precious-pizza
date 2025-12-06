@@ -16,7 +16,8 @@ const userTable = pgTable(
       .notNull()
       .$defaultFn(() => crypto.randomUUID()),
     email: varchar("email", { length: 254 }).notNull().unique(),
-    firsName: varchar("first_name", { length: 40 }).notNull(),
+    phoneNumber: varchar("phone_number", { length: 8 }),
+    firstName: varchar("first_name", { length: 40 }).notNull(),
     lastName: varchar("last_name", { length: 80 }).notNull(),
     password: text("password").notNull(),
     role: userRole("role").notNull(),

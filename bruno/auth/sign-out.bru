@@ -1,7 +1,7 @@
 meta {
   name: sign-out
   type: http
-  seq: 3
+  seq: 4
 }
 
 get {
@@ -18,7 +18,7 @@ body:json {
 }
 
 tests {
-  test("should sign out user", function () {
+  test("should sign out user and return 200", function () {
     expect(res.getStatus()).to.equal(200);
   });
   

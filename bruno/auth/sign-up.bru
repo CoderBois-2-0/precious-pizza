@@ -6,7 +6,7 @@ meta {
 
 post {
   url: {{baseUrl}}/{{path}}/sign-up
-  body: json
+  body: none
   auth: inherit
 }
 
@@ -14,23 +14,32 @@ headers {
   Content-Type: application/json
 }
 
-body:json {
-  {
-    "email": "{{$randomEmail}}",
-    "first-name": "{{$randomFirstName}}",
-    "last-name": "{{$randomLastName}}"
-  }
-}
-
 script:pre-request {
+  const email = bru.interpolate("{{$randomEmail}}");
+  bru.setVar("email", email);
+  
+  const firstName = bru.interpolate("{{$randomFirstName}}");
+  bru.setVar("firstName", firstName);
+  
+  const lastName = bru.interpolate("{{$randomLastName}}");
+  bru.setVar("lastName", lastName);
+  
   const password = bru.interpolate("{{$randomPassword}}");
   
-  const body = req.getBody();
-  req.setBody({ ...body, password, 'confirm-password': password });
+  const body = {
+    email,
+    'first-name': firstName,
+    'last-name': lastName,
+    password,
+    'confirm-password': password
+  };
+  console.log(body)
+  
+  req.setBody(body);
 }
 
 tests {
-  test("should create a new user", function () {
+  test("should create a new user and return 201", function () {
     expect(res.getStatus()).to.equal(201);
   });
   
@@ -41,6 +50,22 @@ tests {
         arr.some(str => str.includes("auth-token"))
       )
   });
+  
+  test("Should return correct body", function () {
+    const email = bru.getVar("email");
+    const firstName = bru.getVar("firstName");
+    const lastName = bru.getVar("lastName");
+  
+    
+    const body = res.getBody();
+    
+    expect(body).to.have.property("id");
+    expect(body.email).to.eql(email);
+    expect(body.firstName).to.eql(firstName);
+    expect(body.lastName).to.eql(lastName);
+  
+  
+  })
 }
 
 settings {

@@ -1,12 +1,12 @@
 meta {
-  name: login
+  name: is-authenticated
   type: http
-  seq: 2
+  seq: 3
 }
 
-post {
-  url: {{baseUrl}}/{{path}}/login
-  body: json
+get {
+  url: {{baseUrl}}/{{path}}/is-authenticated
+  body: none
   auth: inherit
 }
 
@@ -22,16 +22,8 @@ body:json {
 }
 
 tests {
-  test("should create a new user and return 200", function () {
+  test("should return a status of 200", function () {
     expect(res.getStatus()).to.equal(200);
-  });
-  
-  test("should send the 'set-cookie' header with the 'auth-token'", function () {
-    expect(res.getHeader("set-cookie"))
-      .to
-      .satisfy(arr => 
-        arr.some(str => str.includes("auth-token"))
-      )
   });
   
   test("Should have correct json body", function () {

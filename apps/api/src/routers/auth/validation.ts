@@ -4,6 +4,7 @@ import z from "zod/v4";
 const signUpSchema = z
   .object({
     email: z.email(),
+    "phone-number": z.string().length(8),
     "first-name": z.string().min(1).max(40),
     "last-name": z.string().min(1).max(80),
     password: z.string().min(8).max(16),
