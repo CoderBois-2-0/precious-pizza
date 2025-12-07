@@ -1,32 +1,36 @@
 {
-	"name": "api",
-	"type": "module",
-	"engines": {
-		"node": ">=22 <=24"
-	},
-	"scripts": {
-		"lint": "eslint .",
-		"format": "prettier --write .",
-		"dev": "wrangler dev",
-		"deploy": "wrangler deploy --minify",
-		"cf-typegen": "wrangler types --env-interface CloudflareBindings"
-	},
-	"dependencies": {
-		"drizzle-orm": "^0.44.7",
-		"hono": "^4.10.6",
-		"pg": "^8.16.3"
-	},
-	"devDependencies": {
-		"@eslint/js": "^9.39.1",
-		"@types/node": "^22.19.1",
-		"drizzle-kit": "^0.31.7",
-		"eslint": "^9.39.1",
-		"eslint-config-prettier": "^10.1.8",
-		"eslint-plugin-prettier": "^5.5.4",
-		"globals": "^16.5.0",
-		"prettier": "^3.6.2",
-		"typescript-eslint": "^8.48.0",
-		"vitest": "^3.2.4",
-		"wrangler": "^4.4.0"
-	}
+  "name": "api",
+  "type": "module",
+  "engines": {
+    "node": ">=22 <=24"
+  },
+  "scripts": {
+    "db:generate": "pnpm drizzle-kit generate",
+    "db:migrate": "pnpm drizzle-kit migrate",
+    "lint": "eslint .",
+    "lint:fix": "eslint --fix .",
+    "format": "prettier --write .",
+    "dev": "wrangler dev",
+    "deploy": "wrangler deploy --minify",
+    "cf-typegen": "wrangler types --env-interface CloudflareBindings"
+  },
+  "dependencies": {
+    "drizzle-orm": "^0.44.7",
+    "hono": "^4.10.6",
+    "pg": "^8.16.3",
+    "zod": "^4.1.13"
+  },
+  "devDependencies": {
+    "@eslint/js": "^9.39.1",
+    "@types/node": "^22.19.1",
+    "drizzle-kit": "^0.31.7",
+    "eslint": "^9.39.1",
+    "eslint-config-prettier": "^10.1.8",
+    "eslint-plugin-prettier": "^5.5.4",
+    "globals": "^16.5.0",
+    "prettier": "^3.6.2",
+    "typescript-eslint": "^8.48.0",
+    "vitest": "^3.2.4",
+    "wrangler": "^4.51.0"
+  }
 }
