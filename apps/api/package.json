@@ -11,7 +11,10 @@
     "lint:fix": "eslint --fix .",
     "format": "prettier --write .",
     "dev": "wrangler dev",
-    "deploy": "wrangler deploy --minify",
+    "deploy:stageing": "wrangler deploy --minify --env stageing",
+    "deploy:stageing:dry": "wrangler deploy --env stageing --dry-run",
+    "deploy:production": "wrangler deploy --minify --env production",
+    "deploy:production:dry": "wrangler deploy --env production --dry-run",
     "cf-typegen": "wrangler types --env-interface CloudflareBindings"
   },
   "dependencies": {

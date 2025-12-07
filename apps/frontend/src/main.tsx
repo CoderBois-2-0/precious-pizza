@@ -3,6 +3,7 @@ import ReactDOM from 'react-dom/client';
 import { RouterProvider, createRouter } from '@tanstack/react-router';
 
 import './styles.scss';
+// @ts-ignore the import is needed to include bootstrap html classes
 import * as bootstrap from 'bootstrap';
 
 import * as TanStackQueryProvider from './integrations/tanstack-query/root-provider.tsx';
