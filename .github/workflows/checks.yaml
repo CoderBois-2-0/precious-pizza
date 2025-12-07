@@ -75,6 +75,51 @@ jobs:
             - name: Stageing is deployable
               run: pnpm --filter api deploy:production:dry
 
+    frontend-is-deployable-stageing:
+        name: Frontend is deployable to stageing
+        if: github.event.pull_request.base.ref == 'dev'
+        runs-on: ubuntu-latest
+
+        steps:
+            - uses: actions/checkout@v4
+
+            - name: Setup pnpm
+              uses: pnpm/action-setup@41ff72655975bd51cab0327fa583b6e92b6d3061
+
+            - name: Setup Node
+              uses: actions/setup-node@v5
+              with:
+                  node_version: 24
+                  cache: pnpm
+
+            - name: Install dependencies
+              run: pnpm install --frozen-lockfile
+
+            - name: Stageing is deployable
+              run: pnpm --filter frontend deploy:stageing:dry
+
+    frontend-is-deployable-production:
+        name: Frontend is deployable to production
+        if: github.event.pull_request.base.ref == 'main'
+        runs-on: ubuntu-latest
+
+        steps:
+            - uses: actions/checkout@v4
+
+            - name: Setup pnpm
+              uses: pnpm/action-setup@41ff72655975bd51cab0327fa583b6e92b6d3061
+
+            - name: Setup Node
+              uses: actions/setup-node@v5
+              with:
+                  node_version: 24
+                  cache: pnpm
+
+            - name: Install dependencies
+              run: pnpm install --frozen-lockfile
+
+            - name: Stageing is deployable
+              run: pnpm --filter frontend deploy:production:dry
     test-e2e:
         timeout-minutes: 60
         runs-on: ubuntu-latest
