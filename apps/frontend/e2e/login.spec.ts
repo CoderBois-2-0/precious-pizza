@@ -1,3 +1,5 @@
+// eslint-disable
+
 import { expect, test } from '@playwright/test';
 
 const url = 'localhost:3000';
