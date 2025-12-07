@@ -1,4 +1,5 @@
 import { cors } from "hono/cors";
+import { secureHeaders } from "hono/secure-headers";
 import publicRouter from "./publicRouter";
 import protectedRouter from "./protectedRouter";
 import { createRouter } from "./util";
@@ -12,6 +13,7 @@ const app = createRouter()
 
     return corsMiddelware(c, next);
   })
+  .use(secureHeaders())
   .route("/", publicRouter)
   .route("/", protectedRouter);
 
