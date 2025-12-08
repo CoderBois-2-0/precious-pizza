@@ -25,7 +25,7 @@ async function setAuthCookie<TEnv extends IEnv = IEnv>(
     path: "/",
     httpOnly: true,
     maxAge: 60 * 60 * 24 * 3,
-    secure: c.env.ENVIRONMENT !== "production",
+    secure: c.env.ENVIRONMENT === "production",
   });
 }
 

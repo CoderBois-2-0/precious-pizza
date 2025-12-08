@@ -1,6 +1,11 @@
-import type { ILoginUpUser, ISignUpUser } from '@/apiClients/authClient';
+import type {
+  IAPIUser,
+  ILoginUpUser,
+  ISignUpUser,
+} from '@/apiClients/authClient';
 import AuthClient from '@/apiClients/authClient';
 import { useAuthStore } from '@/stores/authStore';
+import { useEffect, useState } from 'react';
 
 const authClient = new AuthClient();
 
@@ -32,6 +37,10 @@ function useAuth() {
   };
 
   const isAuthenticated = async () => {
+    if (authStore.user) {
+      return;
+    }
+
     const user = await authClient.isAuthenticated();
     if (user === null) {
       return;
@@ -40,7 +49,7 @@ function useAuth() {
     authStore.setUser(user);
   };
 
-  return { signUp, login, signOut, isAuthenticated };
+  return { signUp, login, signOut, isAuthenticated, authStore };
 }
 
 export { useAuth };

@@ -1,0 +1,26 @@
+import { IEnv } from "$routers/types";
+import { createRouter } from "$routers/util";
+import { IPizzaVariables } from "./index";
+import { injectPizzaHandler } from "./middleware";
+
+interface IPizzaEnv extends IEnv {
+  Variables: IPizzaVariables;
+}
+
+const router = createRouter<IPizzaEnv>()
+  .use(injectPizzaHandler)
+  .get("/", async (c) => {
+    const pizzaHandler = c.get("pizzaHandler");
+
+    try {
+      const pizzas = await pizzaHandler.getAll();
+
+      return c.json(pizzas);
+    } catch (e) {
+      console.log(e);
+      return c.json({ message: "Could not fetch pizzas" }, 500);
+    }
+  });
+
+export default router;
+export { IPizzaEnv };

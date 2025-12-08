@@ -1,5 +1,7 @@
 import { jwt } from "hono/jwt";
 import { authRouter } from "./auth/index";
+import { categoryRouter } from "./category";
+import { pizzaRouter } from "./pizza";
 import { createRouter, authTokenName } from "./util";
 
 const router = createRouter()
@@ -11,6 +13,8 @@ const router = createRouter()
 
     return jwtHandler(c, next);
   })
-  .route(authRouter.path, authRouter.protectedRouter);
+  .route(authRouter.path, authRouter.protectedRouter)
+  .route(categoryRouter.path, categoryRouter.protectedRouter)
+  .route(pizzaRouter.path, pizzaRouter.protectedRouter);
 
 export default router;
