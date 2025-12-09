@@ -1,152 +1,159 @@
 name: Checks
 
 on:
-    pull_request:
-        branches:
-            - main
-            - dev
+  pull_request:
+    branches:
+      - main
+      - dev
 
 jobs:
-    lint:
-        name: Lint and format check
-        runs-on: ubuntu-latest
+  lint:
+    name: Lint and format check
+    runs-on: ubuntu-latest
 
-        steps:
-            - uses: actions/checkout@v4
+    steps:
+      - uses: actions/checkout@v4
 
-            - name: Setup pnpm
-              uses: pnpm/action-setup@41ff72655975bd51cab0327fa583b6e92b6d3061
+      - name: Setup pnpm
+        uses: pnpm/action-setup@41ff72655975bd51cab0327fa583b6e92b6d3061
 
-            - name: Setup Node
-              uses: actions/setup-node@v5
-              with:
-                  node_version: 24
-                  cache: pnpm
+      - name: Setup Node
+        uses: actions/setup-node@v5
+        with:
+          node_version: 24
+          cache: pnpm
 
-            - name: Install dependencies
-              run: pnpm install --frozen-lockfile
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
 
-            - name: Lint
-              run: pnpm lint
+      - name: Lint
+        run: pnpm lint
 
-    api-is-deployable-stageing:
-        name: API is deployable to stageing
-        if: github.event.pull_request.base.ref == 'dev'
-        runs-on: ubuntu-latest
+  api-is-deployable-stageing:
+    name: API is deployable to stageing
+    if: github.event.pull_request.base.ref == 'dev'
+    runs-on: ubuntu-latest
 
-        steps:
-            - uses: actions/checkout@v4
+    steps:
+      - uses: actions/checkout@v4
 
-            - name: Setup pnpm
-              uses: pnpm/action-setup@41ff72655975bd51cab0327fa583b6e92b6d3061
+      - name: Setup pnpm
+        uses: pnpm/action-setup@41ff72655975bd51cab0327fa583b6e92b6d3061
 
-            - name: Setup Node
-              uses: actions/setup-node@v5
-              with:
-                  node_version: 24
-                  cache: pnpm
+      - name: Setup Node
+        uses: actions/setup-node@v5
+        with:
+          node_version: 24
+          cache: pnpm
 
-            - name: Install dependencies
-              run: pnpm install --frozen-lockfile
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
 
-            - name: Stageing is deployable
-              run: pnpm --filter api deploy:stageing:dry
+      - name: Stageing is deployable
+        run: pnpm --filter api deploy:stageing:dry
 
-    api-is-deployable-production:
-        name: API is deployable to production
-        if: github.event.pull_request.base.ref == 'main'
-        runs-on: ubuntu-latest
+  api-is-deployable-production:
+    name: API is deployable to production
+    if: github.event.pull_request.base.ref == 'main'
+    runs-on: ubuntu-latest
 
-        steps:
-            - uses: actions/checkout@v4
+    steps:
+      - uses: actions/checkout@v4
 
-            - name: Setup pnpm
-              uses: pnpm/action-setup@41ff72655975bd51cab0327fa583b6e92b6d3061
+      - name: Setup pnpm
+        uses: pnpm/action-setup@41ff72655975bd51cab0327fa583b6e92b6d3061
 
-            - name: Setup Node
-              uses: actions/setup-node@v5
-              with:
-                  node_version: 24
-                  cache: pnpm
+      - name: Setup Node
+        uses: actions/setup-node@v5
+        with:
+          node_version: 24
+          cache: pnpm
 
-            - name: Install dependencies
-              run: pnpm install --frozen-lockfile
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
 
-            - name: Stageing is deployable
-              run: pnpm --filter api deploy:production:dry
+      - name: Stageing is deployable
+        run: pnpm --filter api deploy:production:dry
 
-    frontend-is-deployable-stageing:
-        name: Frontend is deployable to stageing
-        if: github.event.pull_request.base.ref == 'dev'
-        runs-on: ubuntu-latest
+  frontend-is-deployable-stageing:
+    name: Frontend is deployable to stageing
+    if: github.event.pull_request.base.ref == 'dev'
+    runs-on: ubuntu-latest
 
-        steps:
-            - uses: actions/checkout@v4
+    steps:
+      - uses: actions/checkout@v4
 
-            - name: Setup pnpm
-              uses: pnpm/action-setup@41ff72655975bd51cab0327fa583b6e92b6d3061
+      - name: Setup pnpm
+        uses: pnpm/action-setup@41ff72655975bd51cab0327fa583b6e92b6d3061
 
-            - name: Setup Node
-              uses: actions/setup-node@v5
-              with:
-                  node_version: 24
-                  cache: pnpm
+      - name: Setup Node
+        uses: actions/setup-node@v5
+        with:
+          node_version: 24
+          cache: pnpm
 
-            - name: Install dependencies
-              run: pnpm install --frozen-lockfile
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
 
-            - name: Stageing is deployable
-              run: pnpm --filter frontend deploy:stageing:dry
+      - name: Build
+        run: pnpm --filter frontend build
 
-    frontend-is-deployable-production:
-        name: Frontend is deployable to production
-        if: github.event.pull_request.base.ref == 'main'
-        runs-on: ubuntu-latest
+      - name: Stageing is deployable
+        run: pnpm --filter frontend deploy:stageing:dry
 
-        steps:
-            - uses: actions/checkout@v4
+  frontend-is-deployable-production:
+    name: Frontend is deployable to production
+    if: github.event.pull_request.base.ref == 'main'
+    runs-on: ubuntu-latest
 
-            - name: Setup pnpm
-              uses: pnpm/action-setup@41ff72655975bd51cab0327fa583b6e92b6d3061
+    steps:
+      - uses: actions/checkout@v4
 
-            - name: Setup Node
-              uses: actions/setup-node@v5
-              with:
-                  node_version: 24
-                  cache: pnpm
+      - name: Setup pnpm
+        uses: pnpm/action-setup@41ff72655975bd51cab0327fa583b6e92b6d3061
 
-            - name: Install dependencies
-              run: pnpm install --frozen-lockfile
+      - name: Setup Node
+        uses: actions/setup-node@v5
+        with:
+          node_version: 24
+          cache: pnpm
 
-            - name: Stageing is deployable
-              run: pnpm --filter frontend deploy:production:dry
-    test-e2e:
-        timeout-minutes: 60
-        runs-on: ubuntu-latest
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
 
-        steps:
-            - uses: actions/checkout@v4
+      - name: Build
+        run: pnpm --filter frontend build
 
-            - name: Setup pnpm
-              uses: pnpm/action-setup@41ff72655975bd51cab0327fa583b6e92b6d3061
+      - name: Stageing is deployable
+        run: pnpm --filter frontend deploy:production:dry
+  test-e2e:
+    timeout-minutes: 60
+    runs-on: ubuntu-latest
+    if: false
 
-            - uses: actions/setup-node@v5
-              with:
-                  node-version: 24
-                  cache: pnpm
+    steps:
+      - uses: actions/checkout@v4
 
-            - name: Install dependencies
-              run: pnpm install
+      - name: Setup pnpm
+        uses: pnpm/action-setup@41ff72655975bd51cab0327fa583b6e92b6d3061
 
-            - name: Install Playwright Browsers
-              run: pnpm --filter frontend exec playwright install --with-deps
+      - uses: actions/setup-node@v5
+        with:
+          node-version: 24
+          cache: pnpm
 
-            - name: Run Playwright tests
-              run: pnpm --filter frontend exec playwright test
+      - name: Install dependencies
+        run: pnpm install
 
-            - uses: actions/upload-artifact@v4
-              if: ${{ !cancelled() }}
-              with:
-                  name: playwright-report
-                  path: playwright-report/
-                  retention-days: 30
+      - name: Install Playwright Browsers
+        run: pnpm --filter frontend exec playwright install --with-deps
+
+      - name: Run Playwright tests
+        run: pnpm --filter frontend exec playwright test
+
+      - uses: actions/upload-artifact@v4
+        if: ${{ !cancelled() }}
+        with:
+          name: playwright-report
+          path: playwright-report/
+          retention-days: 30

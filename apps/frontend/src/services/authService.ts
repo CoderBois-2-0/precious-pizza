@@ -32,6 +32,10 @@ function useAuth() {
   };
 
   const isAuthenticated = async () => {
+    if (authStore.user) {
+      return;
+    }
+
     const user = await authClient.isAuthenticated();
     if (user === null) {
       return;
@@ -40,7 +44,7 @@ function useAuth() {
     authStore.setUser(user);
   };
 
-  return { signUp, login, signOut, isAuthenticated };
+  return { signUp, login, signOut, isAuthenticated, authStore };
 }
 
 export { useAuth };

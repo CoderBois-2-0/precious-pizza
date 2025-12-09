@@ -8,6 +8,27 @@
       "when": 1764952488540,
       "tag": "0000_purple_james_howlett",
       "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "7",
+      "when": 1765212990619,
+      "tag": "0001_normal_dazzler",
+      "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "7",
+      "when": 1765276686288,
+      "tag": "0002_cooing_makkari",
+      "breakpoints": true
+    },
+    {
+      "idx": 3,
+      "version": "7",
+      "when": 1765276704790,
+      "tag": "0003_lush_boomerang",
+      "breakpoints": true
     }
   ]
 }
