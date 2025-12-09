@@ -29,6 +29,13 @@
       "when": 1765276704790,
       "tag": "0003_lush_boomerang",
       "breakpoints": true
+    },
+    {
+      "idx": 4,
+      "version": "7",
+      "when": 1765313611156,
+      "tag": "0004_bitter_tombstone",
+      "breakpoints": true
     }
   ]
 }
