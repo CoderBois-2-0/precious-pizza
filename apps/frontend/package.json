@@ -15,7 +15,11 @@
     "lint": "eslint .",
     "lint:fix": "eslint --fix .",
     "format": "prettier --write .",
-    "check": "prettier --write . && eslint --fix"
+    "check": "prettier --write . && eslint --fix",
+    "deploy:stageing": "wrangler deploy --minify --env stageing",
+    "deploy:stageing:dry": "wrangler deploy --env stageing --dry-run",
+    "deploy:production": "wrangler deploy --minify --env production",
+    "deploy:production:dry": "wrangler deploy --env production --dry-run"
   },
   "dependencies": {
     "@cloudflare/vite-plugin": "^1.17.0",
