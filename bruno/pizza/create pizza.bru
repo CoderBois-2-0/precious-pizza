@@ -1,0 +1,29 @@
+meta {
+  name: create pizza
+  type: http
+  seq: 2
+}
+
+post {
+  url: {{baseUrl}}/{{path}}
+  body: json
+  auth: inherit
+}
+
+headers {
+  Sec-Fetch-Site: same-origin
+}
+
+body:json {
+  {
+    "name": "Hawaii",
+    "description": "The forbidden pizza",
+    "price": 69.95,
+    "categoryID": "532644ff-2d70-473e-86a4-1a48fab160d0"
+  }
+}
+
+settings {
+  encodeUrl: true
+  timeout: 0
+}

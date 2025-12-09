@@ -1,17 +1,20 @@
 import { useState } from 'react';
 import { Link } from '@tanstack/react-router';
-import { Home, Menu, User, UserPlus, X } from 'lucide-react';
+import { Home, Menu, ShieldUser, User, UserPlus, X } from 'lucide-react';
 import { useAuth } from '@/services/authService';
 
 export default function Header() {
-  const { signOut } = useAuth();
+  const { signOut, authStore, isAuthenticated } = useAuth();
+
+  isAuthenticated();
+
   const [isOpen, setIsOpen] = useState(false);
 
   const closeSidebar = () => setIsOpen(false);
 
   return (
     <>
-      <header className="d-flex align-items-center justify-content-between px-3 py-1 text-white shadow-sm header-light-green mb-3">
+      <header className="d-flex align-items-center justify-content-between px-3 py-1 shadow-sm header-light-green mb-3">
         <div className="d-flex align-items-center">
           <button
             onClick={() => setIsOpen(true)}
@@ -20,14 +23,19 @@ export default function Header() {
           >
             <Menu size={24} />
           </button>
+
           <div className="text-center">
             <h1>Precious Pizza</h1>
             <p> - The one Pizza to rule them all!</p>
           </div>
+        </div>
 
-          <button className="btn btn-danger" onClick={signOut}>
-            Sign out
-          </button>
+        <div>
+          {authStore.user && (
+            <button className="btn btn-danger" onClick={signOut}>
+              Sign out
+            </button>
+          )}
         </div>
       </header>
 
@@ -57,6 +65,17 @@ export default function Header() {
 
         {/* Navigation links */}
         <nav className="flex-grow-1 overflow-auto">
+          {authStore.user?.role === 'admin' && (
+            <Link
+              to="/admin/categories"
+              onClick={closeSidebar}
+              className="d-flex align-items-center gap-2 p-2 mb-2 text-white text-decoration-none rounded hover-bg-secondary"
+            >
+              <ShieldUser size={20} />
+              <span className="fw-medium">Admin</span>
+            </Link>
+          )}
+
           <Link
             to="/"
             onClick={closeSidebar}
