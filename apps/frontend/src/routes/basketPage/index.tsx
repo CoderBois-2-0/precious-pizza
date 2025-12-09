@@ -1,3 +1,4 @@
+import BasketPage from '@/components/BasketPage'
 import { createFileRoute } from '@tanstack/react-router'
 
 export const Route = createFileRoute('/basketPage/')({
@@ -7,7 +8,8 @@ export const Route = createFileRoute('/basketPage/')({
 function RouteComponent() {
   return (
     <>
-      <div>Hello "/basket/"!</div>
+    <BasketPage/>  
+      {/* <div>Hello "/basket/"!</div> */}
     </>
   )
 }

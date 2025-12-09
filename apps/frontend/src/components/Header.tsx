@@ -29,7 +29,7 @@ export default function Header() {
             <Link
               to="/basketPage"
               onClick={() => setIsOpen(false)}
-              className='text-black'
+              className="text-black"
             >
               <ShoppingBasket size={28} />
               {/* <span className="fw-medium">Basket</span> */}
