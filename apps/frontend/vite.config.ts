@@ -1,9 +1,10 @@
-import { URL, fileURLToPath } from 'node:url'
-import { defineConfig } from 'vite'
-import { devtools } from '@tanstack/devtools-vite'
-import viteReact from '@vitejs/plugin-react'
+import { URL, fileURLToPath } from 'node:url';
+import { defineConfig } from 'vite';
+import { devtools } from '@tanstack/devtools-vite';
+import viteReact from '@vitejs/plugin-react';
 
-import { tanstackRouter } from '@tanstack/router-plugin/vite'
+import { tanstackRouter } from '@tanstack/router-plugin/vite';
+import { cloudflare } from '@cloudflare/vite-plugin';
 
 // https://vitejs.dev/config/
 export default defineConfig({
@@ -14,10 +15,23 @@ export default defineConfig({
       autoCodeSplitting: true,
     }),
     viteReact(),
+    cloudflare(),
   ],
   resolve: {
     alias: {
       '@': fileURLToPath(new URL('./src', import.meta.url)),
     },
   },
-})
+  css: {
+    preprocessorOptions: {
+      scss: {
+        silenceDeprecations: [
+          'import',
+          'mixed-decls',
+          'color-functions',
+          'global-builtin',
+        ],
+      },
+    },
+  },
+});

@@ -10,63 +10,53 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
-import { Route as UserPageIndexRouteImport } from './routes/userPage/index'
-import { Route as PizzaPageIndexRouteImport } from './routes/pizzaPage/index'
-import { Route as BasketPageIndexRouteImport } from './routes/basketPage/index'
+import { Route as authSignUpRouteImport } from './routes/(auth)/signUp'
+import { Route as authLoginRouteImport } from './routes/(auth)/login'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
-const UserPageIndexRoute = UserPageIndexRouteImport.update({
-  id: '/userPage/',
-  path: '/userPage/',
+const authSignUpRoute = authSignUpRouteImport.update({
+  id: '/(auth)/signUp',
+  path: '/signUp',
   getParentRoute: () => rootRouteImport,
 } as any)
-const PizzaPageIndexRoute = PizzaPageIndexRouteImport.update({
-  id: '/pizzaPage/',
-  path: '/pizzaPage/',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const BasketPageIndexRoute = BasketPageIndexRouteImport.update({
-  id: '/basketPage/',
-  path: '/basketPage/',
+const authLoginRoute = authLoginRouteImport.update({
+  id: '/(auth)/login',
+  path: '/login',
   getParentRoute: () => rootRouteImport,
 } as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
-  '/basketPage': typeof BasketPageIndexRoute
-  '/pizzaPage': typeof PizzaPageIndexRoute
-  '/userPage': typeof UserPageIndexRoute
+  '/login': typeof authLoginRoute
+  '/signUp': typeof authSignUpRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
-  '/basketPage': typeof BasketPageIndexRoute
-  '/pizzaPage': typeof PizzaPageIndexRoute
-  '/userPage': typeof UserPageIndexRoute
+  '/login': typeof authLoginRoute
+  '/signUp': typeof authSignUpRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
-  '/basketPage/': typeof BasketPageIndexRoute
-  '/pizzaPage/': typeof PizzaPageIndexRoute
-  '/userPage/': typeof UserPageIndexRoute
+  '/(auth)/login': typeof authLoginRoute
+  '/(auth)/signUp': typeof authSignUpRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/basketPage' | '/pizzaPage' | '/userPage'
+  fullPaths: '/' | '/login' | '/signUp'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/basketPage' | '/pizzaPage' | '/userPage'
-  id: '__root__' | '/' | '/basketPage/' | '/pizzaPage/' | '/userPage/'
+  to: '/' | '/login' | '/signUp'
+  id: '__root__' | '/' | '/(auth)/login' | '/(auth)/signUp'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
-  BasketPageIndexRoute: typeof BasketPageIndexRoute
-  PizzaPageIndexRoute: typeof PizzaPageIndexRoute
-  UserPageIndexRoute: typeof UserPageIndexRoute
+  authLoginRoute: typeof authLoginRoute
+  authSignUpRoute: typeof authSignUpRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -78,25 +68,18 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/userPage/': {
-      id: '/userPage/'
-      path: '/userPage'
-      fullPath: '/userPage'
-      preLoaderRoute: typeof UserPageIndexRouteImport
+    '/(auth)/signUp': {
+      id: '/(auth)/signUp'
+      path: '/signUp'
+      fullPath: '/signUp'
+      preLoaderRoute: typeof authSignUpRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/pizzaPage/': {
-      id: '/pizzaPage/'
-      path: '/pizzaPage'
-      fullPath: '/pizzaPage'
-      preLoaderRoute: typeof PizzaPageIndexRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/basketPage/': {
-      id: '/basketPage/'
-      path: '/basketPage'
-      fullPath: '/basketPage'
-      preLoaderRoute: typeof BasketPageIndexRouteImport
+    '/(auth)/login': {
+      id: '/(auth)/login'
+      path: '/login'
+      fullPath: '/login'
+      preLoaderRoute: typeof authLoginRouteImport
       parentRoute: typeof rootRouteImport
     }
   }
@@ -104,9 +87,8 @@ declare module '@tanstack/react-router' {
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
-  BasketPageIndexRoute: BasketPageIndexRoute,
-  PizzaPageIndexRoute: PizzaPageIndexRoute,
-  UserPageIndexRoute: UserPageIndexRoute,
+  authLoginRoute: authLoginRoute,
+  authSignUpRoute: authSignUpRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)

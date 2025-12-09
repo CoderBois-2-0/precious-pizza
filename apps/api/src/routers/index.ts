@@ -1,21 +1,22 @@
-import { Hono } from "hono";
 import { cors } from "hono/cors";
+import { secureHeaders } from "hono/secure-headers";
+import publicRouter from "./publicRouter";
+import protectedRouter from "./protectedRouter";
+import { createRouter } from "./util";
+import { csrf } from "hono/csrf";
 
-interface IEnv {
-  Bindings: CloudflareBindings;
-}
+const app = createRouter()
+  .use((c, next) => {
+    const corsMiddelware = cors({
+      origin: c.env.CORS_ORIGIN,
+      credentials: true,
+    });
 
-function createRouter<TEnv extends IEnv = IEnv>() {
-  return new Hono<TEnv>();
-}
-
-const app = createRouter().use((c, next) => {
-  const corsMiddelware = cors({
-    origin: c.env.CORS_ORIGIN,
-  });
-
-  return corsMiddelware(c, next);
-});
+    return corsMiddelware(c, next);
+  })
+  .use(csrf())
+  .use(secureHeaders())
+  .route("/", publicRouter)
+  .route("/", protectedRouter);
 
 export default app;
-export { createRouter };

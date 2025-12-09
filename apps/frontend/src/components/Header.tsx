@@ -1,15 +1,17 @@
-import { Link } from '@tanstack/react-router'
-import { useState } from 'react'
-import { Home, Menu, Pizza, ShoppingBasket, User, X  } from 'lucide-react'
-
+import { useState } from 'react';
+import { Link } from '@tanstack/react-router';
+import { Home, Menu, User, UserPlus, X } from 'lucide-react';
+import { useAuth } from '@/services/authService';
 
 export default function Header() {
-  const [isOpen, setIsOpen] = useState(false)
+  const { signOut } = useAuth();
+  const [isOpen, setIsOpen] = useState(false);
+
+  const closeSidebar = () => setIsOpen(false);
 
   return (
     <>
-      {/* Top Header */}
-      <header className="d-flex align-items-center justify-content-between px-3 py-1 text-white shadow-sm header-light-green ">
+      <header className="d-flex align-items-center justify-content-between px-3 py-1 text-white shadow-sm header-light-green mb-3">
         <div className="d-flex align-items-center">
           <button
             onClick={() => setIsOpen(true)}
@@ -22,18 +24,9 @@ export default function Header() {
             <h1>Precious Pizza</h1>
             <p> - The one Pizza to rule them all!</p>
           </div>
-        </div>
 
-        <div className="d-flex align-items-end">
-          <button className="btn btn-light me-3">
-            <Link
-              to="/basketPage"
-              onClick={() => setIsOpen(false)}
-              className='text-black'
-            >
-              <ShoppingBasket size={28} />
-              {/* <span className="fw-medium">Basket</span> */}
-            </Link>
+          <button className="btn btn-danger" onClick={signOut}>
+            Sign out
           </button>
         </div>
       </header>
@@ -54,7 +47,7 @@ export default function Header() {
         <div className="d-flex justify-content-between align-items-center border-bottom border-secondary pb-2 mb-3">
           <h2 className="h5 mb-0">Navigation</h2>
           <button
-            onClick={() => setIsOpen(false)}
+            onClick={closeSidebar}
             className="btn btn-dark"
             aria-label="Close menu"
           >
@@ -66,7 +59,7 @@ export default function Header() {
         <nav className="flex-grow-1 overflow-auto">
           <Link
             to="/"
-            onClick={() => setIsOpen(false)}
+            onClick={closeSidebar}
             className="d-flex align-items-center gap-2 p-2 mb-2 text-white text-decoration-none rounded hover-bg-secondary"
           >
             <Home size={20} />
@@ -74,33 +67,24 @@ export default function Header() {
           </Link>
 
           <Link
-            to="/basketPage"
-            onClick={() => setIsOpen(false)}
+            to="/signUp"
+            onClick={closeSidebar}
             className="d-flex align-items-center gap-2 p-2 mb-2 text-white text-decoration-none rounded hover-bg-secondary"
           >
-            <ShoppingBasket size={20} />
-            <span className="fw-medium">Basket</span>
+            <UserPlus size={20} />
+            <span className="fw-medium">Sign up</span>
           </Link>
 
           <Link
-            to="/pizzaPage"
-            onClick={() => setIsOpen(false)}
-            className="d-flex align-items-center gap-2 p-2 mb-2 text-white text-decoration-none rounded hover-bg-secondary"
-          >
-            <Pizza size={20} />
-            <span className="fw-medium">Menu</span>
-          </Link>
-
-          <Link
-            to="/userPage"
-            onClick={() => setIsOpen(false)}
+            to="/login"
+            onClick={closeSidebar}
             className="d-flex align-items-center gap-2 p-2 mb-2 text-white text-decoration-none rounded hover-bg-secondary"
           >
             <User size={20} />
-            <span className="fw-medium">User</span>
+            <span className="fw-medium">Login</span>
           </Link>
         </nav>
       </div>
     </>
-  )
+  );
 }
