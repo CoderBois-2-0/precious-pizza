@@ -1,11 +1,11 @@
 import { categoryTable } from "$db/category/schema";
 import { relations } from "drizzle-orm";
 import {
+  numeric,
   boolean,
   foreignKey,
   pgTable,
   primaryKey,
-  real,
   uuid,
   varchar,
 } from "drizzle-orm/pg-core";
@@ -16,10 +16,11 @@ const pizzaTable = pgTable(
     id: uuid("id")
       .notNull()
       .$defaultFn(() => crypto.randomUUID()),
-    name: varchar("name", { length: 40 }).notNull(),
-    description: varchar("description", { length: 200 }).notNull(),
-    price: real("price").notNull(),
-    isDraft: boolean("is_draft").notNull().default(false),
+    name: varchar("name", { length: 50 }).notNull(),
+    price: numeric("price", { precision: 6, scale: 2 }).notNull(),
+    description: varchar("description", { length: 500 }).notNull(),
+    imageUrl: varchar("image_url", { length: 200 }),
+    isVisible: boolean("is_visible").notNull(),
     categoryID: uuid("category_id").notNull(),
   },
   (table) => [
