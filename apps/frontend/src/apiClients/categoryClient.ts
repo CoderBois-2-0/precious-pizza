@@ -72,3 +72,4 @@ class CategoryClient {
 }
 
 export default CategoryClient;
+export { IAPICategory };

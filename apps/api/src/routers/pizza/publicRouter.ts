@@ -2,6 +2,7 @@ import { IEnv } from "$routers/types";
 import { createRouter } from "$routers/util";
 import { IPizzaVariables } from "./index";
 import { injectPizzaHandler } from "./middleware";
+import { pizzaQueryValidator } from "./validation";
 
 interface IPizzaEnv extends IEnv {
   Variables: IPizzaVariables;
@@ -9,11 +10,18 @@ interface IPizzaEnv extends IEnv {
 
 const router = createRouter<IPizzaEnv>()
   .use(injectPizzaHandler)
-  .get("/", async (c) => {
+  .get("/", pizzaQueryValidator, async (c) => {
     const pizzaHandler = c.get("pizzaHandler");
+    const query = c.req.valid("query");
 
     try {
-      const pizzas = await pizzaHandler.getAll();
+      const pizzas = await pizzaHandler.getAll({
+        ...query,
+        order: {
+          limit: query.limit,
+          offset: query.page ? (query.page - 1) * query.limit : undefined,
+        },
+      });
 
       return c.json(pizzas);
     } catch (e) {

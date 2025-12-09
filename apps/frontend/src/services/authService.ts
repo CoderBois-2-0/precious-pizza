@@ -1,3 +1,4 @@
+import { useEffect, useState } from 'react';
 import type {
   IAPIUser,
   ILoginUpUser,
@@ -5,7 +6,6 @@ import type {
 } from '@/apiClients/authClient';
 import AuthClient from '@/apiClients/authClient';
 import { useAuthStore } from '@/stores/authStore';
-import { useEffect, useState } from 'react';
 
 const authClient = new AuthClient();
 

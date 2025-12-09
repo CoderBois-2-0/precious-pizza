@@ -1,7 +1,13 @@
 import { getDB, TDB } from "$db/index";
 import { eq } from "drizzle-orm";
 import { pizzaTable } from "./schema";
-import { TPizza, TPizzaInsert, TPizzaTable, TPizzaUpdate } from "./types";
+import {
+  IPizzaQuery,
+  TPizza,
+  TPizzaInsert,
+  TPizzaTable,
+  TPizzaUpdate,
+} from "./types";
 
 class PizzaHandler {
   #client: TDB;
@@ -12,8 +18,22 @@ class PizzaHandler {
     this.#table = pizzaTable;
   }
 
-  async getAll(): Promise<TPizza[]> {
-    return await this.#client.select().from(this.#table);
+  async getAll(query?: IPizzaQuery): Promise<TPizza[]> {
+    let qb = this.#client.select().from(this.#table).$dynamic();
+
+    if (query?.categoryID) {
+      qb = qb.where(eq(this.#table.categoryID, query.categoryID));
+    }
+
+    const order = query?.order;
+    if (order?.offset) {
+      qb = qb.offset(order.offset);
+    }
+    if (order?.limit) {
+      qb = qb.limit(order.limit);
+    }
+
+    return await qb.execute();
   }
 
   async create(newPizza: TPizzaInsert): Promise<void> {

@@ -23,7 +23,7 @@ const router = createRouter<IProtectedPizzaEnv>()
     try {
       await pizzaHandler.create(pizzaRequst);
 
-      return c.json({ message: "Created pizza" });
+      return c.json({ message: "Created pizza" }, 201);
     } catch {
       return c.json({ message: "Could not create pizza" }, 500);
     }

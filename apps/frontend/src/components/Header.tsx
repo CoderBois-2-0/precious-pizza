@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { Link } from '@tanstack/react-router';
-import { Home, Menu, User, UserPlus, ShieldUser, X } from 'lucide-react';
+import { Home, Menu, ShieldUser, User, UserPlus, X } from 'lucide-react';
 import { useAuth } from '@/services/authService';
 
 export default function Header() {
@@ -67,7 +67,7 @@ export default function Header() {
         <nav className="flex-grow-1 overflow-auto">
           {authStore.user?.role === 'admin' && (
             <Link
-              to="/admin"
+              to="/admin/categories"
               onClick={closeSidebar}
               className="d-flex align-items-center gap-2 p-2 mb-2 text-white text-decoration-none rounded hover-bg-secondary"
             >
