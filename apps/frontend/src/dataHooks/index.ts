@@ -1,5 +1,3 @@
-import { queryOptions } from '@tanstack/react-query';
-
 const msOneDay = 1000 * 60 * 60 * 24;
 
 const defaultQueryOptions = {

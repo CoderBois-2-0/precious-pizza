@@ -1,9 +1,4 @@
-import { useEffect, useState } from 'react';
-import type {
-  IAPIUser,
-  ILoginUpUser,
-  ISignUpUser,
-} from '@/apiClients/authClient';
+import type { ILoginUpUser, ISignUpUser } from '@/apiClients/authClient';
 import AuthClient from '@/apiClients/authClient';
 import { useAuthStore } from '@/stores/authStore';
 
