@@ -7,14 +7,17 @@ type IOrderInsert = typeof orderTable.$inferInsert;
 type IOrderItem = typeof orderItemTable.$inferSelect;
 type IOrderItemInsert = typeof orderItemTable.$inferInsert;
 
+interface INormalizedOrder extends Omit<IOrder, "totalPrice"> {
+  totalPrice: number;
+}
+
 interface IOrderItemQuery {
-  pizzaID: number;
+  pizzaID: string;
   name: string;
-  quantity: number;
   price: number;
 }
 
-interface IFullOrder extends IOrder {
+interface IFullOrder extends INormalizedOrder {
   items: IOrderItemQuery[];
 }
 
@@ -32,4 +35,13 @@ interface INewOrder {
   customerNote?: string;
 }
 
-export { INewOrder, IFullOrder, IOrder, IOrderItem, IOrderItemQuery, IOrderInsert, IOrderItemInsert };
+export {
+  INewOrder,
+  IFullOrder,
+  IOrder,
+  INormalizedOrder,
+  IOrderItem,
+  IOrderItemQuery,
+  IOrderInsert,
+  IOrderItemInsert,
+};

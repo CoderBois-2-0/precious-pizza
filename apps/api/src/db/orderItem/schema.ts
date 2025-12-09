@@ -3,7 +3,7 @@ import {
   varchar,
   serial,
   numeric,
-  integer,
+  uuid,
   foreignKey,
 } from "drizzle-orm/pg-core";
 import { pizzaTable } from "../pizza/schema";
@@ -16,10 +16,9 @@ export const orderItemTable = pgTable(
     orderID: varchar("order_id", { length: 36 })
       .references(() => orderTable.id)
       .notNull(),
-    pizzaID: integer("pizza_id")
+    pizzaID: uuid("pizza_id")
       .references(() => pizzaTable.id)
       .notNull(),
-    quantity: integer("quantity").notNull(),
     price: numeric("price", { precision: 6, scale: 2 }).notNull(),
   },
   (table) => [

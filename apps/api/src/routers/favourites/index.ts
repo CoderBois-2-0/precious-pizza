@@ -58,8 +58,9 @@ app.post("/", async (c) => {
 
   const handler = new FavouritesHandler(c.env.DB_URL);
   const created = await handler.addFavourite({
-      userId, pizzaId,
-      id: ""
+    userId,
+    pizzaId,
+    id: "",
   });
 
   return c.json(created, 201);
