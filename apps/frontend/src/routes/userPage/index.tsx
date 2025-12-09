@@ -1,11 +1,16 @@
-import { createFileRoute } from '@tanstack/react-router'
+import { createFileRoute } from '@tanstack/react-router';
+import { useAuth } from '@/services/authService';
 
 export const Route = createFileRoute('/userPage/')({
   component: UserPage,
   preload: false,
-})
+});
 
 function UserPage() {
+  const { pageGuard, authStore } = useAuth();
+
+  pageGuard();
+
   return (
     <div className="container mt-5">
       {/* Page Header */}
@@ -22,11 +27,8 @@ function UserPage() {
           <div className="card shadow-sm">
             <div className="card-body">
               <h5 className="card-title">Your Profile</h5>
-              <p className="card-text text-muted mb-1">
-                <strong>User ID:</strong> 12345
-              </p>
               <p className="card-text text-muted">
-                <strong>Email:</strong> user@example.com
+                <strong>Email:</strong> {authStore.user?.email}
               </p>
 
               <button className="btn btn-primary w-100 mt-3">
@@ -46,15 +48,21 @@ function UserPage() {
               <ul className="list-group">
                 <li className="list-group-item d-flex justify-content-between align-items-center">
                   Pepperoni
-                  <button className="btn btn-sm btn-outline-danger">Remove</button>
+                  <button className="btn btn-sm btn-outline-danger">
+                    Remove
+                  </button>
                 </li>
                 <li className="list-group-item d-flex justify-content-between align-items-center">
                   Margherita
-                  <button className="btn btn-sm btn-outline-danger">Remove</button>
+                  <button className="btn btn-sm btn-outline-danger">
+                    Remove
+                  </button>
                 </li>
                 <li className="list-group-item d-flex justify-content-between align-items-center">
                   BBQ Chicken
-                  <button className="btn btn-sm btn-outline-danger">Remove</button>
+                  <button className="btn btn-sm btn-outline-danger">
+                    Remove
+                  </button>
                 </li>
               </ul>
 
@@ -66,5 +74,5 @@ function UserPage() {
         </div>
       </div>
     </div>
-  )
+  );
 }

@@ -85,25 +85,39 @@ export default function Header() {
             <span className="fw-medium">Home</span>
           </Link>
 
-          <Link
-            to="/signUp"
-            onClick={closeSidebar}
-            className="d-flex align-items-center gap-2 p-2 mb-2 text-white text-decoration-none rounded hover-bg-secondary"
-          >
-            <UserPlus size={20} />
-            <span className="fw-medium">Sign up</span>
-          </Link>
-
-          <Link
-            to="/login"
-            onClick={closeSidebar}
-            className="d-flex align-items-center gap-2 p-2 mb-2 text-white text-decoration-none rounded hover-bg-secondary"
-          >
-            <User size={20} />
-            <span className="fw-medium">Login</span>
-          </Link>
+          {!authStore.user && (
+            <AuthLinks closeSidebar={closeSidebar}></AuthLinks>
+          )}
         </nav>
       </div>
     </>
   );
 }
+
+interface IAuthLinksProps {
+  closeSidebar: () => void;
+}
+
+const AuthLinks = ({ closeSidebar }: IAuthLinksProps) => {
+  return (
+    <>
+      <Link
+        to="/signUp"
+        onClick={closeSidebar}
+        className="d-flex align-items-center gap-2 p-2 mb-2 text-white text-decoration-none rounded hover-bg-secondary"
+      >
+        <UserPlus size={20} />
+        <span className="fw-medium">Sign up</span>
+      </Link>
+
+      <Link
+        to="/login"
+        onClick={closeSidebar}
+        className="d-flex align-items-center gap-2 p-2 mb-2 text-white text-decoration-none rounded hover-bg-secondary"
+      >
+        <User size={20} />
+        <span className="fw-medium">Login</span>
+      </Link>
+    </>
+  );
+};
