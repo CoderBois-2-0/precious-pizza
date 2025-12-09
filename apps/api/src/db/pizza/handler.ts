@@ -1,13 +1,7 @@
 import { getDB, TDB } from "$db/index";
 import { eq } from "drizzle-orm";
 import { pizzaTable } from "./schema";
-import {
-  IPizzaQuery,
-  TPizza,
-  TPizzaInsert,
-  TPizzaTable,
-  TPizzaUpdate,
-} from "./types";
+import { IPizzaQuery, TPizza, TPizzaInsert, TPizzaTable, TPizzaUpdate } from "./types";
 
 class PizzaHandler {
   #client: TDB;
@@ -40,14 +34,8 @@ class PizzaHandler {
     await this.#client.insert(this.#table).values(newPizza);
   }
 
-  async update(
-    pizzaID: TPizza["id"],
-    pizzaUpdate: TPizzaUpdate,
-  ): Promise<void> {
-    await this.#client
-      .update(this.#table)
-      .set(pizzaUpdate)
-      .where(eq(this.#table.id, pizzaID));
+  async update(pizzaID: TPizza["id"], pizzaUpdate: TPizzaUpdate): Promise<void> {
+    await this.#client.update(this.#table).set(pizzaUpdate).where(eq(this.#table.id, pizzaID));
   }
 
   async delete(pizzaID: TPizza["id"]): Promise<void> {

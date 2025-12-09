@@ -10,10 +10,6 @@ interface IEnv {
   Bindings: CloudflareBindings;
 }
 
-function createRouter<TEnv extends IEnv = IEnv>() {
-  return new Hono<TEnv>();
-}
-
 const app = createRouter()
   .use((c, next) => {
     const corsMiddelware = cors({
@@ -26,7 +22,7 @@ const app = createRouter()
   .use(csrf())
   .use(secureHeaders())
   .route("/", publicRouter)
-  .route("/", protectedRouter)
-  .route("/basket", basketRouter);
+  .route("/", protectedRouter);
+  // .route("/basket", basketRouter);
 
 export default app;
