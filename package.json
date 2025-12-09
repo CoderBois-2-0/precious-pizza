@@ -1,24 +1,27 @@
 {
-	"name": "precious-pizza",
-	"version": "1.0.0",
-	"description": "",
-	"type": "module",
-	"engines": {
-		"node": ">=22 <=24"
-	},
-	"scripts": {
-		"test": "pnpm -r test",
-		"test:api": "pnpm --filter api test",
-		"test:frontend": "pnpm --filter frontend test",
-		"dev": "pnpm -r dev",
-		"dev:api": "pnpm --filter api dev",
-		"dev:frontend": "pnpm --filter frontend dev"
-	},
-	"keywords": [],
-	"author": "",
-	"license": "ISC",
-	"packageManager": "pnpm@10.23.0",
-	"dependencies": {
-		"bootstrap": "5.3.8"
-	}
+  "name": "precious-pizza",
+  "version": "1.0.0",
+  "description": "",
+  "type": "module",
+  "engines": {
+    "node": ">=22 <=24"
+  },
+  "scripts": {
+    "lint": "pnpm -r lint",
+    "lint:api": "pnpm --filter api lint",
+    "lint:frontend": "pnpm --filter frontend lint",
+    "test": "pnpm -r test",
+    "test:api": "pnpm --filter api test",
+    "test:frontend": "pnpm --filter frontend test",
+    "dev": "pnpm -r dev",
+    "dev:api": "pnpm --filter api dev",
+    "dev:frontend": "pnpm --filter frontend dev"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "packageManager": "pnpm@10.23.0",
+  "dependencies": {
+    "bootstrap": "5.3.8"
+  }
 }

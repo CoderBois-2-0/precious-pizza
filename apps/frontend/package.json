@@ -1,45 +1,60 @@
 {
-	"name": "frontend",
-	"private": true,
-	"type": "module",
-	"engines": {
-		"node": ">=22 <=24"
-	},
-	"scripts": {
-		"dev": "vite --port 3000",
-		"build": "vite build && tsc",
-		"serve": "vite preview",
-		"test": "vitest run",
-		"lint": "eslint",
-		"format": "prettier",
-		"check": "prettier --write . && eslint --fix"
-	},
-	"dependencies": {
-		"@tanstack/react-devtools": "^0.7.0",
-		"@tanstack/react-query": "^5.66.5",
-		"@tanstack/react-query-devtools": "^5.84.2",
-		"@tanstack/react-router": "^1.132.0",
-		"@tanstack/react-router-devtools": "^1.132.0",
-		"@tanstack/router-plugin": "^1.132.0",
-		"lucide-react": "^0.545.0",
-		"react": "^19.2.0",
-		"react-dom": "^19.2.0"
-	},
-	"devDependencies": {
-		"@tanstack/devtools-vite": "^0.3.11",
-		"@tanstack/eslint-config": "^0.3.0",
-		"@testing-library/dom": "^10.4.0",
-		"@testing-library/react": "^16.2.0",
-		"@types/node": "^22.10.2",
-		"@types/react": "^19.2.0",
-		"@types/react-dom": "^19.2.0",
-		"@vitejs/plugin-react": "^5.0.4",
-		"jsdom": "^27.0.0",
-		"playwright": "^1.57.0",
-		"prettier": "^3.5.3",
-		"typescript": "^5.7.2",
-		"vite": "^7.1.7",
-		"vitest": "^3.0.5",
-		"web-vitals": "^5.1.0"
-	}
+  "name": "frontend",
+  "private": true,
+  "type": "module",
+  "engines": {
+    "node": ">=22 <=24"
+  },
+  "scripts": {
+    "cf-typegen": "wrangler types",
+    "dev": "vite --port 3000",
+    "build": "vite build && tsc",
+    "serve": "vite preview",
+    "test": "vitest run",
+    "test:e2e": "playwright test",
+    "lint": "eslint .",
+    "lint:fix": "eslint --fix .",
+    "format": "prettier --write .",
+    "check": "prettier --write . && eslint --fix",
+    "deploy:stageing": "wrangler deploy --minify --env stageing",
+    "deploy:stageing:dry": "wrangler deploy --env stageing --dry-run",
+    "deploy:production": "wrangler deploy --minify --env production",
+    "deploy:production:dry": "wrangler deploy --env production --dry-run"
+  },
+  "dependencies": {
+    "@cloudflare/vite-plugin": "^1.17.0",
+    "@popperjs/core": "^2.11.8",
+    "@tanstack/react-devtools": "^0.7.0",
+    "@tanstack/react-query": "^5.66.5",
+    "@tanstack/react-query-devtools": "^5.84.2",
+    "@tanstack/react-router": "^1.132.0",
+    "@tanstack/react-router-devtools": "^1.132.0",
+    "@tanstack/router-plugin": "^1.132.0",
+    "bootstrap": "^5.3.8",
+    "lucide-react": "^0.545.0",
+    "react": "^19.2.0",
+    "react-dom": "^19.2.0",
+    "zustand": "^5.0.9"
+  },
+  "devDependencies": {
+    "@playwright/test": "^1.57.0",
+    "@tanstack/devtools-vite": "^0.3.11",
+    "@tanstack/eslint-config": "^0.3.0",
+    "@testing-library/dom": "^10.4.0",
+    "@testing-library/react": "^16.2.0",
+    "@types/bootstrap": "^5.2.10",
+    "@types/node": "^22.10.2",
+    "@types/react": "^19.2.0",
+    "@types/react-dom": "^19.2.0",
+    "@vitejs/plugin-react": "^5.0.4",
+    "eslint": "^9.39.1",
+    "jsdom": "^27.0.0",
+    "prettier": "^3.5.3",
+    "sass": "^1.94.2",
+    "typescript": "^5.7.2",
+    "vite": "^7.1.7",
+    "vitest": "^4.0.15",
+    "web-vitals": "^5.1.0",
+    "wrangler": "^4.53.0"
+  }
 }

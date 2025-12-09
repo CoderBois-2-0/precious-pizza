@@ -1,0 +1,53 @@
+meta {
+  name: login
+  type: http
+  seq: 2
+}
+
+post {
+  url: {{baseUrl}}/{{path}}/login
+  body: json
+  auth: inherit
+}
+
+headers {
+  Content-Type: application/json
+}
+
+body:json {
+  {
+    "email": "sid.doro-hd@protonmail.com",
+    "password": "adminadmin"
+  }
+}
+
+tests {
+  test("should create a new user and return 200", function () {
+    expect(res.getStatus()).to.equal(200);
+  });
+  
+  test("should send the 'set-cookie' header with the 'auth-token'", function () {
+    expect(res.getHeader("set-cookie"))
+      .to
+      .satisfy(arr => 
+        arr.some(str => str.includes("auth-token"))
+      )
+  });
+  
+  test("Should have correct json body", function () {
+    const body = res.getBody();
+    
+    expect(body).to.have.property("id");
+    expect(body).to.have.property("email");
+    expect(body).to.have.property("firstName");
+    expect(body).to.have.property("lastName");
+    expect(body).to.have.property("role");
+  
+  });
+  
+}
+
+settings {
+  encodeUrl: true
+  timeout: 0
+}

@@ -1,10 +1,16 @@
-import { Link } from '@tanstack/react-router'
-import { useState } from 'react'
-import { Home, ShoppingBasket, Pizza } from 'lucide-react'
-import { Menu, X } from 'lucide-react'
+import { useState } from 'react';
+import { Link } from '@tanstack/react-router';
+import { Home, Menu, ShieldUser, User, UserPlus, X, ShoppingBasket, Pizza } from 'lucide-react';
+import { useAuth } from '@/services/authService';
 
 export default function Header() {
-  const [isOpen, setIsOpen] = useState(false)
+  const { signOut, authStore, isAuthenticated } = useAuth();
+
+  isAuthenticated();
+
+  const [isOpen, setIsOpen] = useState(false);
+
+  const closeSidebar = () => setIsOpen(false);
 
   return (
     <>
@@ -36,6 +42,13 @@ export default function Header() {
             </Link>
           </button>
         </div>
+        <div>
+          {authStore.user && (
+            <button className="btn btn-danger" onClick={signOut}>
+              Sign out
+            </button>
+          )}
+        </div>
       </header>
 
       {/* Side Navigation */}
@@ -54,7 +67,7 @@ export default function Header() {
         <div className="d-flex justify-content-between align-items-center border-bottom border-secondary pb-2 mb-3">
           <h2 className="h5 mb-0">Navigation</h2>
           <button
-            onClick={() => setIsOpen(false)}
+            onClick={closeSidebar}
             className="btn btn-dark"
             aria-label="Close menu"
           >
@@ -64,9 +77,19 @@ export default function Header() {
 
         {/* Navigation links */}
         <nav className="flex-grow-1 overflow-auto">
+          {authStore.user?.role === 'admin' && (
+            <Link
+              to="/admin/categories"
+              onClick={closeSidebar}
+              className="d-flex align-items-center gap-2 p-2 mb-2 text-white text-decoration-none rounded hover-bg-secondary"
+            >
+              <ShieldUser size={20} />
+              <span className="fw-medium">Admin</span>
+            </Link>
+          )}
           <Link
             to="/"
-            onClick={() => setIsOpen(false)}
+            onClick={closeSidebar}
             className="d-flex align-items-center gap-2 p-2 mb-2 text-white text-decoration-none rounded hover-bg-secondary"
           >
             <Home size={20} />
@@ -74,8 +97,26 @@ export default function Header() {
           </Link>
 
           <Link
+            to="/signUp"
+            onClick={closeSidebar}
+            className="d-flex align-items-center gap-2 p-2 mb-2 text-white text-decoration-none rounded hover-bg-secondary"
+          >
+            <UserPlus size={20} />
+            <span className="fw-medium">Sign up</span>
+          </Link>
+
+          <Link
+            to="/login"
+            onClick={closeSidebar}
+            className="d-flex align-items-center gap-2 p-2 mb-2 text-white text-decoration-none rounded hover-bg-secondary"
+          >
+            <User size={20} />
+            <span className="fw-medium">Login</span>
+          </Link>
+
+          <Link
             to="/basketPage"
-            onClick={() => setIsOpen(false)}
+            onClick={closeSidebar}
             className="d-flex align-items-center gap-2 p-2 mb-2 text-white text-decoration-none rounded hover-bg-secondary"
           >
             <ShoppingBasket size={20} />
@@ -84,7 +125,7 @@ export default function Header() {
 
           <Link
             to="/pizzaPage"
-            onClick={() => setIsOpen(false)}
+            onClick={closeSidebar}
             className="d-flex align-items-center gap-2 p-2 mb-2 text-white text-decoration-none rounded hover-bg-secondary"
           >
             <Pizza size={20} />
@@ -93,5 +134,5 @@ export default function Header() {
         </nav>
       </div>
     </>
-  )
+  );
 }
