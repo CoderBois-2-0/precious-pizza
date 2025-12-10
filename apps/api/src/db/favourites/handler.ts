@@ -1,7 +1,7 @@
 import { getDB, TDB } from "$db/index";
 import { IFavourite, IFavouriteWithPizza, INewFavourite } from "./types";
 import { favouritesTable } from "./schema";
-import { and, eq } from "drizzle-orm";
+import { eq } from "drizzle-orm";
 
 class FavouritesHandler {
   #client: TDB;
@@ -48,15 +48,10 @@ class FavouritesHandler {
   }
 
   // Remove a favourite
-  async removeFavourite(userId: string, pizzaId: string): Promise<void> {
+  async removeFavourite(favouriteID: string): Promise<void> {
     await this.#client
       .delete(favouritesTable)
-      .where(
-        and(
-          eq(favouritesTable.userId, userId),
-          eq(favouritesTable.pizzaId, pizzaId),
-        ),
-      );
+      .where(eq(favouritesTable.id, favouriteID));
   }
 }
 

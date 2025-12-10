@@ -29,32 +29,28 @@ const router = createRouter<IFavouritesEnv>()
     return c.json(favourites);
   })
   .post("/", async (c) => {
+    const user = c.get("jwtPayload");
     const body = await c.req.json();
-    const { userId, pizzaId } = body;
+    const { pizzaID } = body;
 
-    if (!userId || !pizzaId) {
-      return c.json({ error: "userId and pizzaId are required" }, 400);
+    if (!pizzaID) {
+      return c.json({ error: "pizzaId are required" }, 400);
     }
 
     const handler = c.get("favouritesHandler");
     const created = await handler.addFavourite({
-      userId,
-      pizzaId,
-      id: "",
+      userId: user.id,
+      pizzaId: pizzaID,
+      id: crypto.randomUUID(),
     });
 
     return c.json(created, 201);
   })
-  .delete("/", async (c) => {
-    const userId = c.req.query("userId");
-    const pizzaId = c.req.query("pizzaId");
-
-    if (!userId || !pizzaId) {
-      return c.json({ error: "Missing userId or pizzaId" }, 400);
-    }
+  .delete("/:id", async (c) => {
+    const favouriteID = c.req.param("id");
 
     const handler = c.get("favouritesHandler");
-    await handler.removeFavourite(userId, pizzaId);
+    await handler.removeFavourite(favouriteID);
 
     return c.json({ success: true });
   })
