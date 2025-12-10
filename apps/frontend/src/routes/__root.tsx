@@ -3,6 +3,8 @@ import { TanStackRouterDevtoolsPanel } from '@tanstack/react-router-devtools';
 import { TanStackDevtools } from '@tanstack/react-devtools';
 
 import Header from '../components/Header';
+import BasketPage from '../components/BasketPage';
+import { BasketProvider } from '../services/basketService';
 
 import TanStackQueryDevtools from '../integrations/tanstack-query/devtools';
 
@@ -14,8 +16,9 @@ interface MyRouterContext {
 
 export const Route = createRootRouteWithContext<MyRouterContext>()({
   component: () => (
-    <>
+    <BasketProvider>
       <Header />
+      <BasketPage />
 
       <Outlet />
 
@@ -31,6 +34,6 @@ export const Route = createRootRouteWithContext<MyRouterContext>()({
           TanStackQueryDevtools,
         ]}
       />
-    </>
+    </BasketProvider>
   ),
 });

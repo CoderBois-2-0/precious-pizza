@@ -37,7 +37,7 @@ const router = createRouter<IBasketEnv>()
     }
   })
   // Create a new empty basket
-  .post("/", basketPostValidator, async (c) => {
+  .post("/", async (c) => {
     const basketHandler = c.get("basketHandler");
 
     try {

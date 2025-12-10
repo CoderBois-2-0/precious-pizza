@@ -12,10 +12,12 @@ import {
   X,
 } from 'lucide-react';
 import { useAuth } from '@/services/authService';
+import { useBasket } from '@/services/basketService';
 import '.././styles.css';
 
 export default function Header() {
   const { signOut, authStore, isAuthenticated } = useAuth();
+  const { toggleBasket } = useBasket();
 
   isAuthenticated();
 
@@ -41,14 +43,12 @@ export default function Header() {
         </div>
 
         <div className="d-flex align-items-end">
-          <button className="btn btn-light me-3">
-            <Link
-              to="/basketPage"
-              onClick={() => setIsOpen(false)}
-              className="text-black"
-            >
-              <ShoppingBasket size={28} />
-            </Link>
+          <button
+            className="btn btn-light me-3"
+            onClick={toggleBasket}
+            aria-label="Toggle basket"
+          >
+            <ShoppingBasket size={28} />
           </button>
           <div>
             {!authStore.user && (
