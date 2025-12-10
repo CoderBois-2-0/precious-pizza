@@ -1,6 +1,6 @@
 import { createFileRoute } from '@tanstack/react-router';
 import { useAuth } from '@/services/authService';
-import { useFavourites } from '@/dataHooks/favouriteData';
+import { useDeleteFavourite, useFavourites } from '@/dataHooks/favouriteData';
 
 export const Route = createFileRoute('/userPage/')({
   component: UserPage,
@@ -10,8 +10,12 @@ export const Route = createFileRoute('/userPage/')({
 function UserPage() {
   const { pageGuard, authStore } = useAuth();
   const favouritesQuery = useFavourites();
+  const favouriteDelete = useDeleteFavourite();
 
   pageGuard();
+
+  const removeFavourite = (favouriteID: string) =>
+    favouriteDelete.mutate(favouriteID);
 
   return (
     <div className="container mt-5">
@@ -55,7 +59,10 @@ function UserPage() {
                     >
                       {favourite.pizza.name}
 
-                      <button className="btn btn-sm btn-outline-danger">
+                      <button
+                        className="btn btn-sm btn-outline-danger"
+                        onClick={() => removeFavourite(favourite.id)}
+                      >
                         Remove
                       </button>
                     </li>

@@ -1,5 +1,9 @@
-import { useQuery } from '@tanstack/react-query';
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { defaultQueryOptions } from './index';
+import type {
+  IAPIFavourite,
+  IAPIFavouritePost,
+} from '@/apiClients/favouriteClient';
 import FavouriteClient from '@/apiClients/favouriteClient';
 
 const FAVOURITES_PRIMARY_KEY = 'favourites';
@@ -14,4 +18,24 @@ function useFavourites() {
   });
 }
 
-export { useFavourites };
+function useCreateFavourite() {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: (newFavourite: IAPIFavouritePost) =>
+      favouriteClient.create(newFavourite),
+    onSuccess: () => queryClient.invalidateQueries(),
+  });
+}
+
+function useDeleteFavourite() {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: (favouriteID: IAPIFavourite['id']) =>
+      favouriteClient.delete(favouriteID),
+    onSuccess: () => queryClient.invalidateQueries(),
+  });
+}
+
+export { useFavourites, useCreateFavourite, useDeleteFavourite };
