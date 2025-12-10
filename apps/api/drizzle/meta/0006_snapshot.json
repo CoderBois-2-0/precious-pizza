@@ -1,6 +1,6 @@
 {
-  "id": "50f5b2b6-c833-4e38-bf97-6537874707c9",
-  "prevId": "54b6b3f5-a07c-4c87-8321-c9d5e443b325",
+  "id": "2bfe3a51-75c7-4870-b657-199312758290",
+  "prevId": "df8ee2e6-c731-4a34-95a8-bb5489b37864",
   "version": "7",
   "dialect": "postgresql",
   "tables": {
@@ -144,7 +144,7 @@
       "columns": {
         "id": {
           "name": "id",
-          "type": "varchar(36)",
+          "type": "uuid",
           "primaryKey": true,
           "notNull": true
         },

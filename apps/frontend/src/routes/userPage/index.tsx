@@ -1,4 +1,6 @@
 import { createFileRoute } from '@tanstack/react-router';
+import { useAuth } from '@/services/authService';
+import { useFavourites } from '@/dataHooks/favouriteData';
 
 export const Route = createFileRoute('/userPage/')({
   component: UserPage,
@@ -6,6 +8,11 @@ export const Route = createFileRoute('/userPage/')({
 });
 
 function UserPage() {
+  const { pageGuard, authStore } = useAuth();
+  const favouritesQuery = useFavourites();
+
+  pageGuard();
+
   return (
     <div className="container mt-5">
       {/* Page Header */}
@@ -22,11 +29,8 @@ function UserPage() {
           <div className="card shadow-sm">
             <div className="card-body">
               <h5 className="card-title">Your Profile</h5>
-              <p className="card-text text-muted mb-1">
-                <strong>User ID:</strong> 12345
-              </p>
               <p className="card-text text-muted">
-                <strong>Email:</strong> user@example.com
+                <strong>Email:</strong> {authStore.user?.email}
               </p>
 
               <button className="btn btn-primary w-100 mt-3">
@@ -42,31 +46,21 @@ function UserPage() {
             <div className="card-body">
               <h5 className="card-title mb-3">Your Favourite Pizzas</h5>
 
-              {/* Example list */}
               <ul className="list-group">
-                <li className="list-group-item d-flex justify-content-between align-items-center">
-                  Pepperoni
-                  <button className="btn btn-sm btn-outline-danger">
-                    Remove
-                  </button>
-                </li>
-                <li className="list-group-item d-flex justify-content-between align-items-center">
-                  Margherita
-                  <button className="btn btn-sm btn-outline-danger">
-                    Remove
-                  </button>
-                </li>
-                <li className="list-group-item d-flex justify-content-between align-items-center">
-                  BBQ Chicken
-                  <button className="btn btn-sm btn-outline-danger">
-                    Remove
-                  </button>
-                </li>
-              </ul>
+                {favouritesQuery.isSuccess &&
+                  favouritesQuery.data.map((favourite) => (
+                    <li
+                      key={favourite.id}
+                      className="list-group-item d-flex justify-content-between align-items-center"
+                    >
+                      {favourite.pizza.name}
 
-              <button className="btn btn-success mt-4 w-100">
-                Add New Favourite
-              </button>
+                      <button className="btn btn-sm btn-outline-danger">
+                        Remove
+                      </button>
+                    </li>
+                  ))}
+              </ul>
             </div>
           </div>
         </div>

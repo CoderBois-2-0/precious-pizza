@@ -3,6 +3,7 @@ import { authRouter } from "./auth/index";
 import { categoryRouter } from "./category";
 import { pizzaRouter } from "./pizza";
 import { createRouter, authTokenName } from "./util";
+import favourtiesRouter from "./favourites/index";
 
 const router = createRouter()
   .use((c, next) => {
@@ -15,6 +16,7 @@ const router = createRouter()
   })
   .route(authRouter.path, authRouter.protectedRouter)
   .route(categoryRouter.path, categoryRouter.protectedRouter)
-  .route(pizzaRouter.path, pizzaRouter.protectedRouter);
+  .route(pizzaRouter.path, pizzaRouter.protectedRouter)
+  .route("/favourite", favourtiesRouter);
 
 export default router;

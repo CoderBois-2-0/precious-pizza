@@ -1,6 +1,6 @@
 {
-  "id": "50f5b2b6-c833-4e38-bf97-6537874707c9",
-  "prevId": "54b6b3f5-a07c-4c87-8321-c9d5e443b325",
+  "id": "70f7aa63-1ca1-4752-99c0-d3d65fefae87",
+  "prevId": "2bfe3a51-75c7-4870-b657-199312758290",
   "version": "7",
   "dialect": "postgresql",
   "tables": {
@@ -133,37 +133,6 @@
           ]
         }
       },
-      "uniqueConstraints": {},
-      "policies": {},
-      "checkConstraints": {},
-      "isRLSEnabled": false
-    },
-    "public.favourites": {
-      "name": "favourites",
-      "schema": "",
-      "columns": {
-        "id": {
-          "name": "id",
-          "type": "varchar(36)",
-          "primaryKey": true,
-          "notNull": true
-        },
-        "user_id": {
-          "name": "user_id",
-          "type": "varchar(36)",
-          "primaryKey": false,
-          "notNull": true
-        },
-        "pizza_id": {
-          "name": "pizza_id",
-          "type": "varchar(36)",
-          "primaryKey": false,
-          "notNull": true
-        }
-      },
-      "indexes": {},
-      "foreignKeys": {},
-      "compositePrimaryKeys": {},
       "uniqueConstraints": {},
       "policies": {},
       "checkConstraints": {},
