@@ -5,7 +5,7 @@ import { usePizzas } from '@/dataHooks/pizzaData';
 import { useCategories } from '@/dataHooks/categoryData';
 import { useCreateFavourite } from '@/dataHooks/favouriteData';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useBasket } from '@/services/basketService';
 
 const BASKET_STORAGE_KEY = 'basketId';
@@ -61,6 +61,14 @@ const Pizza = ({ pizza }: IPizzaProps) => {
   const [basketId, setBasketId] = useState<string | null>(() =>
     localStorage.getItem(BASKET_STORAGE_KEY),
   );
+
+  // Sync basketId with localStorage (e.g., after checkout clears it)
+  useEffect(() => {
+    const storedId = localStorage.getItem(BASKET_STORAGE_KEY);
+    if (storedId !== basketId) {
+      setBasketId(storedId);
+    }
+  }, [basketId]);
 
   const addToBasketMutation = useMutation({
     mutationFn: async (input: {

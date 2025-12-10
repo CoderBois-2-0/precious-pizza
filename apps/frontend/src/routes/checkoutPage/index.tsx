@@ -100,7 +100,16 @@ function CheckoutPage() {
       return res.json() as Promise<{ id: string }>; // order id
     },
     onSuccess: async () => {
+      // Clear basket from localStorage
+      localStorage.removeItem(BASKET_STORAGE_KEY);
+      
+      // Dispatch custom event to notify basket components
+      window.dispatchEvent(new CustomEvent('basketCleared'));
+
+      // Invalidate all basket-related queries to refresh UI
+      await queryClient.invalidateQueries({ queryKey: ['basket'] });
       await queryClient.invalidateQueries();
+
       navigate({ to: '/pizzaPage' });
     },
     onError: (err: unknown) => {

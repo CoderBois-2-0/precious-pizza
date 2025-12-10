@@ -65,17 +65,47 @@ export default function BasketPage() {
 
   // Create basket on first visit if none stored
   useEffect(() => {
-    if (!basketId) {
+    if (!basketId && !createBasketMutation.isPending) {
       createBasketMutation.mutate();
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [basketId]);
+
+  // Sync basketId state with localStorage changes (e.g., after checkout)
+  useEffect(() => {
+    const syncBasket = () => {
+      const storedId = localStorage.getItem(BASKET_STORAGE_KEY);
+      if (storedId !== basketId) {
+        setBasketId(storedId);
+      }
+    };
+
+    // Listen for custom basketCleared event (same-tab)
+    const handleBasketCleared = () => {
+      setBasketId(null);
+    };
+
+    window.addEventListener('storage', syncBasket);
+    window.addEventListener('basketCleared', handleBasketCleared);
+    window.addEventListener('focus', syncBasket);
+
+    return () => {
+      window.removeEventListener('storage', syncBasket);
+      window.removeEventListener('basketCleared', handleBasketCleared);
+      window.removeEventListener('focus', syncBasket);
+    };
+  }, [basketId]);
 
   const basket = basketQuery.data;
   const isLoading = basketQuery.isLoading || createBasketMutation.isPending;
 
   const totalPrice = useMemo(() => {
-    return basket?.items.reduce((sum, item) => sum + item.price * item.quantity, 0) || 0;
+    return (
+      basket?.items.reduce(
+        (sum, item) => sum + item.price * item.quantity,
+        0,
+      ) || 0
+    );
   }, [basket]);
 
   return (
@@ -124,17 +154,18 @@ export default function BasketPage() {
             ) : (
               <div className="d-flex flex-column gap-2">
                 {basket.items.map((item) => (
-                  <div
-                    key={item.id}
-                    className="card bg-secondary text-white"
-                  >
+                  <div key={item.id} className="card bg-secondary text-white">
                     <div className="card-body p-2">
                       <div className="d-flex justify-content-between align-items-start">
                         <div className="flex-grow-1">
                           <h6 className="card-subtitle mb-1">{item.name}</h6>
                           <div className="d-flex justify-content-between align-items-center">
-                            <small>Qty: {item.quantity} × ${item.price.toFixed(2)}</small>
-                            <strong className="ms-2">${(item.price * item.quantity).toFixed(2)}</strong>
+                            <small>
+                              Qty: {item.quantity} × ${item.price.toFixed(2)}
+                            </small>
+                            <strong className="ms-2">
+                              ${(item.price * item.quantity).toFixed(2)}
+                            </strong>
                           </div>
                         </div>
                         <button
