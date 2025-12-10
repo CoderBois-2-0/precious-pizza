@@ -1,6 +1,8 @@
-import { createRouter } from "$routers/util";
+import { createRouter, authTokenName } from "$routers/util";
 import { injectOrderHandler, IOrderEnv } from "./middleware";
 import { orderBasketParamValidator, orderParamValidator, orderPostValidator } from "./validation";
+import { verify } from "hono/jwt";
+import { getCookie } from "hono/cookie";
 
 const router = createRouter<IOrderEnv>()
   .use(injectOrderHandler)
@@ -9,12 +11,25 @@ const router = createRouter<IOrderEnv>()
     const orderHandler = c.get("orderHandler");
     const body = c.req.valid("json");
 
+    // Optionally attach authenticated user
+    const token = getCookie(c, authTokenName);
+    let userID: string | undefined;
+    if (token) {
+      try {
+        const payload = await verify(token, c.env.JWT_SECRET);
+        userID = (payload as any).id;
+      } catch (_) {
+        // ignore invalid tokens to keep public checkout working
+      }
+    }
+
     try {
-      const order = await orderHandler.createOrder(body);
+      const order = await orderHandler.createOrder({ ...body, userID });
       return c.json(order, 201);
     } catch (e) {
-      console.log(e);
-      return c.json({ message: "Could not create order" }, 500);
+      console.error("Order creation failed:", e);
+      const message = e instanceof Error ? e.message : "Could not create order";
+      return c.json({ message }, 500);
     }
   })
   // Get a full order by ID

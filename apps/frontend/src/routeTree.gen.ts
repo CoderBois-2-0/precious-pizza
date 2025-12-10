@@ -12,6 +12,8 @@ import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as UserPageIndexRouteImport } from './routes/userPage/index'
 import { Route as PizzaPageIndexRouteImport } from './routes/pizzaPage/index'
+import { Route as CheckoutPageIndexRouteImport } from './routes/checkoutPage/index'
+import { Route as CheckoutIndexRouteImport } from './routes/checkout/index'
 import { Route as BasketPageIndexRouteImport } from './routes/basketPage/index'
 import { Route as authSignUpRouteImport } from './routes/(auth)/signUp'
 import { Route as authLoginRouteImport } from './routes/(auth)/login'
@@ -34,6 +36,16 @@ const UserPageIndexRoute = UserPageIndexRouteImport.update({
 const PizzaPageIndexRoute = PizzaPageIndexRouteImport.update({
   id: '/pizzaPage/',
   path: '/pizzaPage/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const CheckoutPageIndexRoute = CheckoutPageIndexRouteImport.update({
+  id: '/checkoutPage/',
+  path: '/checkoutPage/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const CheckoutIndexRoute = CheckoutIndexRouteImport.update({
+  id: '/checkout/',
+  path: '/checkout/',
   getParentRoute: () => rootRouteImport,
 } as any)
 const BasketPageIndexRoute = BasketPageIndexRouteImport.update({
@@ -83,6 +95,8 @@ export interface FileRoutesByFullPath {
   '/login': typeof authLoginRoute
   '/signUp': typeof authSignUpRoute
   '/basketPage': typeof BasketPageIndexRoute
+  '/checkout': typeof CheckoutIndexRoute
+  '/checkoutPage': typeof CheckoutPageIndexRoute
   '/pizzaPage': typeof PizzaPageIndexRoute
   '/userPage': typeof UserPageIndexRoute
   '/admin/categories/$categoryID': typeof AdminCategoriesCategoryIDRoute
@@ -96,6 +110,8 @@ export interface FileRoutesByTo {
   '/login': typeof authLoginRoute
   '/signUp': typeof authSignUpRoute
   '/basketPage': typeof BasketPageIndexRoute
+  '/checkout': typeof CheckoutIndexRoute
+  '/checkoutPage': typeof CheckoutPageIndexRoute
   '/pizzaPage': typeof PizzaPageIndexRoute
   '/userPage': typeof UserPageIndexRoute
   '/admin/categories/$categoryID': typeof AdminCategoriesCategoryIDRoute
@@ -110,6 +126,8 @@ export interface FileRoutesById {
   '/(auth)/login': typeof authLoginRoute
   '/(auth)/signUp': typeof authSignUpRoute
   '/basketPage/': typeof BasketPageIndexRoute
+  '/checkout/': typeof CheckoutIndexRoute
+  '/checkoutPage/': typeof CheckoutPageIndexRoute
   '/pizzaPage/': typeof PizzaPageIndexRoute
   '/userPage/': typeof UserPageIndexRoute
   '/admin/categories/$categoryID': typeof AdminCategoriesCategoryIDRoute
@@ -125,6 +143,8 @@ export interface FileRouteTypes {
     | '/login'
     | '/signUp'
     | '/basketPage'
+    | '/checkout'
+    | '/checkoutPage'
     | '/pizzaPage'
     | '/userPage'
     | '/admin/categories/$categoryID'
@@ -138,6 +158,8 @@ export interface FileRouteTypes {
     | '/login'
     | '/signUp'
     | '/basketPage'
+    | '/checkout'
+    | '/checkoutPage'
     | '/pizzaPage'
     | '/userPage'
     | '/admin/categories/$categoryID'
@@ -151,6 +173,8 @@ export interface FileRouteTypes {
     | '/(auth)/login'
     | '/(auth)/signUp'
     | '/basketPage/'
+    | '/checkout/'
+    | '/checkoutPage/'
     | '/pizzaPage/'
     | '/userPage/'
     | '/admin/categories/$categoryID'
@@ -165,6 +189,8 @@ export interface RootRouteChildren {
   authLoginRoute: typeof authLoginRoute
   authSignUpRoute: typeof authSignUpRoute
   BasketPageIndexRoute: typeof BasketPageIndexRoute
+  CheckoutIndexRoute: typeof CheckoutIndexRoute
+  CheckoutPageIndexRoute: typeof CheckoutPageIndexRoute
   PizzaPageIndexRoute: typeof PizzaPageIndexRoute
   UserPageIndexRoute: typeof UserPageIndexRoute
   AdminCategoriesCategoryIDRoute: typeof AdminCategoriesCategoryIDRoute
@@ -195,6 +221,20 @@ declare module '@tanstack/react-router' {
       path: '/pizzaPage'
       fullPath: '/pizzaPage'
       preLoaderRoute: typeof PizzaPageIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/checkoutPage/': {
+      id: '/checkoutPage/'
+      path: '/checkoutPage'
+      fullPath: '/checkoutPage'
+      preLoaderRoute: typeof CheckoutPageIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/checkout/': {
+      id: '/checkout/'
+      path: '/checkout'
+      fullPath: '/checkout'
+      preLoaderRoute: typeof CheckoutIndexRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/basketPage/': {
@@ -261,6 +301,8 @@ const rootRouteChildren: RootRouteChildren = {
   authLoginRoute: authLoginRoute,
   authSignUpRoute: authSignUpRoute,
   BasketPageIndexRoute: BasketPageIndexRoute,
+  CheckoutIndexRoute: CheckoutIndexRoute,
+  CheckoutPageIndexRoute: CheckoutPageIndexRoute,
   PizzaPageIndexRoute: PizzaPageIndexRoute,
   UserPageIndexRoute: UserPageIndexRoute,
   AdminCategoriesCategoryIDRoute: AdminCategoriesCategoryIDRoute,

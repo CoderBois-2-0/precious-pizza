@@ -67,6 +67,19 @@ const router = createRouter<IBasketEnv>()
       return c.json({ message: "Could not add pizza to basket" }, 500);
     }
   })
+  // Recalculate and persist basket total
+  .patch("/:id/total", basketParamValidator, async (c) => {
+    const basketHandler = c.get("basketHandler");
+    const { id: basketID } = c.req.valid("param");
+
+    try {
+      const totalPrice = await basketHandler.updateBasketTotal(basketID);
+      return c.json({ totalPrice });
+    } catch (e) {
+      console.log(e);
+      return c.json({ message: "Could not update basket total" }, 500);
+    }
+  })
   // Remove a pizza from the basket by basket item id
   .delete("/:id/items/:itemID", basketItemParamValidator, async (c) => {
     const basketHandler = c.get("basketHandler");

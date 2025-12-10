@@ -24,7 +24,7 @@ class OrderHandler {
 
   // Create a new order from a basket
   async createOrder(input: INewOrder): Promise<IOrder> {
-    const { basketID, delivery, deliveryFee = 0, deliveryAddress, customerNote } = input;
+    const { basketID, delivery, deliveryFee = 0, deliveryAddress, customerNote, userID } = input;
 
     // 1. Fetch basket items
     const basketItems = await this.#client.select().from(basketItemTable).where(eq(basketItemTable.basketID, basketID));
@@ -44,6 +44,7 @@ class OrderHandler {
       .values({
         id: orderID,
         basketID,
+        userID,
         totalPrice: String(totalPrice),
         deliveryOption: delivery,
         street: deliveryAddress?.street,

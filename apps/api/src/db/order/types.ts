@@ -32,6 +32,7 @@ interface INewOrder {
     doorFloor?: string;
   };
   customerNote?: string;
+  userID?: string;
 }
 
 export { INewOrder, IFullOrder, IOrder, IOrderItem, IOrderItemQuery, IOrderInsert, IOrderItemInsert, TOrderTable };

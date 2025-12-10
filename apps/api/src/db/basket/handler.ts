@@ -37,10 +37,14 @@ class BasketHandler {
       quantity,
       price,
     });
+
+    await this.updateBasketTotal(basketID);
   }
 
   async removePizzaFromBasket(basketID: string, pizzaInBasketID: number) {
     await this.#client.delete(basketItemTable).where(and(eq(basketItemTable.id, pizzaInBasketID), eq(basketItemTable.basketID, basketID)));
+
+    await this.updateBasketTotal(basketID);
   }
 
   // get basket items with pizza info
@@ -89,17 +93,26 @@ class BasketHandler {
     };
   }
 
+  // recompute and persist basket total
+  async updateBasketTotal(basketID: string): Promise<string> {
+    const items = await this.getBasketItems(basketID);
+    const totalPrice = items.reduce((sum, item) => sum + item.price * item.quantity, 0);
+
+    await this.#client
+      .update(basketTable)
+      .set({ totalPrice: totalPrice.toFixed(2) })
+      .where(eq(basketTable.id, basketID));
+
+    return totalPrice.toFixed(2);
+  }
+
   // get all baskets with their items (admin use)
   async getAllBaskets(): Promise<IBasketQuery[]> {
-    const basketIDs = await this.#client
-      .select({ id: basketTable.id })
-      .from(basketTable);
+    const basketIDs = await this.#client.select({ id: basketTable.id }).from(basketTable);
 
     if (basketIDs.length === 0) return [];
 
-    const baskets = await Promise.all(
-      basketIDs.map(({ id }) => this.getFullBasket(id)),
-    );
+    const baskets = await Promise.all(basketIDs.map(({ id }) => this.getFullBasket(id)));
 
     return baskets;
   }

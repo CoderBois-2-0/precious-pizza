@@ -162,7 +162,7 @@ export default function BasketPage() {
             <h5 className="mb-0">Total:</h5>
             <h5 className="mb-0 text-primary">${totalPrice.toFixed(2)}</h5>
           </div>
-          <Link to="/pizzaPage" className="btn btn-success w-100">
+          <Link to="/checkoutPage" className="btn btn-success w-100">
             Proceed to Checkout
           </Link>
         </div>

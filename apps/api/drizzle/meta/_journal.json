@@ -64,6 +64,13 @@
       "when": 1765338125259,
       "tag": "0008_hard_human_fly",
       "breakpoints": true
+    },
+    {
+      "idx": 9,
+      "version": "7",
+      "when": 1765353116863,
+      "tag": "0009_safe_thing",
+      "breakpoints": true
     }
   ]
 }
