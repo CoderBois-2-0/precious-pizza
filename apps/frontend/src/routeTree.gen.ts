@@ -10,12 +10,35 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as UserPageIndexRouteImport } from './routes/userPage/index'
+import { Route as PizzaPageIndexRouteImport } from './routes/pizzaPage/index'
+import { Route as BasketPageIndexRouteImport } from './routes/basketPage/index'
 import { Route as authSignUpRouteImport } from './routes/(auth)/signUp'
 import { Route as authLoginRouteImport } from './routes/(auth)/login'
+import { Route as AdminCategoriesIndexRouteImport } from './routes/admin/categories/index'
+import { Route as AdminPizzasCreateRouteImport } from './routes/admin/pizzas/create'
+import { Route as AdminPizzasPizzaIDRouteImport } from './routes/admin/pizzas/$pizzaID'
+import { Route as AdminCategoriesCreateRouteImport } from './routes/admin/categories/create'
+import { Route as AdminCategoriesCategoryIDRouteImport } from './routes/admin/categories/$categoryID'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const UserPageIndexRoute = UserPageIndexRouteImport.update({
+  id: '/userPage/',
+  path: '/userPage/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const PizzaPageIndexRoute = PizzaPageIndexRouteImport.update({
+  id: '/pizzaPage/',
+  path: '/pizzaPage/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const BasketPageIndexRoute = BasketPageIndexRouteImport.update({
+  id: '/basketPage/',
+  path: '/basketPage/',
   getParentRoute: () => rootRouteImport,
 } as any)
 const authSignUpRoute = authSignUpRouteImport.update({
@@ -28,35 +51,127 @@ const authLoginRoute = authLoginRouteImport.update({
   path: '/login',
   getParentRoute: () => rootRouteImport,
 } as any)
+const AdminCategoriesIndexRoute = AdminCategoriesIndexRouteImport.update({
+  id: '/admin/categories/',
+  path: '/admin/categories/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AdminPizzasCreateRoute = AdminPizzasCreateRouteImport.update({
+  id: '/admin/pizzas/create',
+  path: '/admin/pizzas/create',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AdminPizzasPizzaIDRoute = AdminPizzasPizzaIDRouteImport.update({
+  id: '/admin/pizzas/$pizzaID',
+  path: '/admin/pizzas/$pizzaID',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AdminCategoriesCreateRoute = AdminCategoriesCreateRouteImport.update({
+  id: '/admin/categories/create',
+  path: '/admin/categories/create',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AdminCategoriesCategoryIDRoute =
+  AdminCategoriesCategoryIDRouteImport.update({
+    id: '/admin/categories/$categoryID',
+    path: '/admin/categories/$categoryID',
+    getParentRoute: () => rootRouteImport,
+  } as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/login': typeof authLoginRoute
   '/signUp': typeof authSignUpRoute
+  '/basketPage': typeof BasketPageIndexRoute
+  '/pizzaPage': typeof PizzaPageIndexRoute
+  '/userPage': typeof UserPageIndexRoute
+  '/admin/categories/$categoryID': typeof AdminCategoriesCategoryIDRoute
+  '/admin/categories/create': typeof AdminCategoriesCreateRoute
+  '/admin/pizzas/$pizzaID': typeof AdminPizzasPizzaIDRoute
+  '/admin/pizzas/create': typeof AdminPizzasCreateRoute
+  '/admin/categories': typeof AdminCategoriesIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/login': typeof authLoginRoute
   '/signUp': typeof authSignUpRoute
+  '/basketPage': typeof BasketPageIndexRoute
+  '/pizzaPage': typeof PizzaPageIndexRoute
+  '/userPage': typeof UserPageIndexRoute
+  '/admin/categories/$categoryID': typeof AdminCategoriesCategoryIDRoute
+  '/admin/categories/create': typeof AdminCategoriesCreateRoute
+  '/admin/pizzas/$pizzaID': typeof AdminPizzasPizzaIDRoute
+  '/admin/pizzas/create': typeof AdminPizzasCreateRoute
+  '/admin/categories': typeof AdminCategoriesIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/(auth)/login': typeof authLoginRoute
   '/(auth)/signUp': typeof authSignUpRoute
+  '/basketPage/': typeof BasketPageIndexRoute
+  '/pizzaPage/': typeof PizzaPageIndexRoute
+  '/userPage/': typeof UserPageIndexRoute
+  '/admin/categories/$categoryID': typeof AdminCategoriesCategoryIDRoute
+  '/admin/categories/create': typeof AdminCategoriesCreateRoute
+  '/admin/pizzas/$pizzaID': typeof AdminPizzasPizzaIDRoute
+  '/admin/pizzas/create': typeof AdminPizzasCreateRoute
+  '/admin/categories/': typeof AdminCategoriesIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/login' | '/signUp'
+  fullPaths:
+    | '/'
+    | '/login'
+    | '/signUp'
+    | '/basketPage'
+    | '/pizzaPage'
+    | '/userPage'
+    | '/admin/categories/$categoryID'
+    | '/admin/categories/create'
+    | '/admin/pizzas/$pizzaID'
+    | '/admin/pizzas/create'
+    | '/admin/categories'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/login' | '/signUp'
-  id: '__root__' | '/' | '/(auth)/login' | '/(auth)/signUp'
+  to:
+    | '/'
+    | '/login'
+    | '/signUp'
+    | '/basketPage'
+    | '/pizzaPage'
+    | '/userPage'
+    | '/admin/categories/$categoryID'
+    | '/admin/categories/create'
+    | '/admin/pizzas/$pizzaID'
+    | '/admin/pizzas/create'
+    | '/admin/categories'
+  id:
+    | '__root__'
+    | '/'
+    | '/(auth)/login'
+    | '/(auth)/signUp'
+    | '/basketPage/'
+    | '/pizzaPage/'
+    | '/userPage/'
+    | '/admin/categories/$categoryID'
+    | '/admin/categories/create'
+    | '/admin/pizzas/$pizzaID'
+    | '/admin/pizzas/create'
+    | '/admin/categories/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   authLoginRoute: typeof authLoginRoute
   authSignUpRoute: typeof authSignUpRoute
+  BasketPageIndexRoute: typeof BasketPageIndexRoute
+  PizzaPageIndexRoute: typeof PizzaPageIndexRoute
+  UserPageIndexRoute: typeof UserPageIndexRoute
+  AdminCategoriesCategoryIDRoute: typeof AdminCategoriesCategoryIDRoute
+  AdminCategoriesCreateRoute: typeof AdminCategoriesCreateRoute
+  AdminPizzasPizzaIDRoute: typeof AdminPizzasPizzaIDRoute
+  AdminPizzasCreateRoute: typeof AdminPizzasCreateRoute
+  AdminCategoriesIndexRoute: typeof AdminCategoriesIndexRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -66,6 +181,27 @@ declare module '@tanstack/react-router' {
       path: '/'
       fullPath: '/'
       preLoaderRoute: typeof IndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/userPage/': {
+      id: '/userPage/'
+      path: '/userPage'
+      fullPath: '/userPage'
+      preLoaderRoute: typeof UserPageIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/pizzaPage/': {
+      id: '/pizzaPage/'
+      path: '/pizzaPage'
+      fullPath: '/pizzaPage'
+      preLoaderRoute: typeof PizzaPageIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/basketPage/': {
+      id: '/basketPage/'
+      path: '/basketPage'
+      fullPath: '/basketPage'
+      preLoaderRoute: typeof BasketPageIndexRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/(auth)/signUp': {
@@ -82,6 +218,41 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof authLoginRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/admin/categories/': {
+      id: '/admin/categories/'
+      path: '/admin/categories'
+      fullPath: '/admin/categories'
+      preLoaderRoute: typeof AdminCategoriesIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/admin/pizzas/create': {
+      id: '/admin/pizzas/create'
+      path: '/admin/pizzas/create'
+      fullPath: '/admin/pizzas/create'
+      preLoaderRoute: typeof AdminPizzasCreateRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/admin/pizzas/$pizzaID': {
+      id: '/admin/pizzas/$pizzaID'
+      path: '/admin/pizzas/$pizzaID'
+      fullPath: '/admin/pizzas/$pizzaID'
+      preLoaderRoute: typeof AdminPizzasPizzaIDRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/admin/categories/create': {
+      id: '/admin/categories/create'
+      path: '/admin/categories/create'
+      fullPath: '/admin/categories/create'
+      preLoaderRoute: typeof AdminCategoriesCreateRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/admin/categories/$categoryID': {
+      id: '/admin/categories/$categoryID'
+      path: '/admin/categories/$categoryID'
+      fullPath: '/admin/categories/$categoryID'
+      preLoaderRoute: typeof AdminCategoriesCategoryIDRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 
@@ -89,6 +260,14 @@ const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   authLoginRoute: authLoginRoute,
   authSignUpRoute: authSignUpRoute,
+  BasketPageIndexRoute: BasketPageIndexRoute,
+  PizzaPageIndexRoute: PizzaPageIndexRoute,
+  UserPageIndexRoute: UserPageIndexRoute,
+  AdminCategoriesCategoryIDRoute: AdminCategoriesCategoryIDRoute,
+  AdminCategoriesCreateRoute: AdminCategoriesCreateRoute,
+  AdminPizzasPizzaIDRoute: AdminPizzasPizzaIDRoute,
+  AdminPizzasCreateRoute: AdminPizzasCreateRoute,
+  AdminCategoriesIndexRoute: AdminCategoriesIndexRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)

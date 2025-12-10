@@ -1,3 +1,5 @@
+import { useEffect } from 'react';
+import { useNavigate } from '@tanstack/react-router';
 import type { ILoginUpUser, ISignUpUser } from '@/apiClients/authClient';
 import AuthClient from '@/apiClients/authClient';
 import { useAuthStore } from '@/stores/authStore';
@@ -5,6 +7,7 @@ import { useAuthStore } from '@/stores/authStore';
 const authClient = new AuthClient();
 
 function useAuth() {
+  const navigate = useNavigate();
   const authStore = useAuthStore();
 
   const signUp = async (newUser: ISignUpUser) => {
@@ -31,7 +34,24 @@ function useAuth() {
     authStore.removeUser();
   };
 
+  const pageGuard = () => {
+    const checkIfAuthenticated = async () => {
+      await isAuthenticated();
+
+      if (!authStore.user) {
+        navigate({ to: '/' });
+      }
+    };
+    useEffect(() => {
+      checkIfAuthenticated();
+    }, []);
+  };
+
   const isAuthenticated = async () => {
+    if (authStore.user) {
+      return;
+    }
+
     const user = await authClient.isAuthenticated();
     if (user === null) {
       return;
@@ -40,7 +60,7 @@ function useAuth() {
     authStore.setUser(user);
   };
 
-  return { signUp, login, signOut, isAuthenticated };
+  return { signUp, login, signOut, isAuthenticated, authStore, pageGuard };
 }
 
 export { useAuth };

@@ -7,7 +7,7 @@ const signUpSchema = z
     "phone-number": z.string().length(8),
     "first-name": z.string().min(1).max(40),
     "last-name": z.string().min(1).max(80),
-    password: z.string().min(8).max(16),
+    password: z.string().min(8).max(25),
     "confirm-password": z.string(),
   })
   .refine((val) => val.password === val["confirm-password"], {

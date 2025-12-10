@@ -8,6 +8,62 @@
       "when": 1764952488540,
       "tag": "0000_purple_james_howlett",
       "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "7",
+      "when": 1765212990619,
+      "tag": "0001_normal_dazzler",
+      "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "7",
+      "when": 1765276686288,
+      "tag": "0002_cooing_makkari",
+      "breakpoints": true
+    },
+    {
+      "idx": 3,
+      "version": "7",
+      "when": 1765276704790,
+      "tag": "0003_lush_boomerang",
+      "breakpoints": true
+    },
+    {
+      "idx": 4,
+      "version": "7",
+      "when": 1765337467790,
+      "tag": "0004_old_mystique",
+      "breakpoints": true
+    },
+    {
+      "idx": 5,
+      "version": "7",
+      "when": 1765337784118,
+      "tag": "0005_true_donald_blake",
+      "breakpoints": true
+    },
+    {
+      "idx": 6,
+      "version": "7",
+      "when": 1765337882718,
+      "tag": "0006_cheerful_rattler",
+      "breakpoints": true
+    },
+    {
+      "idx": 7,
+      "version": "7",
+      "when": 1765338109062,
+      "tag": "0007_massive_corsair",
+      "breakpoints": true
+    },
+    {
+      "idx": 8,
+      "version": "7",
+      "when": 1765338125259,
+      "tag": "0008_hard_human_fly",
+      "breakpoints": true
     }
   ]
 }

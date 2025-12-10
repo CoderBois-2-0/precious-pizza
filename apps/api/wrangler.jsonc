@@ -1,9 +1,21 @@
 {
   "$schema": "node_modules/wrangler/config-schema.json",
-  "name": "api",
+  "name": "precious-api",
   "main": "src/index.ts",
   "compatibility_date": "2025-11-26",
   "compatibility_flags": ["nodejs_compat"],
+  "env": {
+    "stageing": {
+      "vars": {
+        "ENVIRONMENT": "stageing",
+      },
+    },
+    "production": {
+      "vars": {
+        "ENVIRONMENT": "production",
+      },
+    },
+  },
   // "vars": {
   //   "MY_VAR": "my-variable"
   // },

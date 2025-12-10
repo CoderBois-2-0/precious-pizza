@@ -3,6 +3,7 @@ import { secureHeaders } from "hono/secure-headers";
 import publicRouter from "./publicRouter";
 import protectedRouter from "./protectedRouter";
 import { createRouter } from "./util";
+import { csrf } from "hono/csrf";
 
 const app = createRouter()
   .use((c, next) => {
@@ -13,6 +14,7 @@ const app = createRouter()
 
     return corsMiddelware(c, next);
   })
+  .use(csrf())
   .use(secureHeaders())
   .route("/", publicRouter)
   .route("/", protectedRouter);

@@ -1,17 +1,31 @@
 import { useState } from 'react';
 import { Link } from '@tanstack/react-router';
-import { Home, Menu, User, UserPlus, X } from 'lucide-react';
+import {
+  Home,
+  Menu,
+  Pizza,
+  ShieldUser,
+  ShoppingBasket,
+  User,
+  UserPen,
+  UserPlus,
+  X,
+} from 'lucide-react';
 import { useAuth } from '@/services/authService';
+import '.././styles.css';
 
 export default function Header() {
-  const { signOut } = useAuth();
-  const [isOpen, setIsOpen] = useState(false);
+  const { signOut, authStore, isAuthenticated } = useAuth();
 
+  isAuthenticated();
+
+  const [isOpen, setIsOpen] = useState(false);
   const closeSidebar = () => setIsOpen(false);
 
   return (
     <>
-      <header className="d-flex align-items-center justify-content-between px-3 py-1 text-white shadow-sm header-light-green mb-3">
+      {/* Top Header */}
+      <header className="d-flex align-items-center justify-content-between px-3 py-1 text-white shadow-sm header-light-green ">
         <div className="d-flex align-items-center">
           <button
             onClick={() => setIsOpen(true)}
@@ -24,10 +38,37 @@ export default function Header() {
             <h1>Precious Pizza</h1>
             <p> - The one Pizza to rule them all!</p>
           </div>
+        </div>
 
-          <button className="btn btn-danger" onClick={signOut}>
-            Sign out
+        <div className="d-flex align-items-end">
+          <button className="btn btn-light me-3">
+            <Link
+              to="/basketPage"
+              onClick={() => setIsOpen(false)}
+              className="text-black"
+            >
+              <ShoppingBasket size={28} />
+            </Link>
           </button>
+          <div>
+            {!authStore.user && (
+              <Link
+                to="/login"
+                onClick={closeSidebar}
+                className="d-flex align-items-center gap-2 p-2 text-black text-decoration-none bg-light rounded hover-bg-secondary"
+              >
+                <User size={20} />
+                <span className="fw-medium">Login</span>
+              </Link>
+            )}
+          </div>
+          <div>
+            {authStore.user && (
+              <button className="btn btn-danger" onClick={signOut}>
+                Sign out
+              </button>
+            )}
+          </div>
         </div>
       </header>
 
@@ -57,6 +98,16 @@ export default function Header() {
 
         {/* Navigation links */}
         <nav className="flex-grow-1 overflow-auto">
+          {authStore.user?.role === 'admin' && (
+            <Link
+              to="/admin/categories"
+              onClick={closeSidebar}
+              className="d-flex align-items-center gap-2 p-2 mb-2 text-white text-decoration-none rounded hover-bg-secondary"
+            >
+              <ShieldUser size={20} />
+              <span className="fw-medium">Admin</span>
+            </Link>
+          )}
           <Link
             to="/"
             onClick={closeSidebar}
@@ -66,25 +117,67 @@ export default function Header() {
             <span className="fw-medium">Home</span>
           </Link>
 
+          {!authStore.user && (
+            <AuthLinks closeSidebar={closeSidebar}></AuthLinks>
+          )}
+
+          {authStore.user && (
+            <Link
+              to="/userPage"
+              onClick={closeSidebar}
+              className="d-flex align-items-center gap-2 p-2 mb-2 text-white text-decoration-none rounded hover-bg-secondary"
+            >
+              <UserPen></UserPen>
+              <span className="fw-medium">User page</span>
+            </Link>
+          )}
           <Link
-            to="/signUp"
+            to="/basketPage"
             onClick={closeSidebar}
             className="d-flex align-items-center gap-2 p-2 mb-2 text-white text-decoration-none rounded hover-bg-secondary"
           >
-            <UserPlus size={20} />
-            <span className="fw-medium">Sign up</span>
+            <ShoppingBasket size={20} />
+            <span className="fw-medium">Basket</span>
           </Link>
 
           <Link
-            to="/login"
+            to="/pizzaPage"
             onClick={closeSidebar}
             className="d-flex align-items-center gap-2 p-2 mb-2 text-white text-decoration-none rounded hover-bg-secondary"
           >
-            <User size={20} />
-            <span className="fw-medium">Login</span>
+            <Pizza size={20} />
+            <span className="fw-medium">Menu</span>
           </Link>
         </nav>
       </div>
     </>
   );
 }
+
+interface IAuthLinksProps {
+  closeSidebar: () => void;
+}
+
+const AuthLinks = ({ closeSidebar }: IAuthLinksProps) => {
+  return (
+    <>
+      <Link
+        to="/signUp"
+        onClick={closeSidebar}
+        className="d-flex align-items-center gap-2 p-2 mb-2 text-white text-decoration-none rounded hover-bg-secondary"
+      >
+        <UserPlus size={20} />
+        <span className="fw-medium">Sign up</span>
+      </Link>
+
+      <Link
+        to="/login"
+        onClick={closeSidebar}
+        className="d-flex align-items-center gap-2 p-2 mb-2 text-white text-decoration-none rounded hover-bg-secondary"
+      >
+        <User size={20} />
+        <span className="fw-medium">Login</span>
+      </Link>
+    </>
+  );
+};
