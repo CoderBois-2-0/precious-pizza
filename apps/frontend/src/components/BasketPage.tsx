@@ -26,7 +26,6 @@ export default function BasketPage() {
   const [basketId, setBasketId] = useState<string | null>(() =>
     localStorage.getItem(BASKET_STORAGE_KEY),
   );
-  const [form, setForm] = useState({ pizzaID: '', quantity: 1, price: 0 });
   const queryClient = useQueryClient();
 
   const basketQuery = useQuery<BasketResponse>({
@@ -48,26 +47,6 @@ export default function BasketPage() {
     onSuccess: ({ id }) => {
       setBasketId(id);
       localStorage.setItem(BASKET_STORAGE_KEY, id);
-    },
-  });
-
-  const addItemMutation = useMutation({
-    mutationFn: async (input: {
-      pizzaID: string;
-      quantity: number;
-      price: number;
-    }) => {
-      if (!basketId) throw new Error('No basket');
-      const res = await fetch(`/api/basket/${basketId}/items`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(input),
-      });
-      if (!res.ok) throw new Error('Failed to add item');
-    },
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['basket', basketId] });
-      setForm({ pizzaID: '', quantity: 1, price: 0 });
     },
   });
 
@@ -95,10 +74,9 @@ export default function BasketPage() {
   const basket = basketQuery.data;
   const isLoading = basketQuery.isLoading || createBasketMutation.isPending;
 
-  const hasItems = useMemo(() => (basket?.items?.length ?? 0) > 0, [basket]);
-
-  if (isLoading) return <div>Loading...</div>;
-  if (!basketId || !basket) return <div>Could not load basket.</div>;
+  const totalPrice = useMemo(() => {
+    return basket?.items.reduce((sum, item) => sum + item.price * item.quantity, 0) || 0;
+  }, [basket]);
 
   return (
     <div
@@ -123,92 +101,72 @@ export default function BasketPage() {
         </button>
       </div>
 
-      <div className="mb-3">
-        <small className="text-secondary">Basket ID: {basketId}</small>
-      </div>
-
-      <form
-        className="mb-3 d-flex flex-column gap-2"
-        onSubmit={(e) => {
-          e.preventDefault();
-          addItemMutation.mutate({
-            pizzaID: form.pizzaID,
-            quantity: Number(form.quantity),
-            price: Number(form.price),
-          });
-        }}
-      >
-        <input
-          className="form-control"
-          placeholder="Pizza ID (uuid)"
-          value={form.pizzaID}
-          onChange={(e) => setForm((f) => ({ ...f, pizzaID: e.target.value }))}
-          required
-        />
-        <input
-          className="form-control"
-          type="number"
-          min={1}
-          placeholder="Quantity"
-          value={form.quantity}
-          onChange={(e) =>
-            setForm((f) => ({ ...f, quantity: Number(e.target.value) }))
-          }
-          required
-        />
-        <input
-          className="form-control"
-          type="number"
-          step="0.01"
-          min={0}
-          placeholder="Price"
-          value={form.price}
-          onChange={(e) =>
-            setForm((f) => ({ ...f, price: Number(e.target.value) }))
-          }
-          required
-        />
-        <button
-          className="btn btn-light text-black"
-          type="submit"
-          disabled={addItemMutation.isPending}
-        >
-          {addItemMutation.isPending ? 'Adding…' : 'Add item'}
-        </button>
-      </form>
-
+      {/* Basket items */}
       <div className="flex-grow-1 overflow-auto">
-        {!hasItems ? (
-          <p>Your basket is empty.</p>
-        ) : (
-          basket.items.map((item) => (
-            <div
-              key={item.id}
-              className="d-flex justify-content-between align-items-center mb-2 p-2 bg-secondary rounded"
-            >
-              <div>
-                <strong>{item.name}</strong>
-                <div>Qty: {item.quantity}</div>
-                <div>Price: {item.price} DKK</div>
+        {isLoading && <p className="text-center">Loading basket...</p>}
+
+        {!basketId && !isLoading && (
+          <div className="text-center text-muted">
+            <ShoppingBasket size={48} className="mb-2 opacity-50" />
+            <p>Your basket is empty</p>
+            <p className="small">Add pizzas from the menu!</p>
+          </div>
+        )}
+
+        {basketId && !isLoading && (
+          <>
+            {!basket || basket.items.length === 0 ? (
+              <div className="text-center text-muted">
+                <ShoppingBasket size={48} className="mb-2 opacity-50" />
+                <p>Your basket is empty</p>
+                <p className="small">Add pizzas from the menu!</p>
               </div>
-              <button
-                className="btn btn-danger"
-                onClick={() => removeItemMutation.mutate(item.id)}
-                disabled={removeItemMutation.isPending}
-              >
-                Remove
-              </button>
-            </div>
-          ))
+            ) : (
+              <div className="d-flex flex-column gap-2">
+                {basket.items.map((item) => (
+                  <div
+                    key={item.id}
+                    className="card bg-secondary text-white"
+                  >
+                    <div className="card-body p-2">
+                      <div className="d-flex justify-content-between align-items-start">
+                        <div className="flex-grow-1">
+                          <h6 className="card-subtitle mb-1">{item.name}</h6>
+                          <div className="d-flex justify-content-between align-items-center">
+                            <small>Qty: {item.quantity} × ${item.price.toFixed(2)}</small>
+                            <strong className="ms-2">${(item.price * item.quantity).toFixed(2)}</strong>
+                          </div>
+                        </div>
+                        <button
+                          onClick={() => removeItemMutation.mutate(item.id)}
+                          className="btn btn-sm btn-danger ms-2"
+                          disabled={removeItemMutation.isPending}
+                          aria-label="Remove item"
+                        >
+                          <X size={16} />
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            )}
+          </>
         )}
       </div>
 
-      <div className="border-top border-secondary pt-2 mt-3">
-        <h4>Total: {basket.totalPrice} DKK</h4>
-        <Link to="/pizzaPage" className="btn btn-light w-100 mt-2 text-black">
-          <ShoppingBasket /> Checkout
-        </Link>
-      </div>
+      {/* Basket total and checkout */}
+      {basketId && basket && basket.items.length > 0 && (
+        <div className="border-top border-secondary pt-3 mt-3">
+          <div className="d-flex justify-content-between align-items-center mb-3">
+            <h5 className="mb-0">Total:</h5>
+            <h5 className="mb-0 text-primary">${totalPrice.toFixed(2)}</h5>
+          </div>
+          <Link to="/pizzaPage" className="btn btn-success w-100">
+            Proceed to Checkout
+          </Link>
+        </div>
+      )}
     </div>
   );
 }

@@ -21,18 +21,11 @@ const basketPostValidator = createValidator("json", basketPostSchema);
 // Body validator for adding an item to a basket
 const basketAddItemSchema = z
   .object({
-    pizzaID: z.string().uuid(),
+    pizzaID: z.string(),
     quantity: z.coerce.number().int().min(1),
     price: z.coerce.number().min(0),
   })
   .strict();
 const basketAddItemValidator = createValidator("json", basketAddItemSchema);
 
-export {
-  basketParamValidator,
-  basketItemParamValidator,
-  basketPostValidator,
-  basketAddItemValidator,
-};
-
-
+export { basketParamValidator, basketItemParamValidator, basketPostValidator, basketAddItemValidator };

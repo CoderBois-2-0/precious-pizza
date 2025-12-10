@@ -3,9 +3,9 @@ import { createValidator } from "$routers/validation";
 
 const pizzaQuery = z
   .object({
-    categoryID: z.uuid().optional(),
-    page: z.int().min(1).optional(),
-    limit: z.int().min(1).max(100).default(20),
+    categoryID: z.string().optional(),
+    page: z.coerce.number().int().min(1).optional(),
+    limit: z.coerce.number().int().min(1).max(100).default(20),
   })
   .strict();
 const pizzaQueryValidator = createValidator("query", pizzaQuery);
