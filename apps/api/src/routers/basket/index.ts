@@ -1,9 +1,6 @@
-
-
-import { createRouter } from "$routers/util";
 import { BasketHandler } from "../../db/basket/handler";
-import { IBasketQuery } from "../../db/basket/types";
-import { IBasketItemInsert, IBasketItemQuery } from "../../db/basketItem/types";
+import publicRouter from "./publicRouter";
+import protectedRouter from "./protectedRouter";
 
 interface IBasketVariables {
   basketHandler: BasketHandler;
@@ -16,5 +13,3 @@ const basketRouter = {
 };
 
 export { basketRouter, IBasketVariables };
-
-

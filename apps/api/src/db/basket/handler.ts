@@ -17,16 +17,16 @@ class BasketHandler {
 
   // Create the basket
   async createBasket(): Promise<string> {
-    const rows = await this.#client
+    const [row] = await this.#client
       .insert(basketTable)
       .values({
         totalPrice: "0.00",
       })
       .returning({ id: basketTable.id });
 
-    return rows.at(0)!.id; // add if !rows.at(0) --> error
+    if (!row) throw new Error("Failed to create basket");
+    return row.id;
   }
-
   // Add one pizza to basket
   async addPizzaToBasket(input: IBasketItemInsert) {
     const { basketID, pizzaID, quantity, price } = input;
@@ -88,75 +88,21 @@ class BasketHandler {
       items,
     };
   }
+
+  // get all baskets with their items (admin use)
+  async getAllBaskets(): Promise<IBasketQuery[]> {
+    const basketIDs = await this.#client
+      .select({ id: basketTable.id })
+      .from(basketTable);
+
+    if (basketIDs.length === 0) return [];
+
+    const baskets = await Promise.all(
+      basketIDs.map(({ id }) => this.getFullBasket(id)),
+    );
+
+    return baskets;
+  }
 }
 
 export { BasketHandler };
-
-//   async getBasketItems(basketID: string): Promise<IBasketItemQuery[]> {
-//     const rows = await this.#client
-//       .select({
-//         id: basketItemTable.id,
-//         pizzaID: basketItemTable.pizzaID,
-//         name: pizzaTable.name,
-//         quantity: basketItemTable.quantity,
-//         price: basketItemTable.price,
-//       })
-//       .from(basketItemTable)
-//       .leftJoin(pizzaTable, eq(basketItemTable.pizzaID, pizzaTable.id))
-//       .where(eq(basketItemTable.basketID, basketID));
-
-//     return rows.map((row) => ({
-//       id: row.id,
-//       pizzaID: row.pizzaID,
-//       name: row.name ?? "Unknown Pizza",
-//       quantity: row.quantity,
-//       price: Number(row.price),
-//     }));
-//   }
-
-//   async getFullBasket(basketID: string): Promise<IfullBasket> {
-//     // 0. Load basket meta (createdAt is required by IfullBasket)
-//     const [basketMeta] = await this.#client.select({ createdAt: basketTable.createdAt }).from(basketTable).where(eq(basketTable.id, basketID));
-
-//     if (!basketMeta) {
-//       throw new Error("Basket not found");
-//     }
-
-//     // 1. Load all items with pizza names
-//     const rows = await this.#client
-//       .select({
-//         id: basketItemTable.id,
-//         pizzaID: basketItemTable.pizzaID,
-//         name: pizzaTable.name,
-//         quantity: basketItemTable.quantity,
-//         price: basketItemTable.price,
-//       })
-//       .from(basketItemTable)
-//       .leftJoin(pizzaTable, eq(basketItemTable.pizzaID, pizzaTable.id))
-//       .where(eq(basketItemTable.basketID, basketID));
-
-//     // 2. Convert output
-//     const items: IBasketItemQuery[] = rows.map((row) => ({
-//       id: row.id,
-//       pizzaID: row.pizzaID,
-//       name: row.name ?? "Unknown Pizza",
-//       quantity: row.quantity,
-//       price: Number(row.price),
-//     }));
-
-//     // 3. Calculate total price
-//     const totalPrice = items.reduce((sum, item) => {
-//       return sum + item.price * item.quantity;
-//     }, 0);
-
-//     // 4. Return nicely formatted
-//     return {
-//       id: basketID,
-//       totalPrice: String(totalPrice),
-//       createdAt: basketMeta.createdAt,
-//       items,
-//     };
-//   }
-// }
-
-// export { BasketHandler };
