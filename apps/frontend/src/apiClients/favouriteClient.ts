@@ -44,6 +44,9 @@ class FavouriteClient {
   async delete(favouriteID: IAPIFavourite['id']): Promise<void> {
     const res = await fetch(`${this.#url}/${favouriteID}`, {
       method: 'DELETE',
+      headers: {
+        'Content-Type': 'application/json',
+      },
       credentials: 'include',
     });
 
@@ -54,4 +57,4 @@ class FavouriteClient {
 }
 
 export default FavouriteClient;
-export type { IAPIFavourite };
+export type { IAPIFavourite, IAPIFavouritePost };

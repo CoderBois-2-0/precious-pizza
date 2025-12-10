@@ -1,7 +1,9 @@
 import { createFileRoute } from '@tanstack/react-router';
 import type { IAPIPizza } from '@/apiClients/pizzaClient';
-import { usePizzas } from '@/dataHooks/pizzaData';
+import { useCreatePizza, usePizzas } from '@/dataHooks/pizzaData';
 import { useCategories } from '@/dataHooks/categoryData';
+import type { IAPICategory } from '@/apiClients/categoryClient';
+import { useCreateFavourite } from '@/dataHooks/favouriteData';
 
 export const Route = createFileRoute('/pizzaPage/')({
   component: RouteComponent,
@@ -10,17 +12,36 @@ export const Route = createFileRoute('/pizzaPage/')({
 function RouteComponent() {
   const categories = useCategories();
 
-  return <div>Hello "/pizzaPage/"!</div>;
+  return (
+    <div className="container">
+      {categories.isSuccess &&
+        categories.data.map((category) => (
+          <Category key={category.id} category={category}></Category>
+        ))}
+    </div>
+  );
 }
 
 interface ICategoryProps {
-  categoryID: string;
+  category: IAPICategory;
 }
 
-const Category = ({ categoryID }: ICategoryProps) => {
-  const pizzas = usePizzas(categoryID);
+const Category = ({ category }: ICategoryProps) => {
+  const pizzas = usePizzas(category.id);
 
-  return;
+  return (
+    <div>
+      <h1>{category.name}</h1>
+      <hr></hr>
+
+      <div className="d-flex flex-column row-gap-2">
+        {pizzas.isSuccess &&
+          pizzas.data.map((pizza) => (
+            <Pizza key={pizza.id} pizza={pizza}></Pizza>
+          ))}
+      </div>
+    </div>
+  );
 };
 
 interface IPizzaProps {
@@ -28,6 +49,12 @@ interface IPizzaProps {
 }
 
 const Pizza = ({ pizza }: IPizzaProps) => {
+  const createPizzaMutation = useCreateFavourite();
+
+  const createPizza = (pizzaID: string) => {
+    createPizzaMutation.mutate({ pizzaID });
+  };
+
   return (
     <div className="card w-100">
       <div className="card-body">
@@ -37,8 +64,13 @@ const Pizza = ({ pizza }: IPizzaProps) => {
 
         <p>{pizza.description}</p>
 
-        <div className="d-flex justify-content-between column-gap-2 align-items-end">
-          <button className="btn btn-accent">Add to favourites</button>
+        <div className="d-flex justify-content-end column-gap-2 align-items-end">
+          <button
+            onClick={() => createPizza(pizza.id)}
+            className="btn btn-secondary"
+          >
+            Add to favourites
+          </button>
         </div>
       </div>
     </div>
