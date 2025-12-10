@@ -9,7 +9,6 @@ function RouteComponent() {
   return (
     <>
       <BasketPage />
-      {/* <div>Hello "/basket/"!</div> */}
     </>
   );
 }

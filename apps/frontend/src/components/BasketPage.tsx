@@ -1,26 +1,106 @@
-import { useMutation, useQuery } from '@tanstack/react-query';
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { Link } from '@tanstack/react-router';
 import { ShoppingBasket, X } from 'lucide-react';
-import { useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
+
+type BasketItem = {
+  id: number;
+  pizzaID: string;
+  name: string;
+  quantity: number;
+  price: number;
+};
+
+type BasketResponse = {
+  id: string;
+  totalPrice: string;
+  createdAt: string;
+  items: BasketItem[];
+};
+
+const BASKET_STORAGE_KEY = 'basketId';
 
 export default function BasketPage() {
   const [isOpen, setIsOpen] = useState(true);
+  const [basketId, setBasketId] = useState<string | null>(() =>
+    localStorage.getItem(BASKET_STORAGE_KEY),
+  );
+  const [form, setForm] = useState({ pizzaID: '', quantity: 1, price: 0 });
+  const queryClient = useQueryClient();
 
-  const { data: basket, isLoading } = useQuery({
-    queryKey: ['basket'],
+  const basketQuery = useQuery<BasketResponse>({
+    queryKey: ['basket', basketId],
+    enabled: Boolean(basketId),
     queryFn: async () => {
-      const res = await fetch('/api/basket/full');
+      const res = await fetch(`/api/basket/full/${basketId}`);
+      if (!res.ok) throw new Error('Failed to fetch basket');
       return res.json();
     },
   });
 
-  const removeMutation = useMutation({
-    mutationFn: async (id: number) => {
-      await fetch(`/api/basket/remove/${id}`, { method: 'DELETE' });
+  const createBasketMutation = useMutation({
+    mutationFn: async () => {
+      const res = await fetch('/api/basket', { method: 'POST' });
+      if (!res.ok) throw new Error('Failed to create basket');
+      return res.json() as Promise<{ id: string }>;
+    },
+    onSuccess: ({ id }) => {
+      setBasketId(id);
+      localStorage.setItem(BASKET_STORAGE_KEY, id);
     },
   });
 
+  const addItemMutation = useMutation({
+    mutationFn: async (input: {
+      pizzaID: string;
+      quantity: number;
+      price: number;
+    }) => {
+      if (!basketId) throw new Error('No basket');
+      const res = await fetch(`/api/basket/${basketId}/items`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(input),
+      });
+      if (!res.ok) throw new Error('Failed to add item');
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['basket', basketId] });
+      setForm({ pizzaID: '', quantity: 1, price: 0 });
+    },
+  });
+
+  const removeItemMutation = useMutation({
+    mutationFn: async (itemID: number) => {
+      if (!basketId) throw new Error('No basket');
+      const res = await fetch(`/api/basket/${basketId}/items/${itemID}`, {
+        method: 'DELETE',
+      });
+      if (!res.ok) throw new Error('Failed to remove item');
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['basket', basketId] });
+    },
+  });
+
+  // Create basket on first visit if none stored
+  useEffect(() => {
+    if (
+      !basketId &&
+      !createBasketMutation.isPending &&
+      !createBasketMutation.isSuccess
+    ) {
+      createBasketMutation.mutate();
+    }
+  }, [basketId, createBasketMutation]);
+
+  const basket = basketQuery.data;
+  const isLoading = basketQuery.isLoading || createBasketMutation.isPending;
+
+  const hasItems = useMemo(() => (basket?.items?.length ?? 0) > 0, [basket]);
+
   if (isLoading) return <div>Loading...</div>;
+  if (!basketId || !basket) return <div>Could not load basket.</div>;
 
   return (
     <div
@@ -45,11 +125,65 @@ export default function BasketPage() {
         </button>
       </div>
 
+      <div className="mb-3">
+        <small className="text-secondary">Basket ID: {basketId}</small>
+      </div>
+
+      <form
+        className="mb-3 d-flex flex-column gap-2"
+        onSubmit={(e) => {
+          e.preventDefault();
+          addItemMutation.mutate({
+            pizzaID: form.pizzaID,
+            quantity: Number(form.quantity),
+            price: Number(form.price),
+          });
+        }}
+      >
+        <input
+          className="form-control"
+          placeholder="Pizza ID (uuid)"
+          value={form.pizzaID}
+          onChange={(e) => setForm((f) => ({ ...f, pizzaID: e.target.value }))}
+          required
+        />
+        <input
+          className="form-control"
+          type="number"
+          min={1}
+          placeholder="Quantity"
+          value={form.quantity}
+          onChange={(e) =>
+            setForm((f) => ({ ...f, quantity: Number(e.target.value) }))
+          }
+          required
+        />
+        <input
+          className="form-control"
+          type="number"
+          step="0.01"
+          min={0}
+          placeholder="Price"
+          value={form.price}
+          onChange={(e) =>
+            setForm((f) => ({ ...f, price: Number(e.target.value) }))
+          }
+          required
+        />
+        <button
+          className="btn btn-light text-black"
+          type="submit"
+          disabled={addItemMutation.isPending}
+        >
+          {addItemMutation.isPending ? 'Adding…' : 'Add item'}
+        </button>
+      </form>
+
       <div className="flex-grow-1 overflow-auto">
-        {basket.items.length === 0 ? (
+        {!hasItems ? (
           <p>Your basket is empty.</p>
         ) : (
-          basket.items.map((item: any) => (
+          basket.items.map((item) => (
             <div
               key={item.id}
               className="d-flex justify-content-between align-items-center mb-2 p-2 bg-secondary rounded"
@@ -61,7 +195,8 @@ export default function BasketPage() {
               </div>
               <button
                 className="btn btn-danger"
-                onClick={() => removeMutation.mutate(item.id)}
+                onClick={() => removeItemMutation.mutate(item.id)}
+                disabled={removeItemMutation.isPending}
               >
                 Remove
               </button>
