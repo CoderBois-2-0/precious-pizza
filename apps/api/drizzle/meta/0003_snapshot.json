@@ -26,9 +26,7 @@
       "compositePrimaryKeys": {
         "categories_id_pk": {
           "name": "categories_id_pk",
-          "columns": [
-            "id"
-          ]
+          "columns": ["id"]
         }
       },
       "uniqueConstraints": {},
@@ -84,12 +82,8 @@
           "name": "pizzas_category_id_categories_id_fk",
           "tableFrom": "pizzas",
           "tableTo": "categories",
-          "columnsFrom": [
-            "category_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["category_id"],
+          "columnsTo": ["id"],
           "onDelete": "no action",
           "onUpdate": "no action"
         }
@@ -97,9 +91,7 @@
       "compositePrimaryKeys": {
         "pizzas_id_pk": {
           "name": "pizzas_id_pk",
-          "columns": [
-            "id"
-          ]
+          "columns": ["id"]
         }
       },
       "uniqueConstraints": {},
@@ -160,18 +152,14 @@
       "compositePrimaryKeys": {
         "users_id_pk": {
           "name": "users_id_pk",
-          "columns": [
-            "id"
-          ]
+          "columns": ["id"]
         }
       },
       "uniqueConstraints": {
         "users_email_unique": {
           "name": "users_email_unique",
           "nullsNotDistinct": false,
-          "columns": [
-            "email"
-          ]
+          "columns": ["email"]
         }
       },
       "policies": {},
@@ -183,10 +171,7 @@
     "public.user_role": {
       "name": "user_role",
       "schema": "public",
-      "values": [
-        "admin",
-        "customer"
-      ]
+      "values": ["admin", "customer"]
     }
   },
   "schemas": {},

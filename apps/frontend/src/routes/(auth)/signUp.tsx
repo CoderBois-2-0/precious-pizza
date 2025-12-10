@@ -20,6 +20,11 @@ const SignUpForm = () => {
   const submit: FormEventHandler = (e) => {
     e.preventDefault();
 
+    // if (password !== confirmPassword) {
+    //   alert('Passwords do not match!');
+    //   return;
+    // }
+
     signUp({
       'first-name': firstName,
       'last-name': lastName,

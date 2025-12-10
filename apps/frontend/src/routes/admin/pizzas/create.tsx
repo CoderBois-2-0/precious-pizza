@@ -1,6 +1,6 @@
 import { createFileRoute, useNavigate } from '@tanstack/react-router';
-import {  useEffect, useState } from 'react';
-import type {FormEventHandler} from 'react';
+import { useEffect, useState } from 'react';
+import type { FormEventHandler } from 'react';
 import { useCategories } from '@/dataHooks/categoryData';
 import { useCreatePizza } from '@/dataHooks/pizzaData';
 

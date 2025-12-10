@@ -1,9 +1,9 @@
-import { createFileRoute } from '@tanstack/react-router'
+import { createFileRoute } from '@tanstack/react-router';
 
 export const Route = createFileRoute('/userPage/')({
   component: UserPage,
   preload: false,
-})
+});
 
 function UserPage() {
   return (
@@ -46,15 +46,21 @@ function UserPage() {
               <ul className="list-group">
                 <li className="list-group-item d-flex justify-content-between align-items-center">
                   Pepperoni
-                  <button className="btn btn-sm btn-outline-danger">Remove</button>
+                  <button className="btn btn-sm btn-outline-danger">
+                    Remove
+                  </button>
                 </li>
                 <li className="list-group-item d-flex justify-content-between align-items-center">
                   Margherita
-                  <button className="btn btn-sm btn-outline-danger">Remove</button>
+                  <button className="btn btn-sm btn-outline-danger">
+                    Remove
+                  </button>
                 </li>
                 <li className="list-group-item d-flex justify-content-between align-items-center">
                   BBQ Chicken
-                  <button className="btn btn-sm btn-outline-danger">Remove</button>
+                  <button className="btn btn-sm btn-outline-danger">
+                    Remove
+                  </button>
                 </li>
               </ul>
 
@@ -66,5 +72,5 @@ function UserPage() {
         </div>
       </div>
     </div>
-  )
+  );
 }
