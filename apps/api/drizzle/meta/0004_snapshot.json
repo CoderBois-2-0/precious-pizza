@@ -1,5 +1,5 @@
 {
-  "id": "aa4f65b5-6e38-4619-ad8f-425f7e0d6a3f",
+  "id": "50f5b2b6-c833-4e38-bf97-6537874707c9",
   "prevId": "54b6b3f5-a07c-4c87-8321-c9d5e443b325",
   "version": "7",
   "dialect": "postgresql",
@@ -10,7 +10,7 @@
       "columns": {
         "id": {
           "name": "id",
-          "type": "varchar(36)",
+          "type": "uuid",
           "primaryKey": true,
           "notNull": true
         },
@@ -19,10 +19,87 @@
           "type": "numeric(6, 2)",
           "primaryKey": false,
           "notNull": false
+        },
+        "created_at": {
+          "name": "created_at",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
         }
       },
       "indexes": {},
       "foreignKeys": {},
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
+    },
+    "public.basket_items": {
+      "name": "basket_items",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "serial",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "pizza_id": {
+          "name": "pizza_id",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "basket_id": {
+          "name": "basket_id",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "quantity": {
+          "name": "quantity",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "price": {
+          "name": "price",
+          "type": "numeric(6, 2)",
+          "primaryKey": false,
+          "notNull": true
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {
+        "basket_items_pizza_id_pizzas_id_fk": {
+          "name": "basket_items_pizza_id_pizzas_id_fk",
+          "tableFrom": "basket_items",
+          "tableTo": "pizzas",
+          "columnsFrom": [
+            "pizza_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "cascade",
+          "onUpdate": "no action"
+        },
+        "basket_items_basket_id_baskets_id_fk": {
+          "name": "basket_items_basket_id_baskets_id_fk",
+          "tableFrom": "basket_items",
+          "tableTo": "baskets",
+          "columnsFrom": [
+            "basket_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "cascade",
+          "onUpdate": "no action"
+        }
+      },
       "compositePrimaryKeys": {},
       "uniqueConstraints": {},
       "policies": {},
@@ -51,7 +128,9 @@
       "compositePrimaryKeys": {
         "categories_id_pk": {
           "name": "categories_id_pk",
-          "columns": ["id"]
+          "columns": [
+            "id"
+          ]
         }
       },
       "uniqueConstraints": {},
@@ -102,7 +181,7 @@
         },
         "basket_id": {
           "name": "basket_id",
-          "type": "varchar(36)",
+          "type": "uuid",
           "primaryKey": false,
           "notNull": true
         },
@@ -177,8 +256,12 @@
           "name": "orders_basket_id_baskets_id_fk",
           "tableFrom": "orders",
           "tableTo": "baskets",
-          "columnsFrom": ["basket_id"],
-          "columnsTo": ["id"],
+          "columnsFrom": [
+            "basket_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
           "onDelete": "no action",
           "onUpdate": "no action"
         }
@@ -211,6 +294,12 @@
           "primaryKey": false,
           "notNull": true
         },
+        "quantity": {
+          "name": "quantity",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true
+        },
         "price": {
           "name": "price",
           "type": "numeric(6, 2)",
@@ -224,8 +313,12 @@
           "name": "order_items_order_id_orders_id_fk",
           "tableFrom": "order_items",
           "tableTo": "orders",
-          "columnsFrom": ["order_id"],
-          "columnsTo": ["id"],
+          "columnsFrom": [
+            "order_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
           "onDelete": "cascade",
           "onUpdate": "no action"
         },
@@ -233,8 +326,12 @@
           "name": "order_items_pizza_id_pizzas_id_fk",
           "tableFrom": "order_items",
           "tableTo": "pizzas",
-          "columnsFrom": ["pizza_id"],
-          "columnsTo": ["id"],
+          "columnsFrom": [
+            "pizza_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
           "onDelete": "cascade",
           "onUpdate": "no action"
         }
@@ -298,8 +395,12 @@
           "name": "pizzas_category_id_categories_id_fk",
           "tableFrom": "pizzas",
           "tableTo": "categories",
-          "columnsFrom": ["category_id"],
-          "columnsTo": ["id"],
+          "columnsFrom": [
+            "category_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
           "onDelete": "no action",
           "onUpdate": "no action"
         }
@@ -307,7 +408,9 @@
       "compositePrimaryKeys": {
         "pizzas_id_pk": {
           "name": "pizzas_id_pk",
-          "columns": ["id"]
+          "columns": [
+            "id"
+          ]
         }
       },
       "uniqueConstraints": {},
@@ -368,14 +471,18 @@
       "compositePrimaryKeys": {
         "users_id_pk": {
           "name": "users_id_pk",
-          "columns": ["id"]
+          "columns": [
+            "id"
+          ]
         }
       },
       "uniqueConstraints": {
         "users_email_unique": {
           "name": "users_email_unique",
           "nullsNotDistinct": false,
-          "columns": ["email"]
+          "columns": [
+            "email"
+          ]
         }
       },
       "policies": {},
@@ -387,22 +494,37 @@
     "public.pizza_categories": {
       "name": "pizza_categories",
       "schema": "public",
-      "values": ["Italian", "Mexican", "Special", "Folded"]
+      "values": [
+        "Italian",
+        "Mexican",
+        "Special",
+        "Folded"
+      ]
     },
     "public.delivery_option": {
       "name": "delivery_option",
       "schema": "public",
-      "values": ["Pickup", "Delivery"]
+      "values": [
+        "Pickup",
+        "Delivery"
+      ]
     },
     "public.order_status": {
       "name": "order_status",
       "schema": "public",
-      "values": ["Pending", "Cancelled", "Successful"]
+      "values": [
+        "Pending",
+        "Cancelled",
+        "Successful"
+      ]
     },
     "public.user_role": {
       "name": "user_role",
       "schema": "public",
-      "values": ["admin", "customer"]
+      "values": [
+        "admin",
+        "customer"
+      ]
     }
   },
   "schemas": {},

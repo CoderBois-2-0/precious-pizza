@@ -7,6 +7,7 @@ import {
   ShieldUser,
   ShoppingBasket,
   User,
+  UserPen,
   UserPlus,
   X,
 } from 'lucide-react';
@@ -118,6 +119,17 @@ export default function Header() {
 
           {!authStore.user && (
             <AuthLinks closeSidebar={closeSidebar}></AuthLinks>
+          )}
+
+          {authStore.user && (
+            <Link
+              to="/userPage"
+              onClick={closeSidebar}
+              className="d-flex align-items-center gap-2 p-2 mb-2 text-white text-decoration-none rounded hover-bg-secondary"
+            >
+              <UserPen></UserPen>
+              <span className="fw-medium">User page</span>
+            </Link>
           )}
           <Link
             to="/basketPage"

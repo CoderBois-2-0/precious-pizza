@@ -1,107 +1,77 @@
-import { Context, Hono } from "hono";
+import { IEnv, TProtectedVariables } from "$routers/types";
+import { createRouter } from "$routers/util";
 import { FavouritesHandler } from "../../db/favourites/handler";
 
-interface IEnv {
-  Bindings: CloudflareBindings;
+interface IFavourtesVariables extends TProtectedVariables {
+  favouritesHandler: FavouritesHandler;
 }
 
-/**
- * Helper type in case a function needs to accept the context parameter
- */
-export type TContext<TEnv extends IEnv = IEnv> = Context<TEnv>;
-
-/**
- * Helper for creating typed routers
- */
-export function createRouter<TEnv extends IEnv = IEnv>() {
-  return new Hono<TEnv>();
+interface IFavouritesEnv extends IEnv {
+  Variables: IFavourtesVariables;
 }
 
-const app = createRouter();
+const router = createRouter<IFavouritesEnv>()
+  .use((c, next) => {
+    const favouritesHandler = new FavouritesHandler(
+      c.env.DB_URL,
+      c.env.ENVIRONMENT !== "production",
+    );
+    c.set("favouritesHandler", favouritesHandler);
 
-/* ---------------------------------------------------
- * PUBLIC ROUTES
- * --------------------------------------------------- */
+    return next();
+  })
+  .get("/", async (c) => {
+    const user = c.get("jwtPayload");
 
-/**
- * GET /favourites?userId=123
- * Returns all favourites for a user.
- */
-app.get("/", async (c) => {
-  const userId = c.req.query("userId");
+    const handler = c.get("favouritesHandler");
+    const favourites = await handler.getAllByUser(user.id);
 
-  if (!userId) {
-    return c.json({ error: "Missing userId" }, 400);
-  }
+    return c.json(favourites);
+  })
+  .post("/", async (c) => {
+    const body = await c.req.json();
+    const { userId, pizzaId } = body;
 
-  const handler = new FavouritesHandler(c.env.DB_URL);
-  const favourites = await handler.getAllByUser(userId);
+    if (!userId || !pizzaId) {
+      return c.json({ error: "userId and pizzaId are required" }, 400);
+    }
 
-  return c.json(favourites);
-});
+    const handler = c.get("favouritesHandler");
+    const created = await handler.addFavourite({
+      userId,
+      pizzaId,
+      id: "",
+    });
 
-/* ---------------------------------------------------
- * PROTECTED ROUTES
- * --------------------------------------------------- */
+    return c.json(created, 201);
+  })
+  .delete("/", async (c) => {
+    const userId = c.req.query("userId");
+    const pizzaId = c.req.query("pizzaId");
 
-/**
- * POST /favourites
- * Body: { userId, pizzaId }
- */
-app.post("/", async (c) => {
-  const body = await c.req.json();
-  const { userId, pizzaId } = body;
+    if (!userId || !pizzaId) {
+      return c.json({ error: "Missing userId or pizzaId" }, 400);
+    }
 
-  if (!userId || !pizzaId) {
-    return c.json({ error: "userId and pizzaId are required" }, 400);
-  }
+    const handler = c.get("favouritesHandler");
+    await handler.removeFavourite(userId, pizzaId);
 
-  const handler = new FavouritesHandler(c.env.DB_URL);
-  const created = await handler.addFavourite({
-    userId,
-    pizzaId,
-    id: "",
+    return c.json({ success: true });
+  })
+  .get("/find", async (c) => {
+    const id = c.req.query("id");
+    const userId = c.req.query("userId");
+    const pizzaId = c.req.query("pizzaId");
+
+    const handler = c.get("favouritesHandler");
+
+    const results = await handler.find({
+      id: id ?? undefined,
+      userId: userId ?? undefined,
+      pizzaId: pizzaId ?? undefined,
+    });
+
+    return c.json(results);
   });
 
-  return c.json(created, 201);
-});
-
-/**
- * DELETE /favourites?userId=123&pizzaId=999
- */
-app.delete("/", async (c) => {
-  const userId = c.req.query("userId");
-  const pizzaId = c.req.query("pizzaId");
-
-  if (!userId || !pizzaId) {
-    return c.json({ error: "Missing userId or pizzaId" }, 400);
-  }
-
-  const handler = new FavouritesHandler(c.env.DB_URL);
-  await handler.removeFavourite(userId, pizzaId);
-
-  return c.json({ success: true });
-});
-
-/* ---------------------------------------------------
- * OPTIONAL: FIND ROUTE
- * GET /favourites/find?id=...&userId=...&pizzaId=...
- * --------------------------------------------------- */
-
-app.get("/find", async (c) => {
-  const id = c.req.query("id");
-  const userId = c.req.query("userId");
-  const pizzaId = c.req.query("pizzaId");
-
-  const handler = new FavouritesHandler(c.env.DB_URL);
-
-  const results = await handler.find({
-    id: id ?? undefined,
-    userId: userId ?? undefined,
-    pizzaId: pizzaId ?? undefined,
-  });
-
-  return c.json(results);
-});
-
-export default app;
+export default router;

@@ -5,6 +5,7 @@ import {
   numeric,
   integer,
   foreignKey,
+  uuid,
 } from "drizzle-orm/pg-core";
 import { pizzaTable } from "../pizza/schema";
 import { orderTable } from "../order/schema";
@@ -13,12 +14,8 @@ export const orderItemTable = pgTable(
   "order_items",
   {
     id: serial("id").primaryKey(),
-    orderID: varchar("order_id", { length: 36 })
-      .references(() => orderTable.id)
-      .notNull(),
-    pizzaID: integer("pizza_id")
-      .references(() => pizzaTable.id)
-      .notNull(),
+    orderID: varchar("order_id", { length: 36 }).notNull(),
+    pizzaID: uuid("pizza_id").notNull(),
     quantity: integer("quantity").notNull(),
     price: numeric("price", { precision: 6, scale: 2 }).notNull(),
   },
