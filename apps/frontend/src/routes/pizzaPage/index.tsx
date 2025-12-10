@@ -1,8 +1,8 @@
 import { createFileRoute } from '@tanstack/react-router';
 import type { IAPIPizza } from '@/apiClients/pizzaClient';
-import { useCreatePizza, usePizzas } from '@/dataHooks/pizzaData';
-import { useCategories } from '@/dataHooks/categoryData';
 import type { IAPICategory } from '@/apiClients/categoryClient';
+import { usePizzas } from '@/dataHooks/pizzaData';
+import { useCategories } from '@/dataHooks/categoryData';
 import { useCreateFavourite } from '@/dataHooks/favouriteData';
 
 export const Route = createFileRoute('/pizzaPage/')({

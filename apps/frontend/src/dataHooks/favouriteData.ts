@@ -1,9 +1,10 @@
-import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { defaultQueryOptions } from './index';
-import FavouriteClient, {
-  type IAPIFavourite,
-  type IAPIFavouritePost,
+import type {
+  IAPIFavourite,
+  IAPIFavouritePost,
 } from '@/apiClients/favouriteClient';
+import FavouriteClient from '@/apiClients/favouriteClient';
 
 const FAVOURITES_PRIMARY_KEY = 'favourites';
 

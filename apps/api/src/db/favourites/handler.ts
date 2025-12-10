@@ -1,7 +1,7 @@
 import { getDB, TDB } from "$db/index";
 import { IFavourite, IFavouriteWithPizza, INewFavourite } from "./types";
 import { favouritesTable } from "./schema";
-import { and, eq } from "drizzle-orm";
+import { eq } from "drizzle-orm";
 
 class FavouritesHandler {
   #client: TDB;
