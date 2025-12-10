@@ -1,6 +1,6 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { defaultQueryOptions } from './index';
-import type {IAPIPizza, IAPIPizzaPost} from '@/apiClients/pizzaClient';
+import type { IAPIPizza, IAPIPizzaPost } from '@/apiClients/pizzaClient';
 import PizzaClient from '@/apiClients/pizzaClient';
 
 const PIZZA_PRIMARY_KEY = 'pizza';

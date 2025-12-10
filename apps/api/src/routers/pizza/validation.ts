@@ -14,8 +14,11 @@ const pizzaPostSchema = z
   .object({
     name: z.string().min(2).max(40),
     description: z.string().max(200),
-    price: z.float32().min(0),
-    isDraft: z.boolean(),
+    price: z
+      .float32()
+      .min(0)
+      .transform((price) => price.toString()),
+    isVisible: z.boolean(),
     categoryID: z.uuid(),
   })
   .strict();
