@@ -1,7 +1,17 @@
 import { useState } from 'react';
 import { Link } from '@tanstack/react-router';
-import { Home, Menu, ShieldUser, User, UserPlus, X, ShoppingBasket, Pizza } from 'lucide-react';
+import {
+  Home,
+  Menu,
+  ShieldUser,
+  User,
+  UserPlus,
+  X,
+  ShoppingBasket,
+  Pizza,
+} from 'lucide-react';
 import { useAuth } from '@/services/authService';
+import '.././styles.css';
 
 export default function Header() {
   const { signOut, authStore, isAuthenticated } = useAuth();
@@ -9,7 +19,6 @@ export default function Header() {
   isAuthenticated();
 
   const [isOpen, setIsOpen] = useState(false);
-
   const closeSidebar = () => setIsOpen(false);
 
   return (
@@ -38,16 +47,27 @@ export default function Header() {
               className="text-black"
             >
               <ShoppingBasket size={28} />
-              {/* <span className="fw-medium">Basket</span> */}
             </Link>
           </button>
-        </div>
-        <div>
-          {authStore.user && (
-            <button className="btn btn-danger" onClick={signOut}>
-              Sign out
-            </button>
-          )}
+          <div>
+            {!authStore.user && (
+              <Link
+                to="/login"
+                onClick={closeSidebar}
+                className="d-flex align-items-center gap-2 p-2 text-black text-decoration-none bg-light rounded hover-bg-secondary"
+              >
+                <User size={20} />
+                <span className="fw-medium">Login</span>
+              </Link>
+            )}
+          </div>
+          <div>
+            {authStore.user && (
+              <button className="btn btn-danger" onClick={signOut}>
+                Sign out
+              </button>
+            )}
+          </div>
         </div>
       </header>
 

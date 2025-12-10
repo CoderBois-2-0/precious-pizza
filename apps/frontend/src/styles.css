@@ -12,7 +12,6 @@ code {
     source-code-pro, Menlo, Monaco, Consolas, 'Courier New', monospace;
 }
 
-
 .hover-bg-secondary:hover {
   background-color: #6c757d; /* Bootstrap secondary color */
 }
@@ -22,7 +21,7 @@ code {
 }
 
 .header-light-green {
-  background-color: #6ab66a; 
+  background-color: #6ab66a;
 }
 
 .header-light-green-gradient {

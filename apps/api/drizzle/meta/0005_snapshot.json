@@ -1,6 +1,6 @@
 {
-  "id": "aa4f65b5-6e38-4619-ad8f-425f7e0d6a3f",
-  "prevId": "54b6b3f5-a07c-4c87-8321-c9d5e443b325",
+  "id": "6896c32e-967c-4971-acd3-872f5f63adbe",
+  "prevId": "aa4f65b5-6e38-4619-ad8f-425f7e0d6a3f",
   "version": "7",
   "dialect": "postgresql",
   "tables": {
@@ -10,7 +10,7 @@
       "columns": {
         "id": {
           "name": "id",
-          "type": "varchar(36)",
+          "type": "uuid",
           "primaryKey": true,
           "notNull": true
         },
@@ -19,10 +19,79 @@
           "type": "numeric(6, 2)",
           "primaryKey": false,
           "notNull": false
+        },
+        "created_at": {
+          "name": "created_at",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
         }
       },
       "indexes": {},
       "foreignKeys": {},
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
+    },
+    "public.basket_items": {
+      "name": "basket_items",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "serial",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "pizza_id": {
+          "name": "pizza_id",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "basket_id": {
+          "name": "basket_id",
+          "type": "varchar(36)",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "quantity": {
+          "name": "quantity",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "price": {
+          "name": "price",
+          "type": "numeric(6, 2)",
+          "primaryKey": false,
+          "notNull": true
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {
+        "basket_items_pizza_id_pizzas_id_fk": {
+          "name": "basket_items_pizza_id_pizzas_id_fk",
+          "tableFrom": "basket_items",
+          "tableTo": "pizzas",
+          "columnsFrom": ["pizza_id"],
+          "columnsTo": ["id"],
+          "onDelete": "cascade",
+          "onUpdate": "no action"
+        },
+        "basket_items_basket_id_baskets_id_fk": {
+          "name": "basket_items_basket_id_baskets_id_fk",
+          "tableFrom": "basket_items",
+          "tableTo": "baskets",
+          "columnsFrom": ["basket_id"],
+          "columnsTo": ["id"],
+          "onDelete": "cascade",
+          "onUpdate": "no action"
+        }
+      },
       "compositePrimaryKeys": {},
       "uniqueConstraints": {},
       "policies": {},
@@ -207,7 +276,13 @@
         },
         "pizza_id": {
           "name": "pizza_id",
-          "type": "uuid",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "quantity": {
+          "name": "quantity",
+          "type": "integer",
           "primaryKey": false,
           "notNull": true
         },

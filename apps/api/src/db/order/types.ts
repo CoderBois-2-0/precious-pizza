@@ -32,4 +32,12 @@ interface INewOrder {
   customerNote?: string;
 }
 
-export { INewOrder, IFullOrder, IOrder, IOrderItem, IOrderItemQuery, IOrderInsert, IOrderItemInsert };
+export {
+  INewOrder,
+  IFullOrder,
+  IOrder,
+  IOrderItem,
+  IOrderItemQuery,
+  IOrderInsert,
+  IOrderItemInsert,
+};

@@ -125,18 +125,14 @@
       "compositePrimaryKeys": {
         "users_id_pk": {
           "name": "users_id_pk",
-          "columns": [
-            "id"
-          ]
+          "columns": ["id"]
         }
       },
       "uniqueConstraints": {
         "users_email_unique": {
           "name": "users_email_unique",
           "nullsNotDistinct": false,
-          "columns": [
-            "email"
-          ]
+          "columns": ["email"]
         }
       },
       "policies": {},
@@ -148,10 +144,7 @@
     "public.user_role": {
       "name": "user_role",
       "schema": "public",
-      "values": [
-        "admin",
-        "customer"
-      ]
+      "values": ["admin", "customer"]
     }
   },
   "schemas": {},

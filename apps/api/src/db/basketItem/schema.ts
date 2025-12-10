@@ -1,4 +1,11 @@
-import { pgTable, varchar, numeric, integer, serial, foreignKey } from "drizzle-orm/pg-core";
+import {
+  pgTable,
+  varchar,
+  numeric,
+  integer,
+  serial,
+  foreignKey,
+} from "drizzle-orm/pg-core";
 import { pizzaTable } from "../pizza/schema";
 import { basketTable } from "../basket/schema";
 
@@ -24,5 +31,5 @@ export const basketItemTable = pgTable(
       columns: [table.basketID],
       foreignColumns: [basketTable.id],
     }).onDelete("cascade"),
-  ]
+  ],
 );

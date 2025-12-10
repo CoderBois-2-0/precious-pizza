@@ -1,26 +1,26 @@
-import { useQuery, useMutation } from '@tanstack/react-query'
-import { Link } from '@tanstack/react-router'
-import { ShoppingBasket, X } from 'lucide-react'
-import { useState } from 'react'
+import { useQuery, useMutation } from '@tanstack/react-query';
+import { Link } from '@tanstack/react-router';
+import { ShoppingBasket, X } from 'lucide-react';
+import { useState } from 'react';
 
 export default function BasketPage() {
-  const [isOpen, setIsOpen] = useState(true)
+  const [isOpen, setIsOpen] = useState(true);
 
   const { data: basket, isLoading } = useQuery({
     queryKey: ['basket'],
     queryFn: async () => {
-      const res = await fetch('/api/basket/full')
-      return res.json()
+      const res = await fetch('/api/basket/full');
+      return res.json();
     },
-  })
+  });
 
   const removeMutation = useMutation({
     mutationFn: async (id: number) => {
-      await fetch(`/api/basket/remove/${id}`, { method: 'DELETE' })
+      await fetch(`/api/basket/remove/${id}`, { method: 'DELETE' });
     },
-  })
+  });
 
-  if (isLoading) return <div>Loading...</div>
+  if (isLoading) return <div>Loading...</div>;
 
   return (
     <div
@@ -77,5 +77,5 @@ export default function BasketPage() {
         </Link>
       </div>
     </div>
-  )
+  );
 }

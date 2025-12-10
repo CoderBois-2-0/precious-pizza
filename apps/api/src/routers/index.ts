@@ -4,7 +4,6 @@ import publicRouter from "./publicRouter";
 import protectedRouter from "./protectedRouter";
 import { createRouter } from "./util";
 import { csrf } from "hono/csrf";
-import { basketRouter } from "./basket";
 
 interface IEnv {
   Bindings: CloudflareBindings;
@@ -23,6 +22,5 @@ const app = createRouter()
   .use(secureHeaders())
   .route("/", publicRouter)
   .route("/", protectedRouter);
-  // .route("/basket", basketRouter);
 
 export default app;
