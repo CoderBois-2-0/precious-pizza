@@ -7,6 +7,7 @@ import {
   ShieldUser,
   ShoppingBasket,
   User,
+  UserPen,
   UserPlus,
   X,
 } from 'lucide-react';
@@ -116,24 +117,20 @@ export default function Header() {
             <span className="fw-medium">Home</span>
           </Link>
 
-          <Link
-            to="/signUp"
-            onClick={closeSidebar}
-            className="d-flex align-items-center gap-2 p-2 mb-2 text-white text-decoration-none rounded hover-bg-secondary"
-          >
-            <UserPlus size={20} />
-            <span className="fw-medium">Sign up</span>
-          </Link>
+          {!authStore.user && (
+            <AuthLinks closeSidebar={closeSidebar}></AuthLinks>
+          )}
 
-          <Link
-            to="/login"
-            onClick={closeSidebar}
-            className="d-flex align-items-center gap-2 p-2 mb-2 text-white text-decoration-none rounded hover-bg-secondary"
-          >
-            <User size={20} />
-            <span className="fw-medium">Login</span>
-          </Link>
-
+          {authStore.user && (
+            <Link
+              to="/userPage"
+              onClick={closeSidebar}
+              className="d-flex align-items-center gap-2 p-2 mb-2 text-white text-decoration-none rounded hover-bg-secondary"
+            >
+              <UserPen></UserPen>
+              <span className="fw-medium">User page</span>
+            </Link>
+          )}
           <Link
             to="/basketPage"
             onClick={closeSidebar}
@@ -156,3 +153,31 @@ export default function Header() {
     </>
   );
 }
+
+interface IAuthLinksProps {
+  closeSidebar: () => void;
+}
+
+const AuthLinks = ({ closeSidebar }: IAuthLinksProps) => {
+  return (
+    <>
+      <Link
+        to="/signUp"
+        onClick={closeSidebar}
+        className="d-flex align-items-center gap-2 p-2 mb-2 text-white text-decoration-none rounded hover-bg-secondary"
+      >
+        <UserPlus size={20} />
+        <span className="fw-medium">Sign up</span>
+      </Link>
+
+      <Link
+        to="/login"
+        onClick={closeSidebar}
+        className="d-flex align-items-center gap-2 p-2 mb-2 text-white text-decoration-none rounded hover-bg-secondary"
+      >
+        <User size={20} />
+        <span className="fw-medium">Login</span>
+      </Link>
+    </>
+  );
+};

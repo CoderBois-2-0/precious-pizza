@@ -1,5 +1,5 @@
 import { getDB, TDB } from "$db/index";
-import { IFavourite, INewFavourite } from "./types";
+import { IFavourite, IFavouriteWithPizza, INewFavourite } from "./types";
 import { favouritesTable } from "./schema";
 import { and, eq } from "drizzle-orm";
 
@@ -12,9 +12,16 @@ class FavouritesHandler {
   }
 
   // Get all favourites for a user
-  async getAllByUser(userId: string): Promise<IFavourite[]> {
+  async getAllByUser(userId: string): Promise<IFavouriteWithPizza[]> {
     return await this.#client.query.favouritesTable.findMany({
       where: (fields, { eq }) => eq(fields.userId, userId),
+      with: {
+        pizza: {
+          columns: {
+            name: true,
+          },
+        },
+      },
     });
   }
 

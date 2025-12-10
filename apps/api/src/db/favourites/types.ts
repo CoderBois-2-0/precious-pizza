@@ -2,6 +2,12 @@ import { favouritesTable } from "./schema";
 
 type IFavourite = typeof favouritesTable.$inferSelect;
 
+interface IFavouriteWithPizza extends IFavourite {
+  pizza: {
+    name: string;
+  };
+}
+
 type IFavouriteQuery = Partial<{
   id: IFavourite["id"];
   userId: IFavourite["userId"];
@@ -10,4 +16,4 @@ type IFavouriteQuery = Partial<{
 
 type INewFavourite = typeof favouritesTable.$inferInsert;
 
-export { IFavourite, IFavouriteQuery, INewFavourite };
+export { IFavourite, IFavouriteWithPizza, IFavouriteQuery, INewFavourite };

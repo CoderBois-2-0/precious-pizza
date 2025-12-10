@@ -1,9 +1,18 @@
-import { varchar, pgTable } from "drizzle-orm/pg-core";
+import { pizzaTable } from "$db/pizza/schema";
+import { relations } from "drizzle-orm";
+import { uuid, pgTable } from "drizzle-orm/pg-core";
 
 const favouritesTable = pgTable("favourites", {
-  id: varchar("id", { length: 36 }).primaryKey(),
-  userId: varchar("user_id", { length: 36 }).notNull(),
-  pizzaId: varchar("pizza_id", { length: 36 }).notNull(),
+  id: uuid("id").primaryKey(),
+  userId: uuid("user_id").notNull(),
+  pizzaId: uuid("pizza_id").notNull(),
 });
 
-export { favouritesTable };
+const favouritesRelation = relations(favouritesTable, ({ one }) => ({
+  pizza: one(pizzaTable, {
+    fields: [favouritesTable.pizzaId],
+    references: [pizzaTable.id],
+  }),
+}));
+
+export { favouritesTable, favouritesRelation };

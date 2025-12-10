@@ -4,6 +4,7 @@ import {
   numeric,
   pgEnum,
   timestamp,
+  uuid,
 } from "drizzle-orm/pg-core";
 import { basketTable } from "../basket/schema";
 
@@ -17,7 +18,7 @@ export const orderStatus = pgEnum("order_status", [
 
 export const orderTable = pgTable("orders", {
   id: varchar("id", { length: 36 }).primaryKey(),
-  basketID: varchar("basket_id", { length: 36 })
+  basketID: uuid("basket_id")
     .references(() => basketTable.id)
     .notNull(),
   totalPrice: numeric("total_price", { precision: 8, scale: 2 }).notNull(),
