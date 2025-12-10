@@ -3,12 +3,12 @@ import { Link } from '@tanstack/react-router';
 import {
   Home,
   Menu,
+  Pizza,
   ShieldUser,
+  ShoppingBasket,
   User,
   UserPlus,
   X,
-  ShoppingBasket,
-  Pizza,
 } from 'lucide-react';
 import { useAuth } from '@/services/authService';
 import '.././styles.css';

@@ -5,10 +5,6 @@ import protectedRouter from "./protectedRouter";
 import { createRouter } from "./util";
 import { csrf } from "hono/csrf";
 
-interface IEnv {
-  Bindings: CloudflareBindings;
-}
-
 const app = createRouter()
   .use((c, next) => {
     const corsMiddelware = cors({
