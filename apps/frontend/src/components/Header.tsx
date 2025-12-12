@@ -184,9 +184,12 @@ const LotrQuote = () => {
   useEffect(() => {
     getRandomQuote();
 
-    const intervalID = setInterval(() => {
-      getRandomQuote();
-    }, 1000 * 10);
+    const intervalID = setInterval(
+      () => {
+        getRandomQuote();
+      },
+      1000 * 60 * 2,
+    );
 
     return () => clearInterval(intervalID);
   }, []);

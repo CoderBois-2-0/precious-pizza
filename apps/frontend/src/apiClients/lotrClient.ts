@@ -7,14 +7,13 @@ class LotrClient {
   #url: string;
 
   constructor() {
-    this.#url = import.meta.env.VITE_API_URL;
+    this.#url = `${import.meta.env.VITE_API_URL}/lotr`;
   }
 
   async getRandomQuote(): Promise<IAPILotrQuote> {
-    return {
-      quote: 'Fly youo fools',
-      character: 'Gandalf',
-    };
+    const quoteRes = await fetch(`${this.#url}/random`);
+
+    return quoteRes.json() as Promise<IAPILotrQuote>;
   }
 }
 
