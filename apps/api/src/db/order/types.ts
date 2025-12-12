@@ -35,4 +35,13 @@ interface INewOrder {
   userID?: string;
 }
 
-export { INewOrder, IFullOrder, IOrder, IOrderItem, IOrderItemQuery, IOrderInsert, IOrderItemInsert, TOrderTable };
+export {
+  INewOrder,
+  IFullOrder,
+  IOrder,
+  IOrderItem,
+  IOrderItemQuery,
+  IOrderInsert,
+  IOrderItemInsert,
+  TOrderTable,
+};

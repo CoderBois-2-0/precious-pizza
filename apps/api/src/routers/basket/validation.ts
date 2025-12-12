@@ -12,7 +12,10 @@ const basketItemParamSchema = z.object({
   id: z.string().uuid(), // basketID
   itemID: z.coerce.number().int().positive(), // basketItem ID
 });
-const basketItemParamValidator = createValidator("param", basketItemParamSchema);
+const basketItemParamValidator = createValidator(
+  "param",
+  basketItemParamSchema,
+);
 
 // Body validator for creating a basket (empty body accepted)
 const basketPostSchema = z.object({}).strict();
@@ -28,4 +31,9 @@ const basketAddItemSchema = z
   .strict();
 const basketAddItemValidator = createValidator("json", basketAddItemSchema);
 
-export { basketParamValidator, basketItemParamValidator, basketPostValidator, basketAddItemValidator };
+export {
+  basketParamValidator,
+  basketItemParamValidator,
+  basketPostValidator,
+  basketAddItemValidator,
+};

@@ -2,7 +2,12 @@ import { IEnv } from "$routers/types";
 import { createRouter } from "$routers/util";
 import { IBasketVariables } from ".";
 import { injectBasketHandler } from "./middleware";
-import { basketAddItemValidator, basketItemParamValidator, basketParamValidator, basketPostValidator } from "./validation";
+import {
+  basketAddItemValidator,
+  basketItemParamValidator,
+  basketParamValidator,
+  basketPostValidator,
+} from "./validation";
 
 interface IBasketEnv extends IEnv {
   Variables: IBasketVariables;
@@ -49,24 +54,29 @@ const router = createRouter<IBasketEnv>()
     }
   })
   // Add a pizza to the basket
-  .post("/:id/items", basketParamValidator, basketAddItemValidator, async (c) => {
-    const basketHandler = c.get("basketHandler");
-    const { id: basketID } = c.req.valid("param");
-    const { pizzaID, quantity, price } = c.req.valid("json");
+  .post(
+    "/:id/items",
+    basketParamValidator,
+    basketAddItemValidator,
+    async (c) => {
+      const basketHandler = c.get("basketHandler");
+      const { id: basketID } = c.req.valid("param");
+      const { pizzaID, quantity, price } = c.req.valid("json");
 
-    try {
-      await basketHandler.addPizzaToBasket({
-        basketID,
-        pizzaID,
-        quantity,
-        price: String(price),
-      });
-      return c.json({ success: true }, 201);
-    } catch (e) {
-      console.log(e);
-      return c.json({ message: "Could not add pizza to basket" }, 500);
-    }
-  })
+      try {
+        await basketHandler.addPizzaToBasket({
+          basketID,
+          pizzaID,
+          quantity,
+          price: String(price),
+        });
+        return c.json({ success: true }, 201);
+      } catch (e) {
+        console.log(e);
+        return c.json({ message: "Could not add pizza to basket" }, 500);
+      }
+    },
+  )
   // Recalculate and persist basket total
   .patch("/:id/total", basketParamValidator, async (c) => {
     const basketHandler = c.get("basketHandler");

@@ -42,7 +42,14 @@ class BasketHandler {
   }
 
   async removePizzaFromBasket(basketID: string, pizzaInBasketID: number) {
-    await this.#client.delete(basketItemTable).where(and(eq(basketItemTable.id, pizzaInBasketID), eq(basketItemTable.basketID, basketID)));
+    await this.#client
+      .delete(basketItemTable)
+      .where(
+        and(
+          eq(basketItemTable.id, pizzaInBasketID),
+          eq(basketItemTable.basketID, basketID),
+        ),
+      );
 
     await this.updateBasketTotal(basketID);
   }
@@ -73,7 +80,10 @@ class BasketHandler {
   // get full basket with total price
   async getFullBasket(basketID: string): Promise<IBasketQuery> {
     // Load basket metadata
-    const [basketMeta] = await this.#client.select({ createdAt: basketTable.createdAt }).from(basketTable).where(eq(basketTable.id, basketID));
+    const [basketMeta] = await this.#client
+      .select({ createdAt: basketTable.createdAt })
+      .from(basketTable)
+      .where(eq(basketTable.id, basketID));
 
     if (!basketMeta) {
       throw new Error("Basket not found");
@@ -83,7 +93,10 @@ class BasketHandler {
     const items = await this.getBasketItems(basketID);
 
     //  Calculate total price dynamically
-    const totalPrice = items.reduce((sum, item) => sum + item.price * item.quantity, 0);
+    const totalPrice = items.reduce(
+      (sum, item) => sum + item.price * item.quantity,
+      0,
+    );
 
     return {
       id: basketID,
@@ -96,7 +109,10 @@ class BasketHandler {
   // recompute and persist basket total
   async updateBasketTotal(basketID: string): Promise<string> {
     const items = await this.getBasketItems(basketID);
-    const totalPrice = items.reduce((sum, item) => sum + item.price * item.quantity, 0);
+    const totalPrice = items.reduce(
+      (sum, item) => sum + item.price * item.quantity,
+      0,
+    );
 
     await this.#client
       .update(basketTable)
@@ -108,11 +124,15 @@ class BasketHandler {
 
   // get all baskets with their items (admin use)
   async getAllBaskets(): Promise<IBasketQuery[]> {
-    const basketIDs = await this.#client.select({ id: basketTable.id }).from(basketTable);
+    const basketIDs = await this.#client
+      .select({ id: basketTable.id })
+      .from(basketTable);
 
     if (basketIDs.length === 0) return [];
 
-    const baskets = await Promise.all(basketIDs.map(({ id }) => this.getFullBasket(id)));
+    const baskets = await Promise.all(
+      basketIDs.map(({ id }) => this.getFullBasket(id)),
+    );
 
     return baskets;
   }

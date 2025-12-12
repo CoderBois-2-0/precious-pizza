@@ -4,7 +4,9 @@ import { createRouter } from "$routers/util";
 import { IBasketVariables } from ".";
 import { injectBasketHandler } from "./middleware";
 
-interface IProtectedBasketVariables extends IBasketVariables, TProtectedVariables {}
+interface IProtectedBasketVariables
+  extends IBasketVariables,
+    TProtectedVariables {}
 
 interface IProtectedBasketEnv extends IEnv {
   Variables: IProtectedBasketVariables;

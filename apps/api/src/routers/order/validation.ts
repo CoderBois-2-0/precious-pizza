@@ -5,7 +5,10 @@ const orderParamSchema = z.object({ id: z.string().uuid() });
 const orderParamValidator = createValidator("param", orderParamSchema);
 
 const orderBasketParamSchema = z.object({ basketID: z.string().uuid() });
-const orderBasketParamValidator = createValidator("param", orderBasketParamSchema);
+const orderBasketParamValidator = createValidator(
+  "param",
+  orderBasketParamSchema,
+);
 
 const deliveryAddressSchema = z.object({
   street: z.string().min(1),
@@ -36,7 +39,9 @@ const orderPostSchema = z
       }
       return true;
     },
-    { message: "Delivery address is required when delivery option is Delivery" }
+    {
+      message: "Delivery address is required when delivery option is Delivery",
+    },
   );
 const orderPostValidator = createValidator("json", orderPostSchema);
 

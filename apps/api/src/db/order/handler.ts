@@ -4,7 +4,14 @@ import { basketItemTable } from "../basketItem/schema";
 import { orderItemTable } from "../orderItem/schema";
 import { getDB, TDB } from "..";
 import { pizzaTable } from "../pizza/schema";
-import { IFullOrder, INewOrder, IOrder, IOrderInsert, IOrderItemQuery, TOrderTable } from "./types";
+import {
+  IFullOrder,
+  INewOrder,
+  IOrder,
+  IOrderInsert,
+  IOrderItemQuery,
+  TOrderTable,
+} from "./types";
 
 class OrderHandler {
   #client: TDB;
@@ -24,17 +31,30 @@ class OrderHandler {
 
   // Create a new order from a basket
   async createOrder(input: INewOrder): Promise<IOrder> {
-    const { basketID, delivery, deliveryFee = 0, deliveryAddress, customerNote, userID } = input;
+    const {
+      basketID,
+      delivery,
+      deliveryFee = 0,
+      deliveryAddress,
+      customerNote,
+      userID,
+    } = input;
 
     // 1. Fetch basket items
-    const basketItems = await this.#client.select().from(basketItemTable).where(eq(basketItemTable.basketID, basketID));
+    const basketItems = await this.#client
+      .select()
+      .from(basketItemTable)
+      .where(eq(basketItemTable.basketID, basketID));
 
     if (basketItems.length === 0) {
       throw new Error("Basket is empty");
     }
 
     // 2. Calculate total price
-    const totalPizzasPrice = basketItems.reduce((sum, item) => sum + Number(item.price) * item.quantity, 0);
+    const totalPizzasPrice = basketItems.reduce(
+      (sum, item) => sum + Number(item.price) * item.quantity,
+      0,
+    );
     const totalPrice = totalPizzasPrice + deliveryFee;
 
     // 3. Create order
@@ -72,20 +92,29 @@ class OrderHandler {
 
   // Get order by ID
   async getById(orderID: string): Promise<IOrder | null> {
-    const [rawOrder] = await this.#client.select().from(orderTable).where(eq(orderTable.id, orderID));
+    const [rawOrder] = await this.#client
+      .select()
+      .from(orderTable)
+      .where(eq(orderTable.id, orderID));
     return rawOrder ? this.normalizeOrder(rawOrder) : null;
   }
 
   // Get an order for a basket
   async getByBasket(basketID: string): Promise<IOrder[]> {
-    const rows = await this.#client.select().from(orderTable).where(eq(orderTable.basketID, basketID));
+    const rows = await this.#client
+      .select()
+      .from(orderTable)
+      .where(eq(orderTable.basketID, basketID));
     return rows.map((r) => this.normalizeOrder(r));
   }
 
   // Fetch a full order with all pizzas and quantities
   async getFullOrder(orderID: string): Promise<IFullOrder | null> {
     // 1. Get order info
-    const [rawOrder] = await this.#client.select().from(orderTable).where(eq(orderTable.id, orderID));
+    const [rawOrder] = await this.#client
+      .select()
+      .from(orderTable)
+      .where(eq(orderTable.id, orderID));
 
     if (!rawOrder) return null;
 

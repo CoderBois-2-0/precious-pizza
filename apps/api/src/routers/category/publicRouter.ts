@@ -12,7 +12,10 @@ interface ICategoryEnv extends IEnv {
 
 const router = createRouter<ICategoryEnv>()
   .use((c, next) => {
-    const categoryHandler = new CategoryHandler(c.env.DB_URL, c.env.ENVIRONMENT !== "production");
+    const categoryHandler = new CategoryHandler(
+      c.env.DB_URL,
+      c.env.ENVIRONMENT !== "production",
+    );
     c.set("categoryHandler", categoryHandler);
     return next();
   })

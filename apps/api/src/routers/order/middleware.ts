@@ -4,16 +4,16 @@ import { IEnv } from "$routers/types";
 import { IOrderVariables } from ".";
 
 interface IOrderEnv extends IEnv {
-	Variables: IOrderVariables;
+  Variables: IOrderVariables;
 }
 
 const injectOrderHandler = createMiddleware<IOrderEnv>((c, next) => {
-	const orderHandler = new OrderHandler(
-		c.env.DB_URL,
-		c.env.ENVIRONMENT !== "production",
-	);
-	c.set("orderHandler", orderHandler);
-	return next();
+  const orderHandler = new OrderHandler(
+    c.env.DB_URL,
+    c.env.ENVIRONMENT !== "production",
+  );
+  c.set("orderHandler", orderHandler);
+  return next();
 });
 
 export { injectOrderHandler, IOrderEnv };
