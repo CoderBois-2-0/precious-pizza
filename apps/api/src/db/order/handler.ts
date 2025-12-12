@@ -17,8 +17,8 @@ import {
 type IOrderRow = Omit<IOrder, "totalPrice"> & { totalPrice: string | number };
 
 class OrderHandler {
-  #client: TDB;
-  #table: TOrderTable;
+  readonly #client: TDB;
+  readonly #table: TOrderTable;
 
   constructor(dbUrl: string, logger: boolean) {
     this.#client = getDB(dbUrl, logger);

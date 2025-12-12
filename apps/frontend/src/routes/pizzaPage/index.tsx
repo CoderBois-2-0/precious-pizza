@@ -111,12 +111,16 @@ const Pizza = ({ pizza }: IPizzaProps) => {
       pizzaID: pizza.id,
       quantity: quantity,
       price:
-        typeof pizza.price === 'string' ? parseFloat(pizza.price) : pizza.price,
+        typeof pizza.price === 'string'
+          ? Number.parseFloat(pizza.price)
+          : pizza.price,
     });
   };
 
   const displayPrice =
-    typeof pizza.price === 'string' ? parseFloat(pizza.price) : pizza.price;
+    typeof pizza.price === 'string'
+      ? Number.parseFloat(pizza.price)
+      : pizza.price;
 
   return (
     <div className="card w-100">

@@ -1,4 +1,4 @@
-import { createContext, useContext, useState } from 'react';
+import { createContext, useContext, useState, useMemo } from 'react';
 import type { ReactNode } from 'react';
 
 interface BasketContextType {
@@ -8,21 +8,26 @@ interface BasketContextType {
   toggleBasket: () => void;
 }
 
+interface BasketProviderProps {
+  readonly children: ReactNode;
+}
+
 const BasketContext = createContext<BasketContextType | undefined>(undefined);
 
-export function BasketProvider({ children }: { children: ReactNode }) {
+export function BasketProvider({ children }: BasketProviderProps) {
   const [isBasketOpen, setIsBasketOpen] = useState(false);
 
   const openBasket = () => setIsBasketOpen(true);
   const closeBasket = () => setIsBasketOpen(false);
   const toggleBasket = () => setIsBasketOpen((prev) => !prev);
 
+  const value = useMemo(
+    () => ({ isBasketOpen, openBasket, closeBasket, toggleBasket }),
+    [isBasketOpen],
+  );
+
   return (
-    <BasketContext.Provider
-      value={{ isBasketOpen, openBasket, closeBasket, toggleBasket }}
-    >
-      {children}
-    </BasketContext.Provider>
+    <BasketContext.Provider value={value}>{children}</BasketContext.Provider>
   );
 }
 

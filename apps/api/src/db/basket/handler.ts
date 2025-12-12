@@ -7,8 +7,8 @@ import { IBasketQuery, TBasketTable } from "./types";
 import { basketTable } from "./schema";
 
 class BasketHandler {
-  #client: TDB;
-  #table: TBasketTable;
+  readonly #client: TDB;
+  readonly #table: TBasketTable;
 
   constructor(dbUrl: string, logger: boolean) {
     this.#client = getDB(dbUrl, logger);

@@ -104,7 +104,7 @@ function CheckoutPage() {
       localStorage.removeItem(BASKET_STORAGE_KEY);
 
       // Dispatch custom event to notify basket components
-      window.dispatchEvent(new CustomEvent('basketCleared'));
+      globalThis.dispatchEvent(new CustomEvent('basketCleared'));
 
       // Invalidate all basket-related queries to refresh UI
       await queryClient.invalidateQueries({ queryKey: ['basket'] });
@@ -147,17 +147,19 @@ function CheckoutPage() {
               <div className="card-body">
                 <h5 className="card-title">Order Details</h5>
                 <div className="mb-3">
-                  <label className="form-label">Delivery Option</label>
-                  <select
-                    className="form-select"
-                    value={delivery}
-                    onChange={(e) =>
-                      setDelivery(e.target.value as 'Pickup' | 'Delivery')
-                    }
-                  >
-                    <option value="Pickup">Pickup</option>
-                    <option value="Delivery">Delivery</option>
-                  </select>
+                  <label className="form-label d-block">
+                    <span className="d-block mb-1">Delivery Option</span>
+                    <select
+                      className="form-select"
+                      value={delivery}
+                      onChange={(e) =>
+                        setDelivery(e.target.value as 'Pickup' | 'Delivery')
+                      }
+                    >
+                      <option value="Pickup">Pickup</option>
+                      <option value="Delivery">Delivery</option>
+                    </select>
+                  </label>
                 </div>
 
                 {delivery === 'Delivery' && (
@@ -210,16 +212,17 @@ function CheckoutPage() {
                 )}
 
                 <div className="mt-3">
-                  <label className="form-label">
-                    Comment (optional, max 500)
+                  <label className="form-label d-block">
+                    <span className="d-block mb-1">
+                      Comment (optional, max 500)
+                    </span>
+                    <textarea
+                      className="form-control"
+                      value={customerNote}
+                      onChange={(e) => setCustomerNote(e.target.value)}
+                      maxLength={500}
+                    />
                   </label>
-                  <textarea
-                    className="form-control"
-                    value={customerNote}
-                    onChange={(e) => setCustomerNote(e.target.value)}
-                    maxLength={500}
-                  />
-                  <small className="text-muted">No &lt; or &gt; allowed.</small>
                 </div>
 
                 <button

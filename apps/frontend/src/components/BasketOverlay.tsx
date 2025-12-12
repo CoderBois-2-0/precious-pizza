@@ -79,20 +79,20 @@ export default function BasketOverlay() {
       setBasketId(null);
     };
 
-    window.addEventListener('storage', syncBasket);
-    window.addEventListener(
+    globalThis.addEventListener('storage', syncBasket);
+    globalThis.addEventListener(
       'basketCleared',
       handleBasketCleared as EventListener,
     );
-    window.addEventListener('focus', syncBasket);
+    globalThis.addEventListener('focus', syncBasket);
 
     return () => {
-      window.removeEventListener('storage', syncBasket);
-      window.removeEventListener(
+      globalThis.removeEventListener('storage', syncBasket);
+      globalThis.removeEventListener(
         'basketCleared',
         handleBasketCleared as EventListener,
       );
-      window.removeEventListener('focus', syncBasket);
+      globalThis.removeEventListener('focus', syncBasket);
     };
   }, [basketId]);
 
