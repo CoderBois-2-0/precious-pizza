@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Link } from '@tanstack/react-router';
 import {
   Home,
@@ -19,7 +19,10 @@ export default function Header() {
   const { signOut, authStore, isAuthenticated } = useAuth();
   const { toggleBasket } = useBasket();
 
-  isAuthenticated();
+  // should chack auth when page is mounted
+  useEffect(() => {
+    isAuthenticated();
+  }, []);
 
   const [isOpen, setIsOpen] = useState(false);
   const closeSidebar = () => setIsOpen(false);
@@ -74,9 +77,7 @@ export default function Header() {
 
       {/* Side Navigation */}
       <div
-        className={`position-fixed top-0 start-0 vh-100 bg-dark text-white shadow-lg d-flex flex-column p-3 ${
-          isOpen ? 'translate-middle-x-0' : 'translate-middle-x-n100'
-        }`}
+        className={`position-fixed top-0 start-0 vh-100 bg-dark text-white shadow-lg d-flex flex-column p-3 `}
         style={{
           width: '20rem',
           transition: 'transform 0.3s ease-in-out',

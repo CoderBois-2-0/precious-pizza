@@ -21,9 +21,17 @@ const router = createRouter<IOrderEnv>()
     if (token) {
       try {
         const payload = await verify(token, c.env.JWT_SECRET);
-        userID = (payload as any).id;
-      } catch (_) {
-        // ignore invalid tokens to keep public checkout working
+        if (payload && typeof payload === "object" && "id" in payload) {
+          // checking user.id in jwt payload is a string
+          const id = (payload as { id?: unknown }).id;
+          if (typeof id === "string") {
+            userID = id;
+          }
+        }
+      } catch (err) {
+        // keep public checkout working by ignoring invalid tokens
+        const msg = err instanceof Error ? err.message : String(err);
+        console.warn("JWT verify failed:", msg);
       }
     }
 

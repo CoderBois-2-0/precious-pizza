@@ -2,7 +2,7 @@ import { requireAdmin } from "$routers/middleware";
 import { IEnv, TProtectedVariables } from "$routers/types";
 import { createRouter } from "$routers/util";
 import { IOrderVariables } from ".";
-import { injectOrderHandler, IOrderEnv } from "./middleware";
+import { injectOrderHandler } from "./middleware";
 import { orderParamValidator } from "./validation";
 
 interface IProtectedOrderVariables

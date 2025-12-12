@@ -13,6 +13,9 @@ import {
   TOrderTable,
 } from "./types";
 
+// DB row return price columns as strings;
+type IOrderRow = Omit<IOrder, "totalPrice"> & { totalPrice: string | number };
+
 class OrderHandler {
   #client: TDB;
   #table: TOrderTable;
@@ -22,11 +25,13 @@ class OrderHandler {
     this.#table = orderTable;
   }
 
-  private normalizeOrder(raw: any): IOrder {
-    return {
+  // Normalize DB order where totalPrice is stored as string
+  private normalizeOrder(raw: IOrderRow): IOrder {
+    const normalized = {
       ...raw,
       totalPrice: Number(raw.totalPrice),
-    } as IOrder;
+    };
+    return normalized as unknown as IOrder;
   }
 
   // Create a new order from a basket
@@ -60,7 +65,7 @@ class OrderHandler {
     // 3. Create order
     const orderID = crypto.randomUUID();
     const [rawOrder] = await this.#client
-      .insert(orderTable)
+      .insert(this.#table)
       .values({
         id: orderID,
         basketID,
@@ -94,8 +99,8 @@ class OrderHandler {
   async getById(orderID: string): Promise<IOrder | null> {
     const [rawOrder] = await this.#client
       .select()
-      .from(orderTable)
-      .where(eq(orderTable.id, orderID));
+      .from(this.#table)
+      .where(eq(this.#table.id, orderID));
     return rawOrder ? this.normalizeOrder(rawOrder) : null;
   }
 
@@ -103,8 +108,8 @@ class OrderHandler {
   async getByBasket(basketID: string): Promise<IOrder[]> {
     const rows = await this.#client
       .select()
-      .from(orderTable)
-      .where(eq(orderTable.basketID, basketID));
+      .from(this.#table)
+      .where(eq(this.#table.basketID, basketID));
     return rows.map((r) => this.normalizeOrder(r));
   }
 
@@ -113,8 +118,8 @@ class OrderHandler {
     // 1. Get order info
     const [rawOrder] = await this.#client
       .select()
-      .from(orderTable)
-      .where(eq(orderTable.id, orderID));
+      .from(this.#table)
+      .where(eq(this.#table.id, orderID));
 
     if (!rawOrder) return null;
 

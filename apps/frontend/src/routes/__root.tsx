@@ -3,9 +3,8 @@ import { TanStackRouterDevtoolsPanel } from '@tanstack/react-router-devtools';
 import { TanStackDevtools } from '@tanstack/react-devtools';
 
 import Header from '../components/Header';
-import BasketPage from '../components/BasketPage';
 import { BasketProvider } from '../services/basketService';
-
+import BasketOverlay from '../components/BasketOverlay';
 import TanStackQueryDevtools from '../integrations/tanstack-query/devtools';
 
 import type { QueryClient } from '@tanstack/react-query';
@@ -18,8 +17,8 @@ export const Route = createRootRouteWithContext<MyRouterContext>()({
   component: () => (
     <BasketProvider>
       <Header />
+      <BasketOverlay />
       <Outlet />
-
       <TanStackDevtools
         config={{
           position: 'bottom-right',

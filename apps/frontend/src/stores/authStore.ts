@@ -1,7 +1,6 @@
 import { create } from 'zustand';
 import type { IAPIUser } from '@/apiClients/authClient';
 
-
 interface IAuthStore {
   user: IAPIUser | null;
   setUser: (user: IAPIUser) => void;

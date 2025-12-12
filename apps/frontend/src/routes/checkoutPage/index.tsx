@@ -102,7 +102,7 @@ function CheckoutPage() {
     onSuccess: async () => {
       // Clear basket from localStorage
       localStorage.removeItem(BASKET_STORAGE_KEY);
-      
+
       // Dispatch custom event to notify basket components
       window.dispatchEvent(new CustomEvent('basketCleared'));
 

@@ -18,11 +18,11 @@ class BasketHandler {
   // Create the basket
   async createBasket(): Promise<string> {
     const [row] = await this.#client
-      .insert(basketTable)
+      .insert(this.#table)
       .values({
         totalPrice: "0.00",
       })
-      .returning({ id: basketTable.id });
+      .returning({ id: this.#table.id });
 
     if (!row) throw new Error("Failed to create basket");
     return row.id;
@@ -81,9 +81,9 @@ class BasketHandler {
   async getFullBasket(basketID: string): Promise<IBasketQuery> {
     // Load basket metadata
     const [basketMeta] = await this.#client
-      .select({ createdAt: basketTable.createdAt })
-      .from(basketTable)
-      .where(eq(basketTable.id, basketID));
+      .select({ createdAt: this.#table.createdAt })
+      .from(this.#table)
+      .where(eq(this.#table.id, basketID));
 
     if (!basketMeta) {
       throw new Error("Basket not found");
@@ -115,9 +115,9 @@ class BasketHandler {
     );
 
     await this.#client
-      .update(basketTable)
+      .update(this.#table)
       .set({ totalPrice: totalPrice.toFixed(2) })
-      .where(eq(basketTable.id, basketID));
+      .where(eq(this.#table.id, basketID));
 
     return totalPrice.toFixed(2);
   }
@@ -125,8 +125,8 @@ class BasketHandler {
   // get all baskets with their items (admin use)
   async getAllBaskets(): Promise<IBasketQuery[]> {
     const basketIDs = await this.#client
-      .select({ id: basketTable.id })
-      .from(basketTable);
+      .select({ id: this.#table.id })
+      .from(this.#table);
 
     if (basketIDs.length === 0) return [];
 

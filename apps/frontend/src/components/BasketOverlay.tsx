@@ -1,11 +1,10 @@
-import { Link, createFileRoute  } from '@tanstack/react-router';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
-
+import { Link } from '@tanstack/react-router';
 import { ShoppingBasket, X } from 'lucide-react';
 import { useEffect, useMemo, useState } from 'react';
 import { useBasket } from '@/services/basketService';
 
-type BasketItem = {
+type TBasketItem = {
   id: number;
   pizzaID: string;
   name: string;
@@ -13,28 +12,18 @@ type BasketItem = {
   price: number;
 };
 
-type BasketResponse = {
-  id: string;
-  totalPrice: string;
-  createdAt: string;
-  items: Array<BasketItem>;
-};
-
-export const Route = createFileRoute('/basketPage/')({
-  component: BasketPage,
-});
+type TBasketResponse = { items: Array<TBasketItem> };
 
 const BASKET_STORAGE_KEY = 'basketId';
 
-
-export default function BasketPage() {
+export default function BasketOverlay() {
   const { isBasketOpen, closeBasket } = useBasket();
   const [basketId, setBasketId] = useState<string | null>(() =>
     localStorage.getItem(BASKET_STORAGE_KEY),
   );
   const queryClient = useQueryClient();
 
-  const basketQuery = useQuery<BasketResponse>({
+  const basketQuery = useQuery<TBasketResponse>({
     queryKey: ['basket', basketId],
     enabled: Boolean(basketId),
     queryFn: async () => {
@@ -69,12 +58,11 @@ export default function BasketPage() {
     },
   });
 
-  // Create basket on first visit if none stored
+  // Create basket on first visit or when cleared
   useEffect(() => {
     if (!basketId && !createBasketMutation.isPending) {
       createBasketMutation.mutate();
     }
-
   }, [basketId]);
 
   // Sync basketId state with localStorage changes (e.g., after checkout)
@@ -86,18 +74,24 @@ export default function BasketPage() {
       }
     };
 
-    // Listen for custom basketCleared event (same-tab)
+    // Listen for basketCleared event
     const handleBasketCleared = () => {
       setBasketId(null);
     };
 
     window.addEventListener('storage', syncBasket);
-    window.addEventListener('basketCleared', handleBasketCleared);
+    window.addEventListener(
+      'basketCleared',
+      handleBasketCleared as EventListener,
+    );
     window.addEventListener('focus', syncBasket);
 
     return () => {
       window.removeEventListener('storage', syncBasket);
-      window.removeEventListener('basketCleared', handleBasketCleared);
+      window.removeEventListener(
+        'basketCleared',
+        handleBasketCleared as EventListener,
+      );
       window.removeEventListener('focus', syncBasket);
     };
   }, [basketId]);
