@@ -4,6 +4,9 @@
   "main": "src/index.ts",
   "compatibility_date": "2025-11-26",
   "compatibility_flags": ["nodejs_compat"],
+  "vars": {
+    "THE_ONE_API_URL": "https://the-one-api.dev/v2",
+  },
   "env": {
     "stageing": {
       "vars": {
@@ -16,9 +19,6 @@
       },
     },
   },
-  // "vars": {
-  //   "MY_VAR": "my-variable"
-  // },
   // "kv_namespaces": [
   //   {
   //     "binding": "MY_KV_NAMESPACE",
