@@ -15,7 +15,8 @@
     "deploy:stageing:dry": "wrangler deploy --env stageing --dry-run",
     "deploy:production": "wrangler deploy --minify --env production",
     "deploy:production:dry": "wrangler deploy --env production --dry-run",
-    "cf-typegen": "wrangler types --env-interface CloudflareBindings"
+    "cf-typegen": "wrangler types --env-interface CloudflareBindings",
+    "test": "vitest run"
   },
   "dependencies": {
     "drizzle-orm": "^0.44.7",
