@@ -13,7 +13,6 @@ import { Route as IndexRouteImport } from './routes/index'
 import { Route as UserPageIndexRouteImport } from './routes/userPage/index'
 import { Route as PizzaPageIndexRouteImport } from './routes/pizzaPage/index'
 import { Route as CheckoutPageIndexRouteImport } from './routes/checkoutPage/index'
-import { Route as CheckoutIndexRouteImport } from './routes/checkout/index'
 import { Route as authSignUpRouteImport } from './routes/(auth)/signUp'
 import { Route as authLoginRouteImport } from './routes/(auth)/login'
 import { Route as AdminCategoriesIndexRouteImport } from './routes/admin/categories/index'
@@ -40,11 +39,6 @@ const PizzaPageIndexRoute = PizzaPageIndexRouteImport.update({
 const CheckoutPageIndexRoute = CheckoutPageIndexRouteImport.update({
   id: '/checkoutPage/',
   path: '/checkoutPage/',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const CheckoutIndexRoute = CheckoutIndexRouteImport.update({
-  id: '/checkout/',
-  path: '/checkout/',
   getParentRoute: () => rootRouteImport,
 } as any)
 const authSignUpRoute = authSignUpRouteImport.update({
@@ -88,7 +82,6 @@ export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/login': typeof authLoginRoute
   '/signUp': typeof authSignUpRoute
-  '/checkout': typeof CheckoutIndexRoute
   '/checkoutPage': typeof CheckoutPageIndexRoute
   '/pizzaPage': typeof PizzaPageIndexRoute
   '/userPage': typeof UserPageIndexRoute
@@ -102,7 +95,6 @@ export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/login': typeof authLoginRoute
   '/signUp': typeof authSignUpRoute
-  '/checkout': typeof CheckoutIndexRoute
   '/checkoutPage': typeof CheckoutPageIndexRoute
   '/pizzaPage': typeof PizzaPageIndexRoute
   '/userPage': typeof UserPageIndexRoute
@@ -117,7 +109,6 @@ export interface FileRoutesById {
   '/': typeof IndexRoute
   '/(auth)/login': typeof authLoginRoute
   '/(auth)/signUp': typeof authSignUpRoute
-  '/checkout/': typeof CheckoutIndexRoute
   '/checkoutPage/': typeof CheckoutPageIndexRoute
   '/pizzaPage/': typeof PizzaPageIndexRoute
   '/userPage/': typeof UserPageIndexRoute
@@ -133,7 +124,6 @@ export interface FileRouteTypes {
     | '/'
     | '/login'
     | '/signUp'
-    | '/checkout'
     | '/checkoutPage'
     | '/pizzaPage'
     | '/userPage'
@@ -147,7 +137,6 @@ export interface FileRouteTypes {
     | '/'
     | '/login'
     | '/signUp'
-    | '/checkout'
     | '/checkoutPage'
     | '/pizzaPage'
     | '/userPage'
@@ -161,7 +150,6 @@ export interface FileRouteTypes {
     | '/'
     | '/(auth)/login'
     | '/(auth)/signUp'
-    | '/checkout/'
     | '/checkoutPage/'
     | '/pizzaPage/'
     | '/userPage/'
@@ -176,7 +164,6 @@ export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   authLoginRoute: typeof authLoginRoute
   authSignUpRoute: typeof authSignUpRoute
-  CheckoutIndexRoute: typeof CheckoutIndexRoute
   CheckoutPageIndexRoute: typeof CheckoutPageIndexRoute
   PizzaPageIndexRoute: typeof PizzaPageIndexRoute
   UserPageIndexRoute: typeof UserPageIndexRoute
@@ -215,13 +202,6 @@ declare module '@tanstack/react-router' {
       path: '/checkoutPage'
       fullPath: '/checkoutPage'
       preLoaderRoute: typeof CheckoutPageIndexRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/checkout/': {
-      id: '/checkout/'
-      path: '/checkout'
-      fullPath: '/checkout'
-      preLoaderRoute: typeof CheckoutIndexRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/(auth)/signUp': {
@@ -280,7 +260,6 @@ const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   authLoginRoute: authLoginRoute,
   authSignUpRoute: authSignUpRoute,
-  CheckoutIndexRoute: CheckoutIndexRoute,
   CheckoutPageIndexRoute: CheckoutPageIndexRoute,
   PizzaPageIndexRoute: PizzaPageIndexRoute,
   UserPageIndexRoute: UserPageIndexRoute,

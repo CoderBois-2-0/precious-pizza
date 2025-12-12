@@ -136,7 +136,7 @@ export default function BasketOverlay() {
         {isLoading && <p className="text-center">Loading basket...</p>}
 
         {!basketId && !isLoading && (
-          <div className="text-center text-muted">
+          <div className="text-center">
             <ShoppingBasket size={48} className="mb-2 opacity-50" />
             <p>Your basket is empty</p>
             <p className="small">Add pizzas from the menu!</p>
@@ -146,7 +146,7 @@ export default function BasketOverlay() {
         {basketId && !isLoading && (
           <>
             {!basket || basket.items.length === 0 ? (
-              <div className="text-center text-muted">
+              <div className="text-center">
                 <ShoppingBasket size={48} className="mb-2 opacity-50" />
                 <p>Your basket is empty</p>
                 <p className="small">Add pizzas from the menu!</p>

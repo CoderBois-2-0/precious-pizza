@@ -104,6 +104,15 @@ class OrderHandler {
     return rawOrder ? this.normalizeOrder(rawOrder) : null;
   }
 
+  // Get orders by user ID (admin use)
+  async getByUser(userID: string): Promise<IOrder[]> {
+    const rows = await this.#client
+      .select()
+      .from(this.#table)
+      .where(eq(this.#table.userID, userID));
+    return rows.map((r) => this.normalizeOrder(r));
+  }
+
   // Get an order for a basket
   async getByBasket(basketID: string): Promise<IOrder[]> {
     const rows = await this.#client
