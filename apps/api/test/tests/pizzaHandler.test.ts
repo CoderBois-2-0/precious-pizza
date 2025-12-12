@@ -1,8 +1,9 @@
 import { describe, it, expect, beforeEach } from "vitest";
-import PizzaHandler from "../src/db/pizza/handler";
+import PizzaHandler from "../../src/db/pizza/handler";
 import { getDB } from "$db/index";
-import { pizzaTable } from "../src/db/pizza/schema";
+import { pizzaTable } from "../../src/db/pizza/schema";
 import { categoryTable } from "$db/category/schema";
+import { env } from "cloudflare:test";
 
 describe("PizzaHandler", {}, () => {
   let handler: PizzaHandler;
@@ -11,7 +12,7 @@ describe("PizzaHandler", {}, () => {
 
   // reset and setup DB before each test
   beforeEach(async () => {
-    const dbUrl = process.env.DB_URL;
+    const dbUrl = env.DB_URL;
     if (!dbUrl) {
       throw new Error("DB_URL env variable is missing!");
     }
