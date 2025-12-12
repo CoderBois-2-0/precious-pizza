@@ -1,11 +1,11 @@
 import { createFileRoute } from '@tanstack/react-router';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
+import { useEffect, useState } from 'react';
 import type { IAPIPizza } from '@/apiClients/pizzaClient';
 import type { IAPICategory } from '@/apiClients/categoryClient';
 import { usePizzas } from '@/dataHooks/pizzaData';
 import { useCategories } from '@/dataHooks/categoryData';
 import { useCreateFavourite } from '@/dataHooks/favouriteData';
-import { useMutation, useQueryClient } from '@tanstack/react-query';
-import { useEffect, useState } from 'react';
 import { useBasket } from '@/services/basketService';
 
 const BASKET_STORAGE_KEY = 'basketId';

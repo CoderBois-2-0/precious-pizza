@@ -15,7 +15,7 @@ interface BasketItem {
 
 interface BasketResponse {
   id: string;
-  items: BasketItem[];
+  items: Array<BasketItem>;
   createdAt: string;
 }
 

@@ -131,14 +131,6 @@ export default function Header() {
               <span className="fw-medium">User page</span>
             </Link>
           )}
-          <Link
-            to="/basketPage"
-            onClick={closeSidebar}
-            className="d-flex align-items-center gap-2 p-2 mb-2 text-white text-decoration-none rounded hover-bg-secondary"
-          >
-            <ShoppingBasket size={20} />
-            <span className="fw-medium">Basket</span>
-          </Link>
 
           <Link
             to="/pizzaPage"
