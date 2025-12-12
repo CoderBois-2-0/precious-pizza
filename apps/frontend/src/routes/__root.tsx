@@ -18,8 +18,6 @@ export const Route = createRootRouteWithContext<MyRouterContext>()({
   component: () => (
     <BasketProvider>
       <Header />
-      <BasketPage />
-
       <Outlet />
 
       <TanStackDevtools
