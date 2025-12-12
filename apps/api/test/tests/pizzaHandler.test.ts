@@ -172,10 +172,63 @@ describe("PizzaHandler", {}, () => {
     );
   });
 
+  it("succeeds when name length = 1", async () => {
+    const pizza = {
+      name: "a", // 1 char
+      price: "10.00",
+      description: "desc",
+      imageUrl: null,
+      isVisible: true,
+      categoryID,
+    };
+
+    await expect(handler.create(pizza)).resolves.not.toThrow();
+  });
+
+  it("succeeds when name length > 1", async () => {
+    const pizza = {
+      name: "ab", // 2 chars
+      price: "10.00",
+      description: "desc",
+      imageUrl: null,
+      isVisible: true,
+      categoryID,
+    };
+
+    await expect(handler.create(pizza)).resolves.not.toThrow();
+  });
+
+  it("succeeds when name is 49 chars", async () => {
+    const pizza = {
+      name: "x".repeat(49), // 49 chars
+      price: "10.00",
+      description: "desc",
+      imageUrl: null,
+      isVisible: true,
+      categoryID,
+    };
+
+    await expect(handler.create(pizza)).resolves.not.toThrow();
+  });
+
+  // Boundary test: name length <= 50
+  it("succeeds when name is exactly 50 chars", async () => {
+    const pizza = {
+      name: "x".repeat(50), // 50 chars
+      price: "10.00",
+      description: "desc",
+      imageUrl: null,
+      isVisible: true,
+      categoryID,
+    };
+
+    await expect(handler.create(pizza)).resolves.not.toThrow();
+  });
+
   // Boundary test: name length <= 50
   it("fails when name exceeds 50 chars", async () => {
     const pizza = {
-      name: "x".repeat(51),
+      name: "x".repeat(51), // 51 chars
       price: "10.00",
       description: "desc",
       imageUrl: null,
