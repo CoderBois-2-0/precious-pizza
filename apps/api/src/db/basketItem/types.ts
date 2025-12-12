@@ -5,7 +5,7 @@ type IBasketItemInsert = typeof basketItemTable.$inferInsert;
 
 interface IBasketItemQuery {
   id?: number;
-  pizzaID: number;
+  pizzaID: string;
   name: string;
   quantity: number;
   price: number;

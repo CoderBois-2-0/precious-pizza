@@ -1,12 +1,14 @@
 import { IBasketItemQuery } from "../basketItem/types";
 import { basketTable } from "./schema";
 
-type IBasket = typeof basketTable.$inferSelect;
-type IBasketInsert = typeof basketTable.$inferInsert;
+type TBasketTable = typeof basketTable;
 
-interface IFullBasket extends IBasket {
+type TBasket = typeof basketTable.$inferSelect;
+type TBasketInsert = typeof basketTable.$inferInsert;
+
+interface IBasketQuery extends TBasket {
   items: IBasketItemQuery[];
   totalPrice: string;
 }
 
-export { IBasket, IBasketInsert, IFullBasket };
+export { TBasket, TBasketInsert, IBasketQuery, TBasketTable };

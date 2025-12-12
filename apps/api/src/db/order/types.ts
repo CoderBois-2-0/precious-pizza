@@ -1,6 +1,8 @@
 import { orderItemTable } from "../orderItem/schema";
 import { orderTable } from "./schema";
 
+type TOrderTable = typeof orderTable;
+
 type IOrder = typeof orderTable.$inferSelect;
 type IOrderInsert = typeof orderTable.$inferInsert;
 
@@ -8,7 +10,7 @@ type IOrderItem = typeof orderItemTable.$inferSelect;
 type IOrderItemInsert = typeof orderItemTable.$inferInsert;
 
 interface IOrderItemQuery {
-  pizzaID: number;
+  pizzaID: string;
   name: string;
   quantity: number;
   price: number;
@@ -30,6 +32,7 @@ interface INewOrder {
     doorFloor?: string;
   };
   customerNote?: string;
+  userID?: string;
 }
 
 export {
@@ -40,4 +43,5 @@ export {
   IOrderItemQuery,
   IOrderInsert,
   IOrderItemInsert,
+  TOrderTable,
 };

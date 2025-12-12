@@ -1,6 +1,6 @@
 {
-  "id": "50f5b2b6-c833-4e38-bf97-6537874707c9",
-  "prevId": "54b6b3f5-a07c-4c87-8321-c9d5e443b325",
+  "id": "dfd08b03-a03b-4ac8-a7c7-6714a73836c8",
+  "prevId": "27a0aaad-d81e-466f-92bb-20da5ee7ca4e",
   "version": "7",
   "dialect": "postgresql",
   "tables": {
@@ -134,19 +134,19 @@
       "columns": {
         "id": {
           "name": "id",
-          "type": "varchar(36)",
+          "type": "uuid",
           "primaryKey": true,
           "notNull": true
         },
         "user_id": {
           "name": "user_id",
-          "type": "varchar(36)",
+          "type": "uuid",
           "primaryKey": false,
           "notNull": true
         },
         "pizza_id": {
           "name": "pizza_id",
-          "type": "varchar(36)",
+          "type": "uuid",
           "primaryKey": false,
           "notNull": true
         }
@@ -174,6 +174,12 @@
           "type": "uuid",
           "primaryKey": false,
           "notNull": true
+        },
+        "user_id": {
+          "name": "user_id",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": false
         },
         "total_price": {
           "name": "total_price",
@@ -247,6 +253,15 @@
           "tableFrom": "orders",
           "tableTo": "baskets",
           "columnsFrom": ["basket_id"],
+          "columnsTo": ["id"],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        },
+        "orders_user_id_users_id_fk": {
+          "name": "orders_user_id_users_id_fk",
+          "tableFrom": "orders",
+          "tableTo": "users",
+          "columnsFrom": ["user_id"],
           "columnsTo": ["id"],
           "onDelete": "no action",
           "onUpdate": "no action"

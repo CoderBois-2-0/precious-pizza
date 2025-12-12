@@ -14,7 +14,12 @@ const app = createRouter()
 
     return corsMiddelware(c, next);
   })
-  .use(csrf())
+  .use((c, next) => {
+    const csrfMiddleware = csrf({
+      origin: c.env.CORS_ORIGIN,
+    });
+    return csrfMiddleware(c, next);
+  })
   .use(secureHeaders())
   .route("/", publicRouter)
   .route("/", protectedRouter);
