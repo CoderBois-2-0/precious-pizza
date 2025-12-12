@@ -12,13 +12,18 @@ import {
   X,
 } from 'lucide-react';
 import { useAuth } from '@/services/authService';
+import { useBasket } from '@/services/basketService';
 import '.././styles.css';
 import { useLotrQuote } from '@/services/lotrQuoteService';
 
 export default function Header() {
   const { signOut, authStore, isAuthenticated } = useAuth();
+  const { toggleBasket } = useBasket();
 
-  isAuthenticated();
+  // should chack auth when page is mounted
+  useEffect(() => {
+    isAuthenticated();
+  }, []);
 
   const [isOpen, setIsOpen] = useState(false);
   const closeSidebar = () => setIsOpen(false);
@@ -44,14 +49,12 @@ export default function Header() {
         <LotrQuote></LotrQuote>
 
         <div className="d-flex align-items-end">
-          <button className="btn btn-light me-3">
-            <Link
-              to="/basketPage"
-              onClick={() => setIsOpen(false)}
-              className="text-black"
-            >
-              <ShoppingBasket size={28} />
-            </Link>
+          <button
+            className="btn btn-light me-3"
+            onClick={toggleBasket}
+            aria-label="Toggle basket"
+          >
+            <ShoppingBasket size={28} />
           </button>
           <div>
             {!authStore.user && (
@@ -77,9 +80,7 @@ export default function Header() {
 
       {/* Side Navigation */}
       <div
-        className={`position-fixed top-0 start-0 vh-100 bg-dark text-white shadow-lg d-flex flex-column p-3 ${
-          isOpen ? 'translate-middle-x-0' : 'translate-middle-x-n100'
-        }`}
+        className={`position-fixed top-0 start-0 vh-100 bg-dark text-white shadow-lg d-flex flex-column p-3 `}
         style={{
           width: '20rem',
           transition: 'transform 0.3s ease-in-out',
@@ -134,14 +135,6 @@ export default function Header() {
               <span className="fw-medium">User page</span>
             </Link>
           )}
-          <Link
-            to="/basketPage"
-            onClick={closeSidebar}
-            className="d-flex align-items-center gap-2 p-2 mb-2 text-white text-decoration-none rounded hover-bg-secondary"
-          >
-            <ShoppingBasket size={20} />
-            <span className="fw-medium">Basket</span>
-          </Link>
 
           <Link
             to="/pizzaPage"

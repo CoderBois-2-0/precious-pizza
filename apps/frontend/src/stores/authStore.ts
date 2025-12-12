@@ -1,15 +1,9 @@
 import { create } from 'zustand';
-
-type TUser = {
-  email: string;
-  firstName: string;
-  lastName: string;
-  role: 'admin' | 'customer';
-};
+import type { IAPIUser } from '@/apiClients/authClient';
 
 interface IAuthStore {
-  user: TUser | null;
-  setUser: (user: TUser) => void;
+  user: IAPIUser | null;
+  setUser: (user: IAPIUser) => void;
   removeUser: () => void;
 }
 

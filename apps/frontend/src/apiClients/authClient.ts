@@ -3,6 +3,7 @@ interface IAPIUser {
   email: string;
   firstName: string;
   lastName: string;
+  phoneNumber: string;
   role: 'admin' | 'customer';
 }
 

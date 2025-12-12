@@ -34,12 +34,15 @@ function UserPage() {
             <div className="card-body">
               <h5 className="card-title">Your Profile</h5>
               <p className="card-text text-muted">
+                <strong>Name:</strong> {authStore.user?.firstName}{' '}
+                {authStore.user?.lastName}
+              </p>
+              <p className="card-text text-muted">
                 <strong>Email:</strong> {authStore.user?.email}
               </p>
-
-              <button className="btn btn-primary w-100 mt-3">
-                Edit Profile
-              </button>
+              <p className="card-text text-muted">
+                <strong>Phone:</strong> {authStore.user?.phoneNumber}
+              </p>
             </div>
           </div>
         </div>
