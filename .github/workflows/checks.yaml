@@ -172,20 +172,11 @@ jobs:
     - name: Setup Node
       uses: actions/setup-node@v5
       with:
-        node-version: 24       # <-- corrected key
+        node-version: 24 
         cache: pnpm
 
     - name: Install dependencies
       run: pnpm install --frozen-lockfile
-
-    - name: Check DB_URL availability
-      run: |
-        if [ -z "$DB_URL" ]; then
-          echo "DB_URL is missing!"
-          exit 1
-        else
-          echo "DB_URL is set"
-        fi
 
     - name: Run API tests
       run: pnpm --filter api test
