@@ -1,116 +1,161 @@
-// import { eq } from "drizzle-orm";
-// import { orderTable } from "./schema";
-// import { basketItemTable } from "../basketItem/schema";
-// import { orderItemTable } from "../orderItem/schema";
-// import { getDB, TDB } from "..";
-// import { pizzaTable } from "../pizza/schema";
-// import { IFullOrder, INewOrder, IOrder, IOrderInsert, IOrderItemQuery } from "./types";
+import { eq } from "drizzle-orm";
+import { orderTable } from "./schema";
+import { basketItemTable } from "../basketItem/schema";
+import { orderItemTable } from "../orderItem/schema";
+import { getDB, TDB } from "..";
+import { pizzaTable } from "../pizza/schema";
+import {
+  IFullOrder,
+  INewOrder,
+  IOrder,
+  IOrderInsert,
+  IOrderItemQuery,
+  TOrderTable,
+} from "./types";
 
-// class OrdersHandler {
-//   #client: TDB;
+// DB row return price columns as strings;
+type IOrderRow = Omit<IOrder, "totalPrice"> & { totalPrice: string | number };
 
-//   constructor(dbUrl: string) {
-//     const db = getDB(dbUrl);
-//     this.#client = db;
-//   }
+class OrderHandler {
+  readonly #client: TDB;
+  readonly #table: TOrderTable;
 
-//   private normalizeOrder(raw: any): IOrder {
-//     return {
-//       ...raw,
-//       totalPrice: Number(raw.totalPrice),
-//     } as IOrder;
-//   }
+  constructor(dbUrl: string, logger: boolean) {
+    this.#client = getDB(dbUrl, logger);
+    this.#table = orderTable;
+  }
 
-//   // Create a new order from a basket
-//   async createOrder(input: INewOrder): Promise<IOrder> {
-//     const { basketID, delivery, deliveryFee = 0, deliveryAddress, customerNote } = input;
+  // Normalize DB order where totalPrice is stored as string
+  private normalizeOrder(raw: IOrderRow): IOrder {
+    const normalized = {
+      ...raw,
+      totalPrice: Number(raw.totalPrice),
+    };
+    return normalized as unknown as IOrder;
+  }
 
-//     // 1. Fetch basket items
-//     const basketItems = await this.#client.select().from(basketItemTable).where(eq(basketItemTable.basketID, basketID));
+  // Create a new order from a basket
+  async createOrder(input: INewOrder): Promise<IOrder> {
+    const {
+      basketID,
+      delivery,
+      deliveryFee = 0,
+      deliveryAddress,
+      customerNote,
+      userID,
+    } = input;
 
-//     if (basketItems.length === 0) {
-//       throw new Error("Basket is empty");
-//     }
+    // 1. Fetch basket items
+    const basketItems = await this.#client
+      .select()
+      .from(basketItemTable)
+      .where(eq(basketItemTable.basketID, basketID));
 
-//     // 2. Calculate total price
-//     const totalPizzasPrice = basketItems.reduce((sum, item) => sum + Number(item.price) * item.quantity, 0);
-//     const totalPrice = totalPizzasPrice + deliveryFee;
+    if (basketItems.length === 0) {
+      throw new Error("Basket is empty");
+    }
 
-//     // 3. Create order
-//     const orderID = crypto.randomUUID();
-//     const [rawOrder] = await this.#client
-//       .insert(orderTable)
-//       .values({
-//         id: orderID,
-//         basketID,
-//         totalPrice: String(totalPrice),
-//         deliveryOption: delivery,
-//         street: deliveryAddress?.street,
-//         number: deliveryAddress?.number,
-//         postalCode: deliveryAddress?.postalCode,
-//         town: deliveryAddress?.town,
-//         doorFloor: deliveryAddress?.doorFloor,
-//         customerNote,
-//         status: "Pending",
-//       } as IOrderInsert)
-//       .returning();
+    // 2. Calculate total price
+    const totalPizzasPrice = basketItems.reduce(
+      (sum, item) => sum + Number(item.price) * item.quantity,
+      0,
+    );
+    const totalPrice = totalPizzasPrice + deliveryFee;
 
-//     // 4. Copy basket items to order_items
-//     const orderItemsData = basketItems.map((item) => ({
-//       orderID: rawOrder.id,
-//       pizzaID: item.pizzaID,
-//       quantity: item.quantity,
-//       price: item.price,
-//     }));
+    // 3. Create order
+    const orderID = crypto.randomUUID();
+    const [rawOrder] = await this.#client
+      .insert(this.#table)
+      .values({
+        id: orderID,
+        basketID,
+        userID,
+        totalPrice: String(totalPrice),
+        deliveryOption: delivery,
+        street: deliveryAddress?.street,
+        number: deliveryAddress?.number,
+        postalCode: deliveryAddress?.postalCode,
+        town: deliveryAddress?.town,
+        doorFloor: deliveryAddress?.doorFloor,
+        customerNote,
+        status: "Pending",
+      } as IOrderInsert)
+      .returning();
 
-//     await this.#client.insert(orderItemTable).values(orderItemsData);
+    // 4. Copy basket items to order_items
+    const orderItemsData = basketItems.map((item) => ({
+      orderID: rawOrder.id,
+      pizzaID: item.pizzaID,
+      quantity: item.quantity,
+      price: item.price,
+    }));
 
-//     return this.normalizeOrder(rawOrder);
-//   }
+    await this.#client.insert(orderItemTable).values(orderItemsData);
 
-//   // Get order by ID
-//   async getById(orderID: string): Promise<IOrder | null> {
-//     const [rawOrder] = await this.#client.select().from(orderTable).where(eq(orderTable.id, orderID));
-//     return rawOrder ? this.normalizeOrder(rawOrder) : null;
-//   }
+    return this.normalizeOrder(rawOrder);
+  }
 
-//   // Get an order for a basket
-//   async getByBasket(basketID: string): Promise<IOrder[]> {
-//     const rows = await this.#client.select().from(orderTable).where(eq(orderTable.basketID, basketID));
-//     return rows.map((r) => this.normalizeOrder(r));
-//   }
+  // Get order by ID
+  async getById(orderID: string): Promise<IOrder | null> {
+    const [rawOrder] = await this.#client
+      .select()
+      .from(this.#table)
+      .where(eq(this.#table.id, orderID));
+    return rawOrder ? this.normalizeOrder(rawOrder) : null;
+  }
 
-//   // Fetch a full order with all pizzas and quantities
-//   async getFullOrder(orderID: string): Promise<IFullOrder | null> {
-//     // 1. Get order info
-//     const [rawOrder] = await this.#client.select().from(orderTable).where(eq(orderTable.id, orderID));
+  // Get orders by user ID (admin use)
+  async getByUser(userID: string): Promise<IOrder[]> {
+    const rows = await this.#client
+      .select()
+      .from(this.#table)
+      .where(eq(this.#table.userID, userID));
+    return rows.map((r) => this.normalizeOrder(r));
+  }
 
-//     if (!rawOrder) return null;
+  // Get an order for a basket
+  async getByBasket(basketID: string): Promise<IOrder[]> {
+    const rows = await this.#client
+      .select()
+      .from(this.#table)
+      .where(eq(this.#table.basketID, basketID));
+    return rows.map((r) => this.normalizeOrder(r));
+  }
 
-//     const order = this.normalizeOrder(rawOrder);
+  // Fetch a full order with all pizzas and quantities
+  async getFullOrder(orderID: string): Promise<IFullOrder | null> {
+    // 1. Get order info
+    const [rawOrder] = await this.#client
+      .select()
+      .from(this.#table)
+      .where(eq(this.#table.id, orderID));
 
-//     // 2. Get order items with pizza info
-//     const itemsRaw = await this.#client
-//       .select({
-//         pizzaID: orderItemTable.pizzaID,
-//         name: pizzaTable.name,
-//         quantity: orderItemTable.quantity,
-//         price: orderItemTable.price,
-//       })
-//       .from(orderItemTable)
-//       .leftJoin(pizzaTable, eq(orderItemTable.pizzaID, pizzaTable.id))
-//       .where(eq(orderItemTable.orderID, orderID));
+    if (!rawOrder) return null;
 
-//     // 3. Convert price strings to numbers if needed
-//     const items: IOrderItemQuery[] = itemsRaw.map((item) => ({
-//       pizzaID: item.pizzaID,
-//       name: item.name ?? "Unknown Pizza",
-//       quantity: item.quantity,
-//       price: Number(item.price),
-//     }));
+    const order = this.normalizeOrder(rawOrder);
 
-//     return { ...order, items };
-//   }
-// }
+    // 2. Get order items with pizza info
+    const itemsRaw = await this.#client
+      .select({
+        pizzaID: orderItemTable.pizzaID,
+        name: pizzaTable.name,
+        quantity: orderItemTable.quantity,
+        price: orderItemTable.price,
+      })
+      .from(orderItemTable)
+      .leftJoin(pizzaTable, eq(orderItemTable.pizzaID, pizzaTable.id))
+      .where(eq(orderItemTable.orderID, orderID));
 
-// export { OrdersHandler };
+    // 3. Convert price strings to numbers if needed
+    const items: IOrderItemQuery[] = itemsRaw.map((item) => ({
+      pizzaID: item.pizzaID,
+      name: item.name ?? "Unknown Pizza",
+      quantity: item.quantity,
+      price: Number(item.price),
+    }));
+
+    return { ...order, items };
+  }
+}
+
+export { OrderHandler };

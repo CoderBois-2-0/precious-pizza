@@ -11,6 +11,8 @@ dist-ssr
 .idea/workspace.xml
 .idea/usage.statistics.xml
 .idea/shelf
+.editorconfig
+.prettierrc
 
 # deps
 node_modules/
