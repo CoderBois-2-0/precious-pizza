@@ -3,7 +3,9 @@ import { relations } from "drizzle-orm";
 import { uuid, pgTable } from "drizzle-orm/pg-core";
 
 const favouritesTable = pgTable("favourites", {
-  id: uuid("id").primaryKey(),
+  id: uuid("id")
+    .notNull()
+    .$defaultFn(() => crypto.randomUUID()),
   userId: uuid("user_id").notNull(),
   pizzaId: uuid("pizza_id").notNull(),
 });
