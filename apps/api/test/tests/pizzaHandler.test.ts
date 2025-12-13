@@ -129,7 +129,7 @@ describe("PizzaHandler", {}, () => {
       "00000000-0000-0000-0000-000000000000", // non-existing ID
       {
         name: "Nope",
-      }
+      },
     );
 
     const rows = await db.select().from(pizzaTable).execute();
@@ -139,7 +139,7 @@ describe("PizzaHandler", {}, () => {
   // Invalid pizza deletion
   it("deleting a non-existing pizza does nothing", async () => {
     await expect(
-      handler.delete("00000000-0000-0000-0000-000000000000") // non-existing ID
+      handler.delete("00000000-0000-0000-0000-000000000000"), // non-existing ID
     ).resolves.not.toThrow();
   });
 
@@ -168,7 +168,7 @@ describe("PizzaHandler", {}, () => {
 
     // Expect the handler to reject the promise with a specific error
     await expect(handler.create(pizza)).rejects.toThrow(
-      "Name must be at least 1 character"
+      "Name must be at least 1 character",
     );
   });
 
