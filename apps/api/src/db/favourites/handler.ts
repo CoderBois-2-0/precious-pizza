@@ -48,7 +48,14 @@ class FavouritesHandler {
     if (!input.userId || !input.pizzaId) {
       throw new Error("Missing userId or pizzaId");
     }
-    return await this.#client.insert(favouritesTable).values(input).returning();
+
+    return await this.#client
+      .insert(favouritesTable)
+      .values(input)
+      .onConflictDoNothing({
+        target: [favouritesTable.userId, favouritesTable.pizzaId],
+      })
+      .returning();
   }
 
   // Remove a favourite

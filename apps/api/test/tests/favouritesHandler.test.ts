@@ -74,6 +74,18 @@ describe("FavouritesHandler", () => {
     expect(rows[0].pizzaId).toBe(pizzaId);
   });
 
+  // Valid: Prevent duplicate favourites
+  it("does not allow adding two of the same favourite pizza", async () => {
+    await handler.create({ userId, pizzaId: pizzaId });
+    await handler.create({ userId, pizzaId: pizzaId });
+    const rows = await db
+      .select()
+      .from(favouritesTable)
+      .where(eq(favouritesTable.userId, userId))
+      .execute();
+    expect(rows.length).toBe(1);
+  });
+
   // Valid: Remove pizza from favourites
   it("removes pizza from favourites when it exists", async () => {
     const [fav] = await handler.create({
