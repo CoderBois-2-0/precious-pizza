@@ -47,7 +47,7 @@ class PizzaHandler {
 
   async update(
     pizzaID: TPizza["id"],
-    pizzaUpdate: TPizzaUpdate
+    pizzaUpdate: TPizzaUpdate,
   ): Promise<void> {
     await this.#client
       .update(this.#table)

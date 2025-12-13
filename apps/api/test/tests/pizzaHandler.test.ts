@@ -135,7 +135,7 @@ describe("PizzaHandler", {}, () => {
 
     // Act
     await expect(
-      handler.update(nonExistingId, { name: "Nope" })
+      handler.update(nonExistingId, { name: "Nope" }),
     ).resolves.not.toThrow();
 
     // Assert: table is still empty
@@ -146,7 +146,7 @@ describe("PizzaHandler", {}, () => {
   // Invalid pizza deletion
   it("deleting a non-existing pizza does nothing", async () => {
     await expect(
-      handler.delete("00000000-0000-0000-0000-000000000000") // non-existing ID
+      handler.delete("00000000-0000-0000-0000-000000000000"), // non-existing ID
     ).resolves.not.toThrow();
   });
 
@@ -176,7 +176,7 @@ describe("PizzaHandler", {}, () => {
 
     // Expect the handler to reject the promise with a specific error
     await expect(handler.create(pizza)).rejects.toThrow(
-      "Name must be at least 1 character"
+      "Name must be at least 1 character",
     );
   });
 
