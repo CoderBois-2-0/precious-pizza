@@ -178,4 +178,6 @@ jobs:
 
       - name: Run API tests
         run: pnpm --filter api test
+        env:
+          DB_URL: ${{ secrets.DB_URL }}
       
