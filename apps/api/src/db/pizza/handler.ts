@@ -1,4 +1,4 @@
-import { getDB, TDB } from "$db/index";
+import { TDB } from "$db/index";
 import { eq } from "drizzle-orm";
 import { pizzaTable } from "./schema";
 import {
@@ -13,8 +13,8 @@ class PizzaHandler {
   #client: TDB;
   #table: TPizzaTable;
 
-  constructor(dbUrl: string, logger: boolean) {
-    this.#client = getDB(dbUrl, logger);
+  constructor(db: TDB) {
+    this.#client = db;
     this.#table = pizzaTable;
   }
 
@@ -47,7 +47,7 @@ class PizzaHandler {
 
   async update(
     pizzaID: TPizza["id"],
-    pizzaUpdate: TPizzaUpdate,
+    pizzaUpdate: TPizzaUpdate
   ): Promise<void> {
     await this.#client
       .update(this.#table)

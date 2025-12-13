@@ -1,10 +1,10 @@
-import { describe, it, expect, beforeEach } from "vitest";
+import { describe, it, expect, beforeEach, afterEach } from "vitest";
 import PizzaHandler from "../../src/db/pizza/handler";
 import { getDB } from "$db/index";
 import { pizzaTable } from "../../src/db/pizza/schema";
 import { categoryTable } from "$db/category/schema";
 import { env } from "cloudflare:workers";
-import { eq } from "drizzle-orm";
+import { eq, sql } from "drizzle-orm";
 
 describe("PizzaHandler", {}, () => {
   let handler: PizzaHandler;
@@ -15,19 +15,17 @@ describe("PizzaHandler", {}, () => {
   // reset and setup DB before each test
   beforeEach(async () => {
     const dbUrl = env.DB_URL;
+    if (!dbUrl) throw new Error("DB_URL env variable is missing!");
 
-    if (!dbUrl) {
-      throw new Error("DB_URL env variable is missing!");
-    }
-
-    handler = new PizzaHandler(dbUrl, false);
     db = getDB(dbUrl, false);
 
-    // Reset pizzas → categories
-    await db.delete(pizzaTable).execute();
-    await db.delete(categoryTable).execute();
+    // BEGIN transaction
+    await db.execute(sql`BEGIN`);
 
-    // Insert VALID category
+    // handler uses SAME db connection
+    handler = new PizzaHandler(db);
+
+    // Seed only required data
     const catId = crypto.randomUUID();
     await db.insert(categoryTable).values({
       id: catId,
@@ -35,6 +33,11 @@ describe("PizzaHandler", {}, () => {
     });
 
     categoryID = catId;
+  });
+
+  // rollback any changes after each test
+  afterEach(async () => {
+    await db.execute(sql`ROLLBACK`);
   });
 
   // -------------------------------------------------------
@@ -128,13 +131,14 @@ describe("PizzaHandler", {}, () => {
 
   // Invalid pizza update
   it("updating a non-existing pizza does not update anything", async () => {
-    await handler.update(
-      "00000000-0000-0000-0000-000000000000", // non-existing ID
-      {
-        name: "Nope",
-      },
-    );
+    const nonExistingId = "00000000-0000-0000-0000-000000000000";
 
+    // Act
+    await expect(
+      handler.update(nonExistingId, { name: "Nope" })
+    ).resolves.not.toThrow();
+
+    // Assert: table is still empty
     const rows = await db.select().from(pizzaTable).execute();
     expect(rows.length).toBe(0);
   });
@@ -142,7 +146,7 @@ describe("PizzaHandler", {}, () => {
   // Invalid pizza deletion
   it("deleting a non-existing pizza does nothing", async () => {
     await expect(
-      handler.delete("00000000-0000-0000-0000-000000000000"), // non-existing ID
+      handler.delete("00000000-0000-0000-0000-000000000000") // non-existing ID
     ).resolves.not.toThrow();
   });
 
@@ -172,7 +176,7 @@ describe("PizzaHandler", {}, () => {
 
     // Expect the handler to reject the promise with a specific error
     await expect(handler.create(pizza)).rejects.toThrow(
-      "Name must be at least 1 character",
+      "Name must be at least 1 character"
     );
   });
 
