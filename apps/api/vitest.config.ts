@@ -8,6 +8,12 @@ export default defineWorkersConfig({
     poolOptions: {
       workers: {
         wrangler: { configPath: "./wrangler.jsonc" },
+
+        miniflare: {
+          bindings: {
+            DB_URL: process.env.DB_URL,
+          },
+        },
       },
     },
   },

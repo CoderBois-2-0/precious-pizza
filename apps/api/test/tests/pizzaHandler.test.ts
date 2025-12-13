@@ -15,9 +15,11 @@ describe("PizzaHandler", {}, () => {
   // reset and setup DB before each test
   beforeEach(async () => {
     const dbUrl = env.DB_URL;
+    
     if (!dbUrl) {
       throw new Error("DB_URL env variable is missing!");
     }
+
 
     handler = new PizzaHandler(dbUrl, false);
     db = getDB(dbUrl, false);

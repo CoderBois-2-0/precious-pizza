@@ -161,7 +161,6 @@ jobs:
     name: API tests
     runs-on: ubuntu-latest
 
-
     steps:
       - uses: actions/checkout@v4
 
@@ -181,4 +180,3 @@ jobs:
         run: pnpm --filter api test
         env:
           DB_URL: ${{ secrets.DB_URL }}
-      
