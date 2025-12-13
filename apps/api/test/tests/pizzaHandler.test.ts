@@ -107,7 +107,7 @@ describe("PizzaHandler", {}, () => {
   });
 
   // -------------------------------------------------------
-  // Inalid Pizza Operations Tests
+  // Inalid Pizza Operations Tests!
   // -------------------------------------------------------
 
   // Invalid pizza creation
