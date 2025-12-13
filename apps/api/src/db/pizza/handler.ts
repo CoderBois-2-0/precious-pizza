@@ -37,6 +37,11 @@ class PizzaHandler {
   }
 
   async create(newPizza: TPizzaInsert): Promise<void> {
+    //validate name length is not less than 1
+    if (!newPizza.name || newPizza.name.trim().length < 1) {
+      throw new Error("Name must be at least 1 character");
+    }
+
     await this.#client.insert(this.#table).values(newPizza);
   }
 
