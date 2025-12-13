@@ -15,7 +15,8 @@
     "deploy:stageing:dry": "wrangler deploy --env stageing --dry-run",
     "deploy:production": "wrangler deploy --minify --env production",
     "deploy:production:dry": "wrangler deploy --env production --dry-run",
-    "cf-typegen": "wrangler types --env-interface CloudflareBindings"
+    "cf-typegen": "wrangler types --env-interface CloudflareBindings",
+    "test": "vitest run"
   },
   "dependencies": {
     "drizzle-orm": "^0.44.7",
@@ -24,6 +25,7 @@
     "zod": "^4.1.13"
   },
   "devDependencies": {
+    "@cloudflare/vitest-pool-workers": "^0.10.15",
     "@eslint/js": "^9.39.1",
     "@types/node": "^22.19.1",
     "drizzle-kit": "^0.31.7",

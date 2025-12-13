@@ -157,3 +157,26 @@ jobs:
           name: playwright-report
           path: playwright-report/
           retention-days: 30
+  api-tests:
+    name: API tests
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@41ff72655975bd51cab0327fa583b6e92b6d3061
+
+      - name: Setup Node
+        uses: actions/setup-node@v5
+        with:
+          node-version: 24
+          cache: pnpm
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Run API tests
+        run: pnpm --filter api test
+        env:
+          DB_URL: ${{ secrets.DB_URL }}

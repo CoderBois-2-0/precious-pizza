@@ -22,6 +22,7 @@
   "license": "ISC",
   "packageManager": "pnpm@10.23.0",
   "dependencies": {
-    "bootstrap": "5.3.8"
+    "bootstrap": "5.3.8",
+    "vite-tsconfig-paths": "^5.1.4"
   }
 }
