@@ -8,6 +8,7 @@ import { eq } from "drizzle-orm";
 
 describe("PizzaHandler", {}, () => {
   let handler: PizzaHandler;
+  type GetAllInput = Parameters<PizzaHandler["getAll"]>[0];
   let db: ReturnType<typeof getDB>;
   let categoryID: string;
 
@@ -112,20 +113,21 @@ describe("PizzaHandler", {}, () => {
   // Invalid pizza creation
   it("fails to create pizza with missing name or price", async () => {
     const invalidPizza = {
-      // name missing
       price: "9.00",
       description: "desc",
       imageUrl: null,
       isVisible: true,
       categoryID,
-    } as any;
+    };
 
+    // We EXPECT a type error here because name is missing
+    // @ts-expect-error testing runtime validation
     await expect(handler.create(invalidPizza)).rejects.toThrow();
   });
 
   // Invalid pizza update
   it("updating a non-existing pizza does not update anything", async () => {
-    const result = await handler.update(
+    await handler.update(
       "00000000-0000-0000-0000-000000000000", // non-existing ID
       {
         name: "Nope",
@@ -146,8 +148,9 @@ describe("PizzaHandler", {}, () => {
   // Invalid query parameters
   it("getAll returns empty result for invalid categoryID", async () => {
     const result = await handler.getAll({
-      categoryID: "00000000-0000-0000-0000-000000000000" as any,
-    });
+      categoryID: "00000000-0000-0000-0000-000000000000",
+    } satisfies GetAllInput);
+
     expect(result.length).toBe(0);
   });
 
