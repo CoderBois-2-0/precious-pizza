@@ -7,6 +7,7 @@ import {
   uuid,
 } from "drizzle-orm/pg-core";
 import { basketTable } from "../basket/schema";
+import { userTable } from "../user/schema";
 
 export const deliveryOption = pgEnum("delivery_option", ["Pickup", "Delivery"]);
 
@@ -21,6 +22,7 @@ export const orderTable = pgTable("orders", {
   basketID: uuid("basket_id")
     .references(() => basketTable.id)
     .notNull(),
+  userID: uuid("user_id").references(() => userTable.id),
   totalPrice: numeric("total_price", { precision: 8, scale: 2 }).notNull(),
   deliveryOption: deliveryOption("delivery_option").notNull(),
 
