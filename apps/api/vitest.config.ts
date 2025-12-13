@@ -1,6 +1,8 @@
 import { defineWorkersConfig } from "@cloudflare/vitest-pool-workers/config";
 import tsconfigPaths from "vite-tsconfig-paths";
 
+const dbUrl = process.env.DB_URL;
+
 export default defineWorkersConfig({
   plugins: [tsconfigPaths()],
   test: {
@@ -9,11 +11,13 @@ export default defineWorkersConfig({
       workers: {
         wrangler: { configPath: "./wrangler.jsonc" },
 
-        miniflare: {
-          bindings: {
-            DB_URL: process.env.DB_URL,
-          },
-        },
+        miniflare: dbUrl
+          ? {
+              bindings: {
+                DB_URL: dbUrl,
+              },
+            }
+          : undefined,
       },
     },
   },
