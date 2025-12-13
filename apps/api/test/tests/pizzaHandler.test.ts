@@ -14,7 +14,9 @@ describe("PizzaHandler", {}, () => {
 
   // reset and setup DB before each test
   beforeEach(async () => {
-    const dbUrl = env.DB_URL;
+    // const dbUrl = env.DB_URL;
+    const dbUrl = env?.DB_URL ?? process.env.DB_URL;
+
     if (!dbUrl) {
       throw new Error("DB_URL env variable is missing!");
     }
