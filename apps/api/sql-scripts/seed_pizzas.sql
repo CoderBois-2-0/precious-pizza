@@ -10,6 +10,18 @@ VALUES (
   'admin'
 ) ON CONFLICT (email) DO NOTHING;
 
+-- Create customer #1
+INSERT INTO users (id, email, phone_number, first_name, last_name, password, role)
+VALUES (
+  gen_random_uuid(),
+  'fresa-a-cat@sweetberry.com',
+  '26543232',
+  'Fresa',
+  'Kitteh',
+  crypt('My-1-little_pony', gen_salt('bf')),
+  'customer'
+) ON CONFLICT (email) DO NOTHING;
+
 -- Insert categories
 INSERT INTO categories (id, name)
 VALUES
