@@ -178,5 +178,7 @@ jobs:
         run: pnpm install --frozen-lockfile
 
       - name: Run API tests
-        run: DB_URL=${{ secrets.DB_URL }} pnpm --filter api test
+        run: pnpm --filter api test
+        env:
+          DB_URL: ${{ secrets.DB_URL }}
       
