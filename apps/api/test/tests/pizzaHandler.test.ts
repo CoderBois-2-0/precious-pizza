@@ -3,7 +3,7 @@ import PizzaHandler from "../../src/db/pizza/handler";
 import { getDB } from "$db/index";
 import { pizzaTable } from "../../src/db/pizza/schema";
 import { categoryTable } from "$db/category/schema";
-// import { env } from "cloudflare:workers";
+import { env } from "cloudflare:workers";
 import { eq } from "drizzle-orm";
 
 describe("PizzaHandler", {}, () => {
@@ -14,11 +14,12 @@ describe("PizzaHandler", {}, () => {
 
   // reset and setup DB before each test
   beforeEach(async () => {
-    // const dbUrl = env.DB_URL;
-    const dbUrl = process.env.DB_URL;
+    const dbUrl = env.DB_URL;
+    
     if (!dbUrl) {
       throw new Error("DB_URL env variable is missing!");
     }
+
 
     handler = new PizzaHandler(dbUrl, false);
     db = getDB(dbUrl, false);
