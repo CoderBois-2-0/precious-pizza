@@ -64,6 +64,25 @@ const router = createRouter<IBasketEnv>()
       const { pizzaID, quantity, price } = c.req.valid("json");
 
       try {
+        // Get current basket to check total
+        const basket = await basketHandler.getFullBasket(basketID);
+        const currentTotal = Number(basket.totalPrice);
+        const newItemTotal = price * quantity;
+        const futureTotal = currentTotal + newItemTotal;
+
+        // Check if future total exceeds NUMERIC(6,2) limit (9999.99)
+        const MAX_BASKET_TOTAL = 9999.99;
+        if (futureTotal > MAX_BASKET_TOTAL) {
+          return c.json(
+            {
+              message: "Basket total would exceed maximum allowed value",
+              maxTotal: MAX_BASKET_TOTAL,
+              futureTotal: futureTotal.toFixed(2),
+            },
+            400,
+          );
+        }
+
         await basketHandler.addPizzaToBasket({
           basketID,
           pizzaID,
@@ -78,18 +97,18 @@ const router = createRouter<IBasketEnv>()
     },
   )
   // Recalculate and persist basket total
-  .patch("/:id/total", basketParamValidator, async (c) => {
-    const basketHandler = c.get("basketHandler");
-    const { id: basketID } = c.req.valid("param");
+  // .patch("/:id/total", basketParamValidator, async (c) => {
+  //   const basketHandler = c.get("basketHandler");
+  //   const { id: basketID } = c.req.valid("param");
 
-    try {
-      const totalPrice = await basketHandler.updateBasketTotal(basketID);
-      return c.json({ totalPrice });
-    } catch (e) {
-      console.log(e);
-      return c.json({ message: "Could not update basket total" }, 500);
-    }
-  })
+  //   try {
+  //     const totalPrice = await basketHandler.updateBasketTotal(basketID);
+  //     return c.json({ totalPrice });
+  //   } catch (e) {
+  //     console.log(e);
+  //     return c.json({ message: "Could not update basket total" }, 500);
+  //   }
+  // })
   // Remove a pizza from the basket by basket item id
   .delete("/:id/items/:itemID", basketItemParamValidator, async (c) => {
     const basketHandler = c.get("basketHandler");
