@@ -10,9 +10,9 @@ interface IOrderEnv extends IEnv {
 
 const injectOrderHandler = createMiddleware<IOrderEnv>((c, next) => {
   const db = getDB(c.env.DB_URL, c.env.ENVIRONMENT !== "production");
-  
-  const orderHandler = new OrderHandler(db)
-  
+
+  const orderHandler = new OrderHandler(db);
+
   c.set("orderHandler", orderHandler);
   return next();
 });

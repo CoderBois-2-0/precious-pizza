@@ -1,4 +1,4 @@
-import { getDB, TDB } from "..";
+import { TDB } from "..";
 import { eq, and } from "drizzle-orm";
 import { basketItemTable } from "../basketItem/schema";
 import { pizzaTable } from "../pizza/schema";
@@ -78,9 +78,17 @@ class BasketHandler {
         0,
       );
 
+      const formattedTotal = totalPrice.toFixed(2);
+      const totalValue = Number(formattedTotal);
+
+      // Validate NUMERIC(6,2) constraint: max 6 digits, 2 decimals (min 0.00 & max 9,999.99)
+      if (totalValue >= 10000 || totalValue < 0) {
+        throw new Error("Basket total cannot exceed 9,999.99 or be below 0.00");
+      }
+
       await tx
         .update(this.#table)
-        .set({ totalPrice: totalPrice.toFixed(2) })
+        .set({ totalPrice: formattedTotal })
         .where(eq(this.#table.id, basketID));
     });
   }

@@ -2,7 +2,7 @@ import { eq } from "drizzle-orm";
 import { orderTable } from "./schema";
 import { basketItemTable } from "../basketItem/schema";
 import { orderItemTable } from "../orderItem/schema";
-import { getDB, TDB } from "..";
+import { TDB } from "..";
 import { pizzaTable } from "../pizza/schema";
 import {
   IFullOrder,
