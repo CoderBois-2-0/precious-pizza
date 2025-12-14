@@ -1,6 +1,6 @@
 import { getDB } from "$db/index";
 import { OrderHandler } from "$db/order/handler";
-import { describe, it, expect, beforeEach, afterEach, beforeAll } from "vitest";
+import { describe, it, expect, beforeEach, afterEach } from "vitest";
 import { env } from "cloudflare:workers";
 import { sql } from "drizzle-orm";
 import { BasketHandler } from "$db/basket/handler";
@@ -18,7 +18,12 @@ describe("OrderHandler", {}, () => {
   let testPizzaID: string;
   let testCategoryID: string;
 
-  beforeAll(async () => {
+  beforeEach(async () => {
+    if (!dbUrl) throw new Error("DB_URL env variable is missing!");
+
+    // BEGIN transaction
+    await db.execute(sql`BEGIN`);
+
     orderHandler = new OrderHandler(db);
     basketHandler = new BasketHandler(db);
 
@@ -57,13 +62,6 @@ describe("OrderHandler", {}, () => {
       quantity: 250,
       price: testPizza.price,
     });
-  });
-
-  beforeEach(async () => {
-    if (!dbUrl) throw new Error("DB_URL env variable is missing!");
-
-    // BEGIN transaction
-    await db.execute(sql`BEGIN`);
   });
 
   // rollback any changes after each test

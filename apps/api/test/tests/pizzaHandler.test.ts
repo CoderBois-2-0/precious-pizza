@@ -46,8 +46,9 @@ describe("PizzaHandler", {}, () => {
 
   // Valid pizza creation
   it("creates pizza with valid data", async () => {
+    const uniqueName = `Test-${crypto.randomUUID()}`;
     const newPizza = {
-      name: "Margherita",
+      name: uniqueName,
       price: "10.50",
       description: "Classic Italian pizza",
       imageUrl: null,
@@ -57,9 +58,14 @@ describe("PizzaHandler", {}, () => {
 
     await handler.create(newPizza);
 
-    const rows = await db.select().from(pizzaTable).execute();
+    const rows = await db
+      .select()
+      .from(pizzaTable)
+      .where(eq(pizzaTable.name, uniqueName))
+      .execute();
     expect(rows.length).toBe(1);
-    expect(rows[0].name).toBe("Margherita");
+    expect(rows[0].name).toBe(uniqueName);
+    expect(rows[0].price).toBe("10.50");
   });
 
   // Valid pizza update
@@ -138,8 +144,12 @@ describe("PizzaHandler", {}, () => {
       handler.update(nonExistingId, { name: "Nope" }),
     ).resolves.not.toThrow();
 
-    // Assert: table is still empty
-    const rows = await db.select().from(pizzaTable).execute();
+    // Assert: verify the non-existing ID was not created
+    const rows = await db
+      .select()
+      .from(pizzaTable)
+      .where(eq(pizzaTable.id, nonExistingId))
+      .execute();
     expect(rows.length).toBe(0);
   });
 

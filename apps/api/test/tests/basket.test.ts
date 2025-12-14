@@ -1,6 +1,6 @@
 import { getDB } from "$db/index";
 import { BasketHandler } from "$db/basket/handler";
-import { describe, it, expect, beforeEach, afterEach, beforeAll } from "vitest";
+import { describe, it, expect, beforeEach, afterEach } from "vitest";
 import { env } from "cloudflare:workers";
 import { sql } from "drizzle-orm";
 import { categoryTable } from "$db/category/schema";
@@ -15,7 +15,10 @@ describe("BasketHandler", () => {
   let testPizzaID2: string;
   let testCategoryID: string;
 
-  beforeAll(async () => {
+  beforeEach(async () => {
+    if (!dbUrl) throw new Error("DB_URL env variable is missing!");
+    await db.execute(sql`BEGIN`);
+
     basketHandler = new BasketHandler(db);
 
     // Create test category
@@ -45,11 +48,6 @@ describe("BasketHandler", () => {
       isVisible: true,
       categoryID: testCategoryID,
     });
-  });
-
-  beforeEach(async () => {
-    if (!dbUrl) throw new Error("DB_URL env variable is missing!");
-    await db.execute(sql`BEGIN`);
   });
 
   afterEach(async () => {
