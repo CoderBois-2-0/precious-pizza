@@ -38,3 +38,5 @@ lerna-debug.log*
 .DS_Store
 .nitro
 .tanstack
+
+coverage
