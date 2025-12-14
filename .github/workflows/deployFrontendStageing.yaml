@@ -13,6 +13,7 @@ jobs:
     env:
       CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
       CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+      VITE_API_URL: https://precious-api-stageing.sid-doro-hd.workers.dev/
 
     steps:
       - uses: actions/checkout@v4
