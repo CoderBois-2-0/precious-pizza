@@ -59,9 +59,9 @@ tests {
     const phoneNumber = bru.getVar("phoneNumber");
     const firstName = bru.getVar("firstName");
     const lastName = bru.getVar("lastName");
-    
+
     const body = res.getBody();
-    
+  
     expect(body).to.have.property("id");
     expect(body.email).to.eql(email);
     expect(body.phoneNumber).to.eql(phoneNumber);

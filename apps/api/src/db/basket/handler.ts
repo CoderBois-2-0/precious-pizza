@@ -1,4 +1,4 @@
-import { getDB, TDB } from "..";
+import { TDB } from "..";
 import { eq, and } from "drizzle-orm";
 import { basketItemTable } from "../basketItem/schema";
 import { pizzaTable } from "../pizza/schema";
@@ -10,8 +10,8 @@ class BasketHandler {
   readonly #client: TDB;
   readonly #table: TBasketTable;
 
-  constructor(dbUrl: string, logger: boolean) {
-    this.#client = getDB(dbUrl, logger);
+  constructor(db: TDB) {
+    this.#client = db;
     this.#table = basketTable;
   }
 
@@ -28,17 +28,69 @@ class BasketHandler {
     return row.id;
   }
   // Add one pizza to basket
-  async addPizzaToBasket(input: IBasketItemInsert) {
-    const { basketID, pizzaID, quantity, price } = input;
+  async addPizzaToBasket(pizza: IBasketItemInsert) {
+    const { basketID, pizzaID, quantity, price } = pizza;
+    // tx = transaction context (short for "transaction") --> this.#client inside transaction
+    await this.#client.transaction(async (tx) => {
+      // Check if the pizza already exists in this basket
+      const [existing] = await tx
+        .select({
+          id: basketItemTable.id,
+          quantity: basketItemTable.quantity,
+        })
+        .from(basketItemTable)
+        .where(
+          and(
+            eq(basketItemTable.basketID, basketID),
+            eq(basketItemTable.pizzaID, pizzaID),
+          ),
+        );
 
-    await this.#client.insert(basketItemTable).values({
-      basketID,
-      pizzaID,
-      quantity,
-      price,
+      if (existing) {
+        // Increment quantity and update price to the latest value
+        await tx
+          .update(basketItemTable)
+          .set({
+            quantity: existing.quantity + quantity,
+            price,
+          })
+          .where(eq(basketItemTable.id, existing.id));
+      } else {
+        await tx.insert(basketItemTable).values({
+          basketID,
+          pizzaID,
+          quantity,
+          price,
+        });
+      }
+
+      // Recalculate total inside the same transaction so insert/update + total are atomic
+      const items = await tx
+        .select({
+          quantity: basketItemTable.quantity,
+          price: basketItemTable.price,
+        })
+        .from(basketItemTable)
+        .where(eq(basketItemTable.basketID, basketID));
+
+      const totalPrice = items.reduce(
+        (sum, item) => sum + Number(item.price) * item.quantity,
+        0,
+      );
+
+      const formattedTotal = totalPrice.toFixed(2);
+      const totalValue = Number(formattedTotal);
+
+      // Validate NUMERIC(6,2) constraint: max 6 digits, 2 decimals (min 0.00 & max 9,999.99)
+      if (totalValue >= 10000 || totalValue < 0) {
+        throw new Error("Basket total cannot exceed 9,999.99 or be below 0.00");
+      }
+
+      await tx
+        .update(this.#table)
+        .set({ totalPrice: formattedTotal })
+        .where(eq(this.#table.id, basketID));
     });
-
-    await this.updateBasketTotal(basketID);
   }
 
   async removePizzaFromBasket(basketID: string, pizzaInBasketID: number) {

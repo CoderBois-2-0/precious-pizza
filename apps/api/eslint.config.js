@@ -1,4 +1,4 @@
-import { defineConfig } from "eslint/config";
+import { defineConfig, globalIgnores } from "eslint/config";
 import js from "@eslint/js";
 import globals from "globals";
 import tseslint from "typescript-eslint";
@@ -13,4 +13,5 @@ export default defineConfig([
   },
   tseslint.configs.recommended,
   eslintPluginPrettierRecommended,
+  globalIgnores([".wrangler/"]),
 ]);

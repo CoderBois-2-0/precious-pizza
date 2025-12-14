@@ -1,4 +1,4 @@
-import { getDB, TDB } from "$db/index";
+import { TDB } from "$db/index";
 import { eq } from "drizzle-orm";
 import { pizzaTable } from "./schema";
 import {
@@ -13,8 +13,8 @@ class PizzaHandler {
   #client: TDB;
   #table: TPizzaTable;
 
-  constructor(dbUrl: string, logger: boolean) {
-    this.#client = getDB(dbUrl, logger);
+  constructor(db: TDB) {
+    this.#client = db;
     this.#table = pizzaTable;
   }
 
@@ -37,6 +37,11 @@ class PizzaHandler {
   }
 
   async create(newPizza: TPizzaInsert): Promise<void> {
+    //validate name length is not less than 1
+    if (!newPizza.name || newPizza.name.trim().length < 1) {
+      throw new Error("Name must be at least 1 character");
+    }
+
     await this.#client.insert(this.#table).values(newPizza);
   }
 

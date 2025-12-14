@@ -71,6 +71,20 @@
       "when": 1765353116863,
       "tag": "0009_safe_thing",
       "breakpoints": true
+    },
+    {
+      "idx": 10,
+      "version": "7",
+      "when": 1765683007368,
+      "tag": "0010_wise_tinkerer",
+      "breakpoints": true
+    },
+    {
+      "idx": 11,
+      "version": "7",
+      "when": 1765724293614,
+      "tag": "0011_public_shatterstar",
+      "breakpoints": true
     }
   ]
 }
