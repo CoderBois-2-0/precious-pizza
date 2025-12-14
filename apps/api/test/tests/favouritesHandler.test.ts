@@ -25,7 +25,7 @@ describe("FavouritesHandler", () => {
     // BEGIN transaction
     await db.execute(sql`BEGIN`);
 
-    // handler uses SAME db connection
+    // handler uses SAME db connection!
     handler = new FavouritesHandler(db);
 
     // Seed only required data
