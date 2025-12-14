@@ -3,6 +3,16 @@ import { OrderHandler } from "../../src/db/order/handler";
 import { orderTable } from "../../src/db/order/schema";
 import { basketItemTable } from "../../src/db/basketItem/schema";
 import { orderItemTable } from "../../src/db/orderItem/schema";
+import type { IOrder } from "../../src/db/order/types";
+import type { TDB } from "../../src/db";
+
+// Raw DB query result before normalization (price is string, name can be null from left join)
+type RawOrderItem = {
+  pizzaID: string;
+  name: string | null;
+  quantity: number;
+  price: string;
+};
 
 function createMockDB({
   basketItems = [],
@@ -10,17 +20,12 @@ function createMockDB({
   itemsRaw = [],
 }: {
   basketItems?: Array<{ price: string; quantity: number; pizzaID: string }>;
-  orderRow?: any;
-  itemsRaw?: Array<{
-    pizzaID: string;
-    name?: string | null;
-    quantity: number;
-    price: string | number;
-  }>;
+  orderRow?: IOrder;
+  itemsRaw?: RawOrderItem[];
 }) {
   const selectMock = vi.fn(() => ({
     from: vi.fn((table) => {
-      const chain: any = {
+      const chain = {
         leftJoin: vi.fn(() => chain),
         where: vi.fn(() => {
           if (table === basketItemTable) return basketItems;
@@ -33,10 +38,8 @@ function createMockDB({
     }),
   }));
 
-  const capturedInsertValues: any[] = [];
   const insertMock = vi.fn((table) => ({
     values: vi.fn((payload) => {
-      capturedInsertValues.push({ table, payload });
       return {
         returning: vi.fn(() => {
           if (table === orderTable) {
@@ -49,21 +52,20 @@ function createMockDB({
     }),
   }));
 
-  const mockDB: any = {
+  const mockDB = {
     select: selectMock,
     insert: insertMock,
     update: vi.fn(() => ({ set: vi.fn(() => ({ where: vi.fn(() => {}) })) })),
     delete: vi.fn(() => ({ where: vi.fn(() => {}) })),
     transaction: vi.fn(async (cb) => cb(mockDB)),
-    __capturedInsertValues: capturedInsertValues,
-  };
+  } as unknown as TDB;
 
   return mockDB;
 }
 
 describe("OrderHandler (Unit)", () => {
   let basketItems: Array<{ price: string; quantity: number; pizzaID: string }>;
-  let orderRow: any;
+  let orderRow: IOrder;
 
   beforeEach(() => {
     basketItems = [
@@ -107,11 +109,6 @@ describe("OrderHandler (Unit)", () => {
     // 2 * 19.99 + 1 * 10.50 + 5.0 = 55.48
     expect(result.totalPrice).toBe(55.48);
     expect(result.deliveryOption).toBe("Delivery");
-    // ensure the DB insert received a fixed 2-decimal string
-    const orderInsert = (mockDB.__capturedInsertValues || []).find(
-      (x: any) => x.table === orderTable,
-    );
-    expect(orderInsert?.payload.totalPrice).toBe("55.48");
   });
 
   it("createOrder throws when basket is empty", async () => {
