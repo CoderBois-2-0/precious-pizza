@@ -26,7 +26,7 @@ const router = createRouter<ILotrEnv>()
       const character = await lotrAPIClient.getCharacter(quote.characterID);
 
       return c.json({ quote: quote.dialog, character: character.name });
-    } catch (e) {
+    } catch {
       return c.json({ message: "Something went wrong" }, 500);
     }
   });
