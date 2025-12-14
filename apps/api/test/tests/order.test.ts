@@ -34,7 +34,7 @@ describe("OrderHandler", {}, () => {
       name: "Test Category",
     });
 
-    // Create test pizza
+    // Create test pizza!
     testPizzaID = crypto.randomUUID();
     const testPizza = {
       id: testPizzaID,
