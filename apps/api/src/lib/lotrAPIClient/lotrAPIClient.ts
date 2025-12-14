@@ -38,11 +38,13 @@ class LotrAPIClient {
       },
     });
 
-    const characterData: ILotrAPICharacter = await characterRes.json();
-    const character = characterData.docs.at(0);
-    if (!character) {
-      throw new Error("Could not get character");
+    // a status of 500 is returned upon an invalid ID
+    if (characterRes.status === 500) {
+      throw new Error("Invalid character ID");
     }
+
+    const characterData: ILotrAPICharacter = await characterRes.json();
+    const character = characterData.docs[0];
 
     return { name: character.name };
   }
