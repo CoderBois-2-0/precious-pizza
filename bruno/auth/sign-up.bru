@@ -18,6 +18,9 @@ script:pre-request {
   const email = bru.interpolate("{{$randomEmail}}");
   bru.setVar("email", email);
   
+  const phoneNumber = bru.interpolate("12345678");
+  bru.setVar("phoneNumber", phoneNumber);
+  
   const firstName = bru.interpolate("{{$randomFirstName}}");
   bru.setVar("firstName", firstName);
   
@@ -28,12 +31,12 @@ script:pre-request {
   
   const body = {
     email,
+    "phone-number": phoneNumber,
     'first-name': firstName,
     'last-name': lastName,
     password,
     'confirm-password': password
   };
-  console.log(body)
   
   req.setBody(body);
 }
@@ -53,18 +56,17 @@ tests {
   
   test("Should return correct body", function () {
     const email = bru.getVar("email");
+    const phoneNumber = bru.getVar("phoneNumber");
     const firstName = bru.getVar("firstName");
     const lastName = bru.getVar("lastName");
-  
     
     const body = res.getBody();
     
     expect(body).to.have.property("id");
     expect(body.email).to.eql(email);
+    expect(body.phoneNumber).to.eql(phoneNumber);
     expect(body.firstName).to.eql(firstName);
     expect(body.lastName).to.eql(lastName);
-  
-  
   })
 }
 
