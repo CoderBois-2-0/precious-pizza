@@ -71,13 +71,6 @@
       "when": 1765353116863,
       "tag": "0009_safe_thing",
       "breakpoints": true
-    },
-    {
-      "idx": 10,
-      "version": "7",
-      "when": 1765664625019,
-      "tag": "0010_lovely_loners",
-      "breakpoints": true
     }
   ]
 }
