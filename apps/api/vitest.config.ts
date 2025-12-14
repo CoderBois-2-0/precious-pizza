@@ -7,6 +7,9 @@ export default defineWorkersConfig({
   plugins: [tsconfigPaths()],
   test: {
     globals: true,
+    coverage: {
+      provider: "istanbul",
+    },
     poolOptions: {
       workers: {
         wrangler: { configPath: "./wrangler.jsonc" },

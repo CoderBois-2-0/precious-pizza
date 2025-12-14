@@ -135,11 +135,16 @@ describe("FavouritesHandler", () => {
 
   // Invalid: Remove non-existing favourite
   it("removing a non-existing favourite does nothing", async () => {
-    await expect(
-      handler.delete("00000000-0000-0000-0000-000000000000"),
-    ).resolves.not.toThrow();
+    const nonExistingId = "00000000-0000-0000-0000-000000000000";
 
-    const rows = await db.select().from(favouritesTable).execute();
+    await expect(handler.delete(nonExistingId)).resolves.not.toThrow();
+
+    // Verify the non-existing ID was not somehow created
+    const rows = await db
+      .select()
+      .from(favouritesTable)
+      .where(eq(favouritesTable.id, nonExistingId))
+      .execute();
     expect(rows.length).toBe(0);
   });
 
