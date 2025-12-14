@@ -23,7 +23,7 @@ export const orderTable = pgTable("orders", {
     .references(() => basketTable.id)
     .notNull(),
   userID: uuid("user_id").references(() => userTable.id),
-  totalPrice: numeric("total_price", { precision: 8, scale: 2 }).notNull(),
+  totalPrice: numeric("total_price", { precision: 6, scale: 2 }).notNull(),
   deliveryOption: deliveryOption("delivery_option").notNull(),
 
   street: varchar("street", { length: 100 }),

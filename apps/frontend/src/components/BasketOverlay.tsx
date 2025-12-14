@@ -26,6 +26,7 @@ export default function BasketOverlay() {
   const basketQuery = useQuery<TBasketResponse>({
     queryKey: ['basket', basketId],
     enabled: Boolean(basketId),
+    // QueryFn is tanstack for read/fetch operations - cacheable
     queryFn: async () => {
       const res = await fetch(`/api/basket/full/${basketId}`);
       if (!res.ok) throw new Error('Failed to fetch basket');
@@ -33,7 +34,9 @@ export default function BasketOverlay() {
     },
   });
 
+  // create basket (--> when basketId empty in localStorage)
   const createBasketMutation = useMutation({
+    // mutation is tanstack write operations (POST;PUT;PATCH;DELETE)
     mutationFn: async () => {
       const res = await fetch('/api/basket', { method: 'POST' });
       if (!res.ok) throw new Error('Failed to create basket');
@@ -45,6 +48,7 @@ export default function BasketOverlay() {
     },
   });
 
+  // remove a pizza from basket and update totalprice
   const removeItemMutation = useMutation({
     mutationFn: async (itemID: number) => {
       if (!basketId) throw new Error('No basket');

@@ -2,7 +2,7 @@ import { eq } from "drizzle-orm";
 import { orderTable } from "./schema";
 import { basketItemTable } from "../basketItem/schema";
 import { orderItemTable } from "../orderItem/schema";
-import { getDB, TDB } from "..";
+import { TDB } from "..";
 import { pizzaTable } from "../pizza/schema";
 import {
   IFullOrder,
@@ -20,8 +20,8 @@ class OrderHandler {
   readonly #client: TDB;
   readonly #table: TOrderTable;
 
-  constructor(dbUrl: string, logger: boolean) {
-    this.#client = getDB(dbUrl, logger);
+  constructor(db: TDB) {
+    this.#client = db;
     this.#table = orderTable;
   }
 
@@ -70,7 +70,7 @@ class OrderHandler {
         id: orderID,
         basketID,
         userID,
-        totalPrice: String(totalPrice),
+        totalPrice: totalPrice.toFixed(2),
         deliveryOption: delivery,
         street: deliveryAddress?.street,
         number: deliveryAddress?.number,
