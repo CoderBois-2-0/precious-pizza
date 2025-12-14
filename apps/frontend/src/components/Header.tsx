@@ -14,6 +14,7 @@ import {
 import { useAuth } from '@/services/authService';
 import { useBasket } from '@/services/basketService';
 import '.././styles.css';
+import { useLotrQuote } from '@/services/lotrQuoteService';
 
 export default function Header() {
   const { signOut, authStore, isAuthenticated } = useAuth();
@@ -44,6 +45,8 @@ export default function Header() {
             <p> - The one Pizza to rule them all!</p>
           </div>
         </div>
+
+        <LotrQuote></LotrQuote>
 
         <div className="d-flex align-items-end">
           <button
@@ -172,5 +175,30 @@ const AuthLinks = ({ closeSidebar }: IAuthLinksProps) => {
         <span className="fw-medium">Login</span>
       </Link>
     </>
+  );
+};
+
+const LotrQuote = () => {
+  const { getRandomQuote, quote } = useLotrQuote();
+
+  useEffect(() => {
+    getRandomQuote();
+
+    const intervalID = setInterval(
+      () => {
+        getRandomQuote();
+      },
+      1000 * 60 * 2,
+    );
+
+    return () => clearInterval(intervalID);
+  }, []);
+
+  return (
+    <div>
+      <p>
+        {quote.quote} - <i>{quote.character}</i>
+      </p>
+    </div>
   );
 };

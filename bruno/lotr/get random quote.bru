@@ -1,0 +1,29 @@
+meta {
+  name: get random quote
+  type: http
+  seq: 1
+}
+
+get {
+  url: {{baseUrl}}/{{path}}/random
+  body: none
+  auth: inherit
+}
+
+tests {
+  test("should return a status of 200", function () {
+    expect(res.getStatus()).to.equal(200);
+  });
+  
+  test("Should have correct json body", function () {
+    const body = res.getBody();
+    
+    expect(body).to.have.property("quote");
+    expect(body).to.have.property("character");
+  });
+}
+
+settings {
+  encodeUrl: true
+  timeout: 0
+}
