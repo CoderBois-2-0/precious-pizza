@@ -1,16 +1,15 @@
-[project]
+[tool.poetry]
 name = "precious-locust"
 version = "0.1.0"
 description = ""
-authors = [
-    {name = "doro-hd",email = "doro-hd@protonmail.com"}
-]
+authors = ["doro-hd <doro-hd@protonmail.com>"]
 readme = "README.md"
-requires-python = ">=3.13"
-dependencies = [
-    "locust (>=2.42.6,<3.0.0)",
-    "python-dotenv (>=1.2.1,<2.0.0)"
-]
+packages = [{include = "src"}]
+
+[tool.poetry.dependencies]
+python = "^3.13"
+locust = "^2.42.6"
+python-dotenv = "^1.2.1"
 
 
 [build-system]
