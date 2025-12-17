@@ -35,6 +35,11 @@ export default defineConfig({
     },
   },
   server: {
+    host: true,
+    allowedHosts: ['frontend.local'],
+    hmr: {
+      overlay: false,
+    },
     proxy: {
       '/api': {
         target: 'http://localhost:8787',
