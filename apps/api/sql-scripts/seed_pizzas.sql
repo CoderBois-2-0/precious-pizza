@@ -26,7 +26,7 @@ VALUES (
 INSERT INTO categories (id, name)
 VALUES
   ('396241b9-dc78-4d95-a8b0-64b4b6807159'::uuid, 'Special'),
-  ('04b0eb61-fce4-4f8f-a94b-e59138e00da8'::uuid, 'Classic'),
+  ('04b0eb61-fce4-4f8f-a94b-e59138e00da8'::uuid, 'Italian'),
   ('f4e21ab5-8088-42bb-b3c4-c83bf3bc3fd2'::uuid, 'Folded'),
   ('520c5147-7a2a-43cc-ab12-5d940cbfcc94'::uuid, 'Mexican')
 ON CONFLICT DO NOTHING;

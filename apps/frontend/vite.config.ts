@@ -36,7 +36,7 @@ export default defineConfig({
   },
   server: {
     host: true,
-    allowedHosts: ['frontend.local'],
+    // allowedHosts: ['frontend.local'],
     hmr: {
       overlay: false,
     },
